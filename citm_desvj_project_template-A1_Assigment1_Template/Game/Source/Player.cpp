@@ -60,26 +60,15 @@ bool Player::Update(float dt)
 		power += 0.05f;
 		powerJump.w += 1;
 		
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			direction = 3;
-		}
-		else if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			direction = 4;
-		}
-		else if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-			direction = 0;
-		}
-		else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			direction = 1;
-		}
-		else if(app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			direction = 2;
-		}
 		
 		
 	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
+		SDL_GetMouseState(&mouseX, &mouseY);
 		savePos = position.x;
 		savePosY = position.y;
+
+		triX = savePos - mouseX;
+		triY = savePosY - mouseY;
 		
 		player = jumpState::POWER_JUMP;
 	}
@@ -107,64 +96,17 @@ bool Player::Update(float dt)
 		}
 		break;
 	case Player::POWER_JUMP:
-		switch (direction)
-		{
-		case 0:
-			if (position.y > savePosY - power * 40) {
-				vel = b2Vec2(0, -(speedPower * dt + (power / 10)));
-			}
-			else {
-				player = jumpState::FLOOR;
-				power = 0;
-				powerJump.w = 0;
-				direction = 2;
-			}
-			break;
-		case 1:
-			if (position.x > savePos - power * 40) {
-				vel = b2Vec2(-(speedPower * dt + (power / 10)), 0);
-			}
-			else {
-				player = jumpState::FLOOR;
-				power = 0;
-				direction = 2;
-				powerJump.w = 0;
-			}
-			break;
-		case 2:
-			if (position.x < savePos + power * 40) {
-				vel = b2Vec2(speedPower * dt + (power / 10), 0);
-			}
-			else {
-				player = jumpState::FLOOR;
-				power = 0;
-				powerJump.w = 0;
-				direction = 2;
-			}
-			break;
-		case 3:
-			if (position.x < savePos + power * 40) {
-				vel = b2Vec2(speedPower * dt + (power / 10), -(speedPower * dt + (power / 10)));
-			}
-			else {
-				player = jumpState::FLOOR;
-				power = 0;
-				powerJump.w = 0;
-				direction = 2;
-			}
-			break;
-		case 4:
-			if (position.x > savePos - power * 40) {
-				vel = b2Vec2(-(speedPower * dt + (power / 10)), -(speedPower * dt + (power / 10)));
-			}
-			else {
-				player = jumpState::FLOOR;
-				power = 0;
-				direction = 2;
-				powerJump.w = 0;
-			}
-			break;
-		}
+		
+
+		angle = atan2(triY, triX) * DEGTORAD;
+		jumpX = speedPower * cos(angle);
+		jumpY = -speedPower * sin(angle);
+
+		vel = b2Vec2(-triX * power / 10, -triY * power / 10);
+		triY += GRAVITY_Y * 3;
+		vel.Normalize();
+		vel.x *= dt;
+		vel.y *= dt;
 		
 		
 		break;

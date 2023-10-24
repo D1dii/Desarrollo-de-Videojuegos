@@ -5,6 +5,8 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 
+#define DEGTORAD 0.0174532925199432957f
+
 struct SDL_Texture;
 
 class Player : public Entity
@@ -30,9 +32,17 @@ public:
 	float speedy = 1.0f;
 	float jumpa = 0.06f;
 	float power = 0;
-	float speedPower = 1.4f;
+	float speedPower = 2.0f;
+	float jumpX = 0;
+	float jumpY = 0;
+	float triX = 0;
+	float triY = 0;
 	float savePos = position.x;
 	float savePosY = position.y;
+	int mouseX = 0;
+	int mouseY = 0;
+	float angle;
+	
 	int direction = 2;
 	const char* texturePath;
 	

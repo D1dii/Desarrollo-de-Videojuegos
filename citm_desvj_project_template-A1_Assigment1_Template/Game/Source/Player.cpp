@@ -57,8 +57,12 @@ bool Player::Update(float dt)
 		player = jumpState::JUMPING;
 	}
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
-		power += 0.05f;
-		powerJump.w += 1;
+		if (power < 2.5f) {
+			power += 0.025f;
+			powerJump.w += 1;
+		}
+		
+		
 		
 		
 		
@@ -69,6 +73,9 @@ bool Player::Update(float dt)
 
 		triX = savePos - mouseX;
 		triY = savePosY - mouseY;
+
+		powerJump.w = 0;
+		
 		
 		player = jumpState::POWER_JUMP;
 	}
@@ -102,11 +109,14 @@ bool Player::Update(float dt)
 		jumpX = speedPower * cos(angle);
 		jumpY = -speedPower * sin(angle);
 
-		vel = b2Vec2(-triX * power / 10, -triY * power / 10);
-		triY += GRAVITY_Y * 3;
+		vel = b2Vec2(-triX, -triY);
+		triY += GRAVITY_Y * 2;
 		vel.Normalize();
+		vel.x *= power;
 		vel.x *= dt;
+		vel.y *= power;
 		vel.y *= dt;
+		
 		
 		
 		break;
@@ -149,8 +159,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
-		if (player == jumpState::JUMPING) {
+		if (player == jumpState::JUMPING || player == jumpState::POWER_JUMP) {
 			player = jumpState::FLOOR;
+			power = 0;
 		}
 		break;
 	case ColliderType::UNKNOWN:

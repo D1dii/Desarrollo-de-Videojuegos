@@ -35,9 +35,9 @@ Player::Player() : Entity(EntityType::PLAYER)
 	Run.speed = 0.2f;
 	Run.loop = true;
 
-	ChargeJump.PushBack({ 0, 30, 30, 30 });
-	ChargeJump.PushBack({ 30, 30, 30, 30 });
-	ChargeJump.PushBack({ 60, 30, 30, 30 });
+	ChargeJump.PushBack({ 0, 60, 30, 30 });
+	ChargeJump.PushBack({ 30, 60, 30, 30 });
+	ChargeJump.PushBack({ 60, 60, 30, 30 });
 
 	ChargeJump.speed = 0.1f;
 	ChargeJump.loop = false;
@@ -89,7 +89,7 @@ bool Player::Start() {
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
-	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
+	//pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
 
 	return true;
 }

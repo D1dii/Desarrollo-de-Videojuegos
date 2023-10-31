@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Point.h"
 #include "SDL/include/SDL.h"
+#include "../Animation.h"
 
 #define DEGTORAD 0.0174532925199432957f
 
@@ -26,13 +27,20 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
+	
+	Animation* currentAnim;
+
+	Animation Idle;
+	Animation Run;
+	Animation ChargeJump;
+	Animation Jump;
 
 public:
-	float speedx = 0.5f;
+	float speedx = 0.2f;
 	float speedy = 1.0f;
 	float jumpa = 0.06f;
 	float power = 0;
-	float speedPower = 2.0f;
+	float speedPower = 1.0f;
 	float jumpX = 0;
 	float jumpY = 0;
 	float triX = 0;

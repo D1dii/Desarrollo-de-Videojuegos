@@ -12,6 +12,52 @@
 Player::Player() : Entity(EntityType::PLAYER)
 {
 	name.Create("Player");
+
+	Idle.PushBack({ 0, 0, 30, 30 });
+	Idle.PushBack({ 30, 0, 30, 30 });
+	Idle.PushBack({ 60, 0, 30, 30 });
+	Idle.PushBack({ 90, 0, 30, 30 });
+	Idle.PushBack({ 120, 0, 30, 30 });
+	Idle.PushBack({ 150, 0, 30, 30 });
+
+	Idle.speed = 0.2f;
+	Idle.loop = true;
+
+	Run.PushBack({ 0, 30, 30, 30 });
+	Run.PushBack({ 30, 30, 30, 30 });
+	Run.PushBack({ 60, 30, 30, 30 });
+	Run.PushBack({ 90, 30, 30, 30 });
+	Run.PushBack({ 120, 30, 30, 30 });
+	Run.PushBack({ 150, 30, 30, 30 });
+	Run.PushBack({ 180, 30, 30, 30 });
+	Run.PushBack({ 210, 30, 30, 30 });
+
+	Run.speed = 0.2f;
+	Run.loop = true;
+
+	ChargeJump.PushBack({ 0, 30, 30, 30 });
+	ChargeJump.PushBack({ 30, 30, 30, 30 });
+	ChargeJump.PushBack({ 60, 30, 30, 30 });
+
+	ChargeJump.speed = 0.1f;
+	ChargeJump.loop = false;
+
+	Jump.PushBack({ 90, 60, 30, 30 });
+	Jump.PushBack({ 120, 60, 30, 30 });
+	Jump.PushBack({ 150, 60, 30, 30 });
+	Jump.PushBack({ 180, 60, 30, 30 });
+	Jump.PushBack({ 210, 60, 30, 30 });
+	Jump.PushBack({ 240, 60, 30, 30 });
+	Jump.PushBack({ 270, 60, 30, 30 });
+	Jump.PushBack({ 300, 60, 30, 30 });
+	Jump.PushBack({ 330, 60, 30, 30 });
+	Jump.PushBack({ 360, 60, 30, 30 });
+	Jump.PushBack({ 390, 60, 30, 30 });
+	Jump.PushBack({ 420, 60, 30, 30 });
+
+	Jump.speed = 0.1f;
+	Jump.loop = false;
+
 }
 
 Player::~Player() {
@@ -32,6 +78,7 @@ bool Player::Start() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 
+	currentAnim = &Idle;
 	
 	powerJump.h = 20;
 	powerJump.w = 0;
@@ -52,12 +99,14 @@ bool Player::Update(float dt)
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
-		if (power < 2.5f) {
-			power += 0.025f;
+		currentAnim = &ChargeJump;
+		if (power < 1.0f) {
+			power += 0.015f;
 			powerJump.w += 1;
 		}
 		
 	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
+		currentAnim = &Jump;
 		SDL_GetMouseState(&mouseX, &mouseY);
 		savePos = position.x;
 		savePosY = position.y;
@@ -72,11 +121,15 @@ bool Player::Update(float dt)
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+		currentAnim = &Run;
 		vel = b2Vec2(-speedx*dt, -GRAVITY_Y);
+		
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+		currentAnim = &Run;
 		vel = b2Vec2(speedx*dt, -GRAVITY_Y);
+		
 	}
 
 	switch (player)
@@ -128,7 +181,9 @@ bool Player::Update(float dt)
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;
 
-	app->render->DrawTexture(texture, position.x, position.y);
+	currentAnim->Update();
+
+	app->render->DrawTexture(texture, position.x, position.y, &currentAnim ->GetCurrentFrame());
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
 
 	return true;

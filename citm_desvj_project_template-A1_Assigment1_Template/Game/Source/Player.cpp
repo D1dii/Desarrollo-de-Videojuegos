@@ -50,21 +50,12 @@ bool Player::Start() {
 bool Player::Update(float dt)
 {
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
-
 	
-
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
-		player = jumpState::JUMPING;
-	}
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
 		if (power < 2.5f) {
 			power += 0.025f;
 			powerJump.w += 1;
 		}
-		
-		
-		
-		
 		
 	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
 		SDL_GetMouseState(&mouseX, &mouseY);

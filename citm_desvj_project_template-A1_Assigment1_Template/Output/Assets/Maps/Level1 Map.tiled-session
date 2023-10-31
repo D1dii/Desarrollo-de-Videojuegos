@@ -1,0 +1,22 @@
+{
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 2
+        }
+    },
+    "last.imagePath": "C:/Users/didacgp/Documents/GitHub/Desarrollo-de-Videojuegos/citm_desvj_project_template-A1_Assigment1_Template/Output/Assets/Tiny Tower Free Pack",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+    ],
+    "project": "Level1 Map.tiled-project",
+    "recentFiles": [
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

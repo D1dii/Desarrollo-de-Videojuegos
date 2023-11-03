@@ -8,6 +8,7 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "Window.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -85,7 +86,7 @@ bool Player::Start() {
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;
 
-	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 10, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
@@ -97,19 +98,23 @@ bool Player::Start() {
 bool Player::Update(float dt)
 {
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
+	uint scale = app->win->GetScale();
+	
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
 		currentAnim = &ChargeJump;
-		if (power < 1.0f) {
-			power += 0.015f;
+		if (power < 1.5f) {
+			power += 0.025f;
 			powerJump.w += 1;
 		}
 		
 	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
 		currentAnim = &Jump;
 		SDL_GetMouseState(&mouseX, &mouseY);
-		savePos = position.x;
-		savePosY = position.y;
+		mouseX = mouseX;
+		mouseY = mouseY - app->render->camera.y;
+		savePos = position.x * scale;
+		savePosY = position.y * scale;
 
 		triX = savePos - mouseX;
 		triY = savePosY - mouseY;
@@ -148,7 +153,6 @@ bool Player::Update(float dt)
 		break;
 	case Player::POWER_JUMP:
 		
-
 		angle = atan2(triY, triX) * DEGTORAD;
 		jumpX = speedPower * cos(angle);
 		jumpY = -speedPower * sin(angle);
@@ -160,8 +164,6 @@ bool Player::Update(float dt)
 		vel.x *= dt;
 		vel.y *= power;
 		vel.y *= dt;
-		
-		
 		
 		break;
 	case Player::FLOOR:

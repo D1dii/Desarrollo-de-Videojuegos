@@ -1,6 +1,8 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
+#include "Player.h"
+#include "Physics.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -25,6 +27,7 @@ bool Render::Awake(pugi::xml_node& config)
 {
 	LOG("Create SDL rendering context");
 	bool ret = true;
+	uint scale = app->win->GetScale();
 
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
@@ -45,8 +48,8 @@ bool Render::Awake(pugi::xml_node& config)
 	{
 		camera.w = app->win->screenSurface->w;
 		camera.h = app->win->screenSurface->h;
-		camera.x = 0;
-		camera.y = 0;
+		camera.x = 0 * scale;
+		camera.y = -1920 * scale;
 	}
 
 	return ret;
@@ -212,8 +215,8 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	for(uint i = 0; i < 360; ++i)
 	{
-		points[i].x = (int)(x + camera.x + radius * cos(i * factor));
-		points[i].y = (int)(y + camera.y + radius * sin(i * factor));
+		points[i].x = (int)(x * scale + camera.x + radius * cos(i * factor));
+		points[i].y = (int)(y * scale + camera.y + radius * sin(i * factor));
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);

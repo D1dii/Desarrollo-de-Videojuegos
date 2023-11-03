@@ -89,7 +89,7 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT)
 		app->render->camera.y -= (int)ceil(camSpeed * dt);
 
-	if(app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT)
+	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 		app->render->camera.y += (int)ceil(camSpeed * dt);
 
 	if(app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT)
@@ -97,6 +97,11 @@ bool Scene::Update(float dt)
 
 	if(app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
+
+	if (app->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN) {
+		int stop = 0;
+	}
+		
 
 	// Renders the image in the center of the screen 
 	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);

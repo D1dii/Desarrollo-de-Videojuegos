@@ -182,17 +182,12 @@ bool Map::Load(SString mapFileName)
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
     }
+
+    if (ret == true)
+    {
+        ret = LoadObjectGroups(mapFileXML.child("map"));
+    }
     
-    // NOTE: Later you have to create a function here to load and create the colliders from the map
-
-    PhysBody* c1 = app->physics->CreateRectangle(224 + 128, 543 + 32, 256, 64, STATIC);
-    c1->ctype = ColliderType::PLATFORM;
-
-    PhysBody* c2 = app->physics->CreateRectangle(352 + 64, 384 + 32, 128, 64, STATIC);
-    c2->ctype = ColliderType::PLATFORM;
-
-    PhysBody* c3 = app->physics->CreateRectangle(256, 704 + 32, 576, 64, STATIC);
-    c3->ctype = ColliderType::PLATFORM;
     
     if(ret == true)
     {
@@ -337,6 +332,29 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
         p->value = propertieNode.attribute("value").as_bool(); // (!!) I'm assuming that all values are bool !!
 
         properties.list.Add(p);
+    }
+
+    return ret;
+}
+
+bool Map::LoadObjectGroups(pugi::xml_node mapNode) 
+{
+    bool ret = true;
+
+    for (pugi::xml_node objectNode = mapNode.child("objectgroup"); objectNode && ret; objectNode = objectNode.next_sibling("objectgroup")) {
+        for (pugi::xml_node objectIt = objectNode.child("object"); objectIt != NULL; objectIt = objectIt.next_sibling("object")) {
+
+            int x = objectIt.attribute("x").as_int();
+            int y = objectIt.attribute("y").as_int();
+            int width = objectIt.attribute("width").as_int();
+            int height = objectIt.attribute("height").as_int();
+
+            x += width / 2;
+            y += height / 2;
+
+            PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
+            c1->ctype = ColliderType::PLATFORM;
+        }
     }
 
     return ret;

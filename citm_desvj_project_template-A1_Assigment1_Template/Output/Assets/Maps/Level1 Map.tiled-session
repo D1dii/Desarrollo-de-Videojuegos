@@ -8,11 +8,11 @@
             "scaleInDock": 2
         },
         "Level1 Map.tmx": {
-            "scale": 2,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 241,
-                "y": 151.5
+                "x": 218.66666666666666,
+                "y": 279.33333333333326
             }
         },
         "Level1 Map.tmx#Tiny Tower FREE": {
@@ -25,6 +25,7 @@
         "Level1 Map.tmx"
     ],
     "project": "Level1 Map.tiled-project",
+    "property.type": "bool",
     "recentFiles": [
         "Level1 Map.tmx"
     ],

@@ -99,7 +99,8 @@ bool Player::Update(float dt)
 {
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 	uint scale = app->win->GetScale();
-	
+	bool isFacingLeft = (vel.x < 0);
+	SDL_RendererFlip flip = isFacingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
 		currentAnim = &ChargeJump;
@@ -126,9 +127,9 @@ bool Player::Update(float dt)
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame(), 0.0, NULL, flip);
 		currentAnim = &Run;
-		vel = b2Vec2(-speedx*dt, -GRAVITY_Y);
-		
+		vel = b2Vec2(-speedx*dt, -GRAVITY_Y);		
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
@@ -144,6 +145,7 @@ bool Player::Update(float dt)
 		vel = b2Vec2(0, -speedy * dt * 2);
 		speedy -= jumpa;
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+			app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame(), 0.0, NULL, flip);
 			vel = b2Vec2(-speedx * dt, -speedy * dt * 2);
 		}
 

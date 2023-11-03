@@ -6,6 +6,7 @@
 #include "SDL/include/SDL.h"
 #include "../Animation.h"
 
+
 #define DEGTORAD 0.0174532925199432957f
 
 struct SDL_Texture;

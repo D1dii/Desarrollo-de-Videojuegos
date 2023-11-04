@@ -58,6 +58,8 @@ public:
 	bool godMode = false;
 	bool showBar = false;
 	
+	bool isFacingLeft;
+
 	SDL_Texture* texture = NULL;
 	
 	PhysBody* pbody;

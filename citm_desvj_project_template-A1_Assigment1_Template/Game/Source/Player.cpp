@@ -12,7 +12,9 @@
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
+
 	name.Create("Player");
+	isFacingLeft = false;
 
 	Idle.PushBack({ 0, 0, 30, 30 });
 	Idle.PushBack({ 30, 0, 30, 30 });
@@ -88,7 +90,7 @@ bool Player::Start() {
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
-	//pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
+	app->audio->PlayMusic("Assets/Audio/Music/LeFestinLetHimCook.mp3", 0.0f);
 
 	return true;
 }
@@ -133,6 +135,7 @@ bool Player::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
 		currentAnim = &Run;
+		isFacingLeft = true;
 		if (godMode == false) {
 			vel = b2Vec2(-speedx * dt, -GRAVITY_Y);
 		}
@@ -143,6 +146,7 @@ bool Player::Update(float dt)
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+		isFacingLeft = false;
 		currentAnim = &Run;
 		if (godMode == false) {
 			vel = b2Vec2(speedx * dt, -GRAVITY_Y);
@@ -172,10 +176,12 @@ bool Player::Update(float dt)
 		vel = b2Vec2(0, -speedy * dt * 2);
 		speedy -= jumpa;
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+			isFacingLeft = true;
 			vel = b2Vec2(-speedx * dt, -speedy * dt * 2);
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+			isFacingLeft = false;
 			vel = b2Vec2(speedx * dt, -speedy * dt * 2);
 		}
 		break;
@@ -254,6 +260,11 @@ bool Player::Update(float dt)
 	powerJump.y = position.y - 30;
 
 	currentAnim->Update();
+
+
+	SDL_RendererFlip flip = (isFacingLeft) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame(), 0.0f, 0, flip);
 
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim ->GetCurrentFrame());
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);

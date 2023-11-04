@@ -24,37 +24,37 @@ Player::Player() : Entity(EntityType::PLAYER)
 	Idle.speed = 0.2f;
 	Idle.loop = true;
 
-	Run.PushBack({ 0, 30, 30, 30 });
-	Run.PushBack({ 30, 30, 30, 30 });
-	Run.PushBack({ 60, 30, 30, 30 });
-	Run.PushBack({ 90, 30, 30, 30 });
-	Run.PushBack({ 120, 30, 30, 30 });
-	Run.PushBack({ 150, 30, 30, 30 });
-	Run.PushBack({ 180, 30, 30, 30 });
-	Run.PushBack({ 210, 30, 30, 30 });
+	Run.PushBack({ 0, 60, 30, 30 });
+	Run.PushBack({ 30, 60, 30, 30 });
+	Run.PushBack({ 60, 60, 30, 30 });
+	Run.PushBack({ 90, 60, 30, 30 });
+	Run.PushBack({ 120, 60, 30, 30 });
+	Run.PushBack({ 150, 60, 30, 30 });
+	Run.PushBack({ 180, 60, 30, 30 });
+	Run.PushBack({ 210, 60, 30, 30 });
 
 	Run.speed = 0.2f;
 	Run.loop = true;
 
-	ChargeJump.PushBack({ 0, 60, 30, 30 });
-	ChargeJump.PushBack({ 30, 60, 30, 30 });
-	ChargeJump.PushBack({ 60, 60, 30, 30 });
+	ChargeJump.PushBack({ 0, 30, 30, 30 });
+	ChargeJump.PushBack({ 30, 30, 30, 30 });
+	ChargeJump.PushBack({ 60, 30, 30, 30 });
 
 	ChargeJump.speed = 0.1f;
 	ChargeJump.loop = false;
 
-	Jump.PushBack({ 90, 60, 30, 30 });
-	Jump.PushBack({ 120, 60, 30, 30 });
-	Jump.PushBack({ 150, 60, 30, 30 });
-	Jump.PushBack({ 180, 60, 30, 30 });
-	Jump.PushBack({ 210, 60, 30, 30 });
-	Jump.PushBack({ 240, 60, 30, 30 });
-	Jump.PushBack({ 270, 60, 30, 30 });
-	Jump.PushBack({ 300, 60, 30, 30 });
-	Jump.PushBack({ 330, 60, 30, 30 });
-	Jump.PushBack({ 360, 60, 30, 30 });
-	Jump.PushBack({ 390, 60, 30, 30 });
-	Jump.PushBack({ 420, 60, 30, 30 });
+	Jump.PushBack({ 90, 30, 30, 30 });
+	Jump.PushBack({ 120, 30, 30, 30 });
+	Jump.PushBack({ 150, 30, 30, 30 });
+	Jump.PushBack({ 180, 30, 30, 30 });
+	Jump.PushBack({ 210, 30, 30, 30 });
+	Jump.PushBack({ 240, 30, 30, 30 });
+	Jump.PushBack({ 270, 30, 30, 30 });
+	Jump.PushBack({ 300, 30, 30, 30 });
+	Jump.PushBack({ 330, 30, 30, 30 });
+	Jump.PushBack({ 360, 30, 30, 30 });
+	Jump.PushBack({ 390, 30, 30, 30 });
+	Jump.PushBack({ 420, 30, 30, 30 });
 
 	Jump.speed = 0.1f;
 	Jump.loop = false;
@@ -78,8 +78,6 @@ bool Player::Start() {
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
-
-	currentAnim = &Idle;
 	
 	powerJump.h = 20;
 	powerJump.w = 0;
@@ -97,10 +95,9 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
+	currentAnim = &Idle;
 	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 	uint scale = app->win->GetScale();
-	bool isFacingLeft = (vel.x < 0);
-	SDL_RendererFlip flip = isFacingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
 		currentAnim = &ChargeJump;
@@ -110,7 +107,6 @@ bool Player::Update(float dt)
 		}
 		
 	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
-		currentAnim = &Jump;
 		SDL_GetMouseState(&mouseX, &mouseY);
 		mouseX = mouseX;
 		mouseY = mouseY - app->render->camera.y;
@@ -127,7 +123,6 @@ bool Player::Update(float dt)
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
-		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame(), 0.0, NULL, flip);
 		currentAnim = &Run;
 		vel = b2Vec2(-speedx*dt, -GRAVITY_Y);		
 	}
@@ -145,7 +140,6 @@ bool Player::Update(float dt)
 		vel = b2Vec2(0, -speedy * dt * 2);
 		speedy -= jumpa;
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
-			app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame(), 0.0, NULL, flip);
 			vel = b2Vec2(-speedx * dt, -speedy * dt * 2);
 		}
 
@@ -181,6 +175,7 @@ bool Player::Update(float dt)
 	//Update player position in pixels
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
+
 
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;

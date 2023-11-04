@@ -51,7 +51,7 @@ public:
 	int mouseX = 0;
 	int mouseY = 0;
 	float angle;
-	
+
 	int direction = 2;
 	const char* texturePath;
 	

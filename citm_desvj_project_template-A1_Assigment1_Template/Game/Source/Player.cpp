@@ -154,12 +154,12 @@ bool Player::Update(float dt)
 		jumpY = -speedPower * sin(angle);
 
 		vel = b2Vec2(-triX, -triY);
-		triY += GRAVITY_Y * 2;
+		triY += GRAVITY_Y;
 		vel.Normalize();
-		vel.x *= power;
-		vel.x *= dt;
-		vel.y *= power;
-		vel.y *= dt;
+		vel.x *= power*0.75;
+		vel.x *= dt*0.75;
+		vel.y *= power*0.75;
+		vel.y *= dt*0.75;
 		
 		break;
 	case Player::FLOOR:

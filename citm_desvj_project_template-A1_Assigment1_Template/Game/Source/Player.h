@@ -56,6 +56,7 @@ public:
 	const char* texturePath;
 
 	bool godMode = false;
+	bool showBar = false;
 	
 	SDL_Texture* texture = NULL;
 	

@@ -79,7 +79,7 @@ bool Player::Start() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 	
-	powerJump.h = 20;
+	powerJump.h = 0;
 	powerJump.w = 0;
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;
@@ -236,8 +236,20 @@ bool Player::Update(float dt)
 		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 	}
 
-	
+	// Show Power Jump bar
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
+		showBar = !showBar;
+		
+		
+	}
 
+
+	if (showBar == false) {
+		powerJump.h = 0;
+	}
+	else {
+		powerJump.h = 20;
+	}
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;
 

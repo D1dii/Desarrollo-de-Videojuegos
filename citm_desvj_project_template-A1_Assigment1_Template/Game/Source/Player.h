@@ -66,6 +66,7 @@ public:
 	int pickCoinFxId;
 	
 	SDL_Rect powerJump;
+	SDL_Rect destinoRect;
 	
 
 	enum jumpState 

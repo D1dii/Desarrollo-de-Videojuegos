@@ -107,8 +107,6 @@ bool Player::Update(float dt)
 	}
 	
 	uint scale = app->win->GetScale();
-
-	
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
 		currentAnim = &ChargeJump;
@@ -262,11 +260,13 @@ bool Player::Update(float dt)
 	currentAnim->Update();
 
 
+
 	SDL_RendererFlip flip = (isFacingLeft) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame(), 0.0f, 0, flip);
-
-	app->render->DrawTexture(texture, position.x, position.y, &currentAnim ->GetCurrentFrame());
+	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
+	
+	//SDL_RenderCopyEx(app->render->renderer, texture, &currentAnim->GetCurrentFrame(), &destinoRect, 0, NULL, flip);
+	
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
 
 	app->render->camera.y = (-position.y + 230) * scale;

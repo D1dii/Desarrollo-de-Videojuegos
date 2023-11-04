@@ -23,7 +23,7 @@
 
   <scene>
     <map path="Assets/Maps/" name="Level1 Map.tmx"/>
-    <player x="100" y="1920" texturepath="Assets/Textures/idle.png"/>
+    <player x="100" y="2150" texturepath="Assets/Textures/idle.png"/>
   </scene>
   
 </config>

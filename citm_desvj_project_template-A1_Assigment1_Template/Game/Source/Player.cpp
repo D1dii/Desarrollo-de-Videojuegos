@@ -84,7 +84,7 @@ bool Player::Start() {
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;
 
-	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 10, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 8, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
@@ -101,7 +101,7 @@ bool Player::Update(float dt)
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
 		currentAnim = &ChargeJump;
-		if (power < 1.5f) {
+		if (power < 0.6f) {
 			power += 0.025f;
 			powerJump.w += 1;
 		}
@@ -184,6 +184,8 @@ bool Player::Update(float dt)
 
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim ->GetCurrentFrame());
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
+
+	app->render->camera.y = (-position.y + 230) * scale;
 
 	return true;
 }

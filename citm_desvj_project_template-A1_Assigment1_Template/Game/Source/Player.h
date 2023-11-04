@@ -54,6 +54,8 @@ public:
 
 	int direction = 2;
 	const char* texturePath;
+
+	bool godMode = false;
 	
 	SDL_Texture* texture = NULL;
 	

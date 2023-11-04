@@ -173,6 +173,16 @@ void App::PrepareUpdate()
 // ---------------------------------------------
 void App::FinishUpdate()
 {
+	// Change FPS Cap to 30 FPS
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) {
+		if (maxFrameDuration == 16) {
+			maxFrameDuration = 32;
+		}
+		else {
+			maxFrameDuration = configFile.child("config").child("app").child("maxFrameDuration").attribute("value").as_int();
+		}
+	}
+
 	// This is a good place to call Load / Save functions
 	double currentDt = frameTime.ReadMs();
 	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {

@@ -96,8 +96,17 @@ bool Player::Start() {
 bool Player::Update(float dt)
 {
 	currentAnim = &Idle;
-	b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
+	b2Vec2 vel = b2Vec2(0, 0);
+	if (godMode == false) {
+		vel = b2Vec2(0, -GRAVITY_Y);
+	}
+	else {
+		vel = b2Vec2(0, 0);
+	}
+	
 	uint scale = app->win->GetScale();
+
+	
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
 		currentAnim = &ChargeJump;
@@ -124,13 +133,36 @@ bool Player::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
 		currentAnim = &Run;
-		vel = b2Vec2(-speedx*dt, -GRAVITY_Y);		
+		if (godMode == false) {
+			vel = b2Vec2(-speedx * dt, -GRAVITY_Y);
+		}
+		else {
+			vel = b2Vec2(-speedx * dt, 0);
+		}
+			
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
 		currentAnim = &Run;
-		vel = b2Vec2(speedx*dt, -GRAVITY_Y);
+		if (godMode == false) {
+			vel = b2Vec2(speedx * dt, -GRAVITY_Y);
+		}
+		else {
+			vel = b2Vec2(speedx * dt, 0);
+		}
 		
+		
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true) {
+		currentAnim = &Run;
+		vel = b2Vec2(0, -speedx * dt);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true) {
+		currentAnim = &Run;
+		vel = b2Vec2(0, speedx * dt);
+
 	}
 
 	switch (player)
@@ -173,9 +205,38 @@ bool Player::Update(float dt)
 	pbody->body->SetLinearVelocity(vel);
 
 	//Update player position in pixels
+
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
 
+	// Debug options
+
+	// GodMode
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
+		godMode = !godMode;
+	}
+
+	// Respawn on the start
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+		position.x = 100;
+		position.y = 2150;
+		pbody->body->SetTransform({PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y)}, 0);
+	}
+
+	// Spawn on debug checkpoints
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+		position.x = 368;
+		position.y = 1568;
+		pbody->body->SetTransform({PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
+		position.x = 80;
+		position.y = 912;
+		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
+	}
+
+	
 
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;

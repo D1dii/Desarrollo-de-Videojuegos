@@ -38,6 +38,8 @@ public:
 	Animation ChargeJump;
 	Animation ChargeJumpLeft;
 	Animation Jump;
+	Animation Fall;
+	Animation FallLeft;
 
 public:
 	float speedx = 0.2f;

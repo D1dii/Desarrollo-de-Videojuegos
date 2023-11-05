@@ -89,6 +89,25 @@ Player::Player() : Entity(EntityType::PLAYER)
 	Jump.speed = 0.1f;
 	Jump.loop = false;
 
+	Fall.PushBack({ 0, 190, 30, 30 });
+	Fall.PushBack({ 30, 190, 30, 30 });
+	Fall.PushBack({ 60, 190, 30, 30 });
+	Fall.PushBack({ 90, 190, 30, 30 });
+	Fall.PushBack({ 120, 190, 30, 30 });
+	Fall.PushBack({ 150, 190, 30, 30 });
+
+	Fall.speed = 0.1f;
+	Fall.loop = false;
+
+	FallLeft.PushBack({ 0, 220, 30, 30 });
+	FallLeft.PushBack({ 30, 220, 30, 30 });
+	FallLeft.PushBack({ 60, 220, 30, 30 });
+	FallLeft.PushBack({ 90, 220, 30, 30 });
+	FallLeft.PushBack({ 120, 220, 30, 30 });
+	FallLeft.PushBack({ 150, 220, 30, 30 });
+
+	FallLeft.speed = 0.1f;
+	FallLeft.loop = false;
 }
 
 Player::~Player() {
@@ -235,9 +254,19 @@ bool Player::Update(float dt)
 		vel.x *= dt*0.75;
 		vel.y *= power*0.75;
 		vel.y *= dt*0.75;
+
+		/*if (vel.y < -10.0f) {
+			if (isFacingLeft != true) {
+				currentAnim = &Fall;
+			}
+			else {
+				currentAnim = &FallLeft;
+			}
+		}*/
 		
 		break;
 	case Player::FLOOR:
+
 		speedy = 1.0f;
 		b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 		

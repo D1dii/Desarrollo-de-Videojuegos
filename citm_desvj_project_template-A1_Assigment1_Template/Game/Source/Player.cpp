@@ -190,6 +190,13 @@ bool Player::Update(float dt)
 		triX = savePos - mouseX;
 		triY = savePosY - mouseY;
 
+		if (mouseX < savePos) {
+			isFacingLeft = true;
+		}
+		else {
+			isFacingLeft = false;
+		}
+
 		powerJump.w = 0;
 		
 		
@@ -232,6 +239,15 @@ bool Player::Update(float dt)
 
 	}
 
+	/*if (pbody->body->GetLinearVelocity().y > 5.0f) {
+		if (isFacingLeft != true) {
+			currentAnim = &Fall;
+		}
+		else {
+			currentAnim = &FallLeft;
+		}
+	}*/
+
 	switch (player)
 	{
 	case Player::JUMPING:
@@ -261,15 +277,6 @@ bool Player::Update(float dt)
 		vel.x *= dt*0.75;
 		vel.y *= power*0.75;
 		vel.y *= dt*0.75;
-
-		/*if (vel.y < -10.0f) {
-			if (isFacingLeft != true) {
-				currentAnim = &Fall;
-			}
-			else {
-				currentAnim = &FallLeft;
-			}
-		}*/
 		
 		break;
 	case Player::FLOOR:

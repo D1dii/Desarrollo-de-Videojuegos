@@ -133,7 +133,14 @@ bool Player::Start() {
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;
 
-	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 8, bodyType::DYNAMIC);
+	int player[8] = {
+		0, 0,
+		12, 0,
+		12, 16,
+		0, 16,
+	};
+
+	pbody = app->physics->CreateChain(position.x, position.y, player, 8, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
@@ -278,8 +285,8 @@ bool Player::Update(float dt)
 
 	//Update player position in pixels
 
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 5);
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 7);
 
 	// Debug options
 

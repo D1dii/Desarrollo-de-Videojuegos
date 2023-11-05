@@ -32,8 +32,11 @@ public:
 	Animation* currentAnim;
 
 	Animation Idle;
+	Animation IdleLeft;
+	Animation RunLeft;
 	Animation Run;
 	Animation ChargeJump;
+	Animation ChargeJumpLeft;
 	Animation Jump;
 
 public:

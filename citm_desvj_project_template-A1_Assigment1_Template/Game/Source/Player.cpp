@@ -26,6 +26,16 @@ Player::Player() : Entity(EntityType::PLAYER)
 	Idle.speed = 0.2f;
 	Idle.loop = true;
 
+	IdleLeft.PushBack({ 0, 125, 30, 30 });
+	IdleLeft.PushBack({ 30, 125, 30, 30 });
+	IdleLeft.PushBack({ 60, 125, 30, 30 });
+	IdleLeft.PushBack({ 90, 125, 30, 30 });
+	IdleLeft.PushBack({ 120, 125, 30, 30 });
+	IdleLeft.PushBack({ 150, 125, 30, 30 });
+
+	IdleLeft.speed = 0.2f;
+	IdleLeft.loop = true;
+
 	Run.PushBack({ 0, 60, 30, 30 });
 	Run.PushBack({ 30, 60, 30, 30 });
 	Run.PushBack({ 60, 60, 30, 30 });
@@ -34,6 +44,18 @@ Player::Player() : Entity(EntityType::PLAYER)
 	Run.PushBack({ 150, 60, 30, 30 });
 	Run.PushBack({ 180, 60, 30, 30 });
 	Run.PushBack({ 210, 60, 30, 30 });
+
+	RunLeft.speed = 0.2f;
+	RunLeft.loop = true;
+
+	RunLeft.PushBack({ 0, 95, 30, 30 });
+	RunLeft.PushBack({ 30, 95, 30, 30 });
+	RunLeft.PushBack({ 60, 95, 30, 30 });
+	RunLeft.PushBack({ 90, 95, 30, 30 });
+	RunLeft.PushBack({ 120, 95, 30, 30 });
+	RunLeft.PushBack({ 150, 95, 30, 30 });
+	RunLeft.PushBack({ 180, 95, 30, 30 });
+	RunLeft.PushBack({ 210, 95, 30, 30 });
 
 	Run.speed = 0.2f;
 	Run.loop = true;
@@ -44,6 +66,12 @@ Player::Player() : Entity(EntityType::PLAYER)
 
 	ChargeJump.speed = 0.1f;
 	ChargeJump.loop = false;
+
+	ChargeJumpLeft.PushBack({ 0, 150, 30, 30 });
+	ChargeJumpLeft.PushBack({ 30, 150, 30, 30 });
+	ChargeJumpLeft.PushBack({ 60, 150, 30, 30 });
+	ChargeJumpLeft.speed = 0.1f;
+	ChargeJumpLeft.loop = false;
 
 	Jump.PushBack({ 90, 30, 30, 30 });
 	Jump.PushBack({ 120, 30, 30, 30 });
@@ -97,7 +125,13 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
-	currentAnim = &Idle;
+	if (isFacingLeft != true) {
+		currentAnim = &Idle;
+	}
+	else {
+		currentAnim = &IdleLeft;
+	}
+	
 	b2Vec2 vel = b2Vec2(0, 0);
 	if (godMode == false) {
 		vel = b2Vec2(0, -GRAVITY_Y);
@@ -109,7 +143,12 @@ bool Player::Update(float dt)
 	uint scale = app->win->GetScale();
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
-		currentAnim = &ChargeJump;
+		if (isFacingLeft != true) {
+			currentAnim = &ChargeJump;
+		}
+		else {
+			currentAnim = &ChargeJumpLeft;
+		}
 		if (power < 0.6f) {
 			power += 0.025f;
 			powerJump.w += 1;
@@ -132,7 +171,7 @@ bool Player::Update(float dt)
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
-		currentAnim = &Run;
+		currentAnim = &RunLeft;
 		isFacingLeft = true;
 		if (godMode == false) {
 			vel = b2Vec2(-speedx * dt, -GRAVITY_Y);

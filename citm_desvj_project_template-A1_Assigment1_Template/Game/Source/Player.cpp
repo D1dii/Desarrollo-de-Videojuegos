@@ -89,25 +89,25 @@ Player::Player() : Entity(EntityType::PLAYER)
 	Jump.speed = 0.1f;
 	Jump.loop = false;
 
-	Fall.PushBack({ 0, 190, 30, 30 });
-	Fall.PushBack({ 30, 190, 30, 30 });
-	Fall.PushBack({ 60, 190, 30, 30 });
-	Fall.PushBack({ 90, 190, 30, 30 });
-	Fall.PushBack({ 120, 190, 30, 30 });
-	Fall.PushBack({ 150, 190, 30, 30 });
+	//Fall.PushBack({ 0, 185, 30, 30 });
+	Fall.PushBack({ 30, 185, 30, 30 });
+	Fall.PushBack({ 60, 185, 30, 30 });
+	Fall.PushBack({ 90, 185, 30, 30 });
+	Fall.PushBack({ 120, 185, 30, 30 });
+	Fall.PushBack({ 150, 185, 30, 30 });
 
 	Fall.speed = 0.1f;
-	Fall.loop = false;
+	Fall.loop = true;
 
-	FallLeft.PushBack({ 0, 220, 30, 30 });
-	FallLeft.PushBack({ 30, 220, 30, 30 });
-	FallLeft.PushBack({ 60, 220, 30, 30 });
-	FallLeft.PushBack({ 90, 220, 30, 30 });
-	FallLeft.PushBack({ 120, 220, 30, 30 });
-	FallLeft.PushBack({ 150, 220, 30, 30 });
+	//FallLeft.PushBack({ 0, 215, 30, 30 });
+	FallLeft.PushBack({ 30, 215, 30, 30 });
+	FallLeft.PushBack({ 60, 215, 30, 30 });
+	FallLeft.PushBack({ 90, 215, 30, 30 });
+	FallLeft.PushBack({ 120, 215, 30, 30 });
+	FallLeft.PushBack({ 150, 215, 30, 30 });
 
 	FallLeft.speed = 0.1f;
-	FallLeft.loop = false;
+	FallLeft.loop = true;
 }
 
 Player::~Player() {
@@ -151,11 +151,28 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
-	if (isFacingLeft != true) {
-		currentAnim = &Idle;
+	if (justFall == true)
+	{
+		fallTimer++;
+		if (isFacingLeft == false) {
+			currentAnim = &Fall;
+		}
+		else {
+			currentAnim = &FallLeft;
+		}
 	}
-	else {
-		currentAnim = &IdleLeft;
+	else if (justFall == false)
+	{
+		if (isFacingLeft != true) {
+			currentAnim = &Idle;
+		}
+		else {
+			currentAnim = &IdleLeft;
+		}
+	}
+	
+	if (fallTimer >= 50) {
+		justFall = false;
 	}
 	
 	b2Vec2 vel = b2Vec2(0, 0);
@@ -283,6 +300,14 @@ bool Player::Update(float dt)
 
 		speedy = 1.0f;
 		b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
+		if (justFall == true) {
+			if (isFacingLeft == false) {
+				currentAnim = &Fall;
+			}
+			else {
+				currentAnim = &FallLeft;
+			}
+		}
 		
 		break;
 	}
@@ -347,8 +372,6 @@ bool Player::Update(float dt)
 
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	
-	//SDL_RenderCopyEx(app->render->renderer, texture, &currentAnim->GetCurrentFrame(), &destinoRect, 0, NULL, flip);
-	
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
 
 	app->render->camera.y = (-position.y + 230) * scale;
@@ -375,6 +398,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (player == jumpState::JUMPING || player == jumpState::POWER_JUMP) {
 			player = jumpState::FLOOR;
 			power = 0;
+			justFall = true;
+			fallTimer = 0;
 		}
 		break;
 	case ColliderType::UNKNOWN:

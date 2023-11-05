@@ -64,6 +64,9 @@ public:
 	bool showBar = false;
 	
 	bool isFacingLeft;
+	bool justFall = false;
+
+	int fallTimer = 0;
 
 	SDL_Texture* texture = NULL;
 	

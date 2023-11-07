@@ -185,7 +185,7 @@ bool Player::Update(float dt)
 	
 	uint scale = app->win->GetScale();
 	
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::JUMPING) {
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::POWER_JUMP) {
 		if (isFacingLeft != true) {
 			currentAnim = &ChargeJump;
 		}
@@ -197,7 +197,7 @@ bool Player::Update(float dt)
 			powerJump.w += 1;
 		}
 		
-	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP) {
+	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && player != jumpState::POWER_JUMP) {
 		SDL_GetMouseState(&mouseX, &mouseY);
 		mouseX = mouseX;
 		mouseY = mouseY - app->render->camera.y;

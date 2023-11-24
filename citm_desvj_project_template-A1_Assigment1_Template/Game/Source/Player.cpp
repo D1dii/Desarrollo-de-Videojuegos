@@ -16,109 +16,114 @@ Player::Player() : Entity(EntityType::PLAYER)
 	name.Create("Player");
 	isFacingLeft = false;
 
-	Idle.PushBack({ 0, 0, 30, 30 });
-	Idle.PushBack({ 30, 0, 30, 30 });
-	Idle.PushBack({ 60, 0, 30, 30 });
-	Idle.PushBack({ 90, 0, 30, 30 });
-	Idle.PushBack({ 120, 0, 30, 30 });
-	Idle.PushBack({ 150, 0, 30, 30 });
+	
 
-	Idle.speed = 0.2f;
-	Idle.loop = true;
-
-	IdleLeft.PushBack({ 0, 125, 30, 30 });
-	IdleLeft.PushBack({ 30, 125, 30, 30 });
-	IdleLeft.PushBack({ 60, 125, 30, 30 });
-	IdleLeft.PushBack({ 90, 125, 30, 30 });
-	IdleLeft.PushBack({ 120, 125, 30, 30 });
-	IdleLeft.PushBack({ 150, 125, 30, 30 });
-
-	IdleLeft.speed = 0.2f;
-	IdleLeft.loop = true;
-
-	Run.PushBack({ 0, 60, 30, 30 });
-	Run.PushBack({ 30, 60, 30, 30 });
-	Run.PushBack({ 60, 60, 30, 30 });
-	Run.PushBack({ 90, 60, 30, 30 });
-	Run.PushBack({ 120, 60, 30, 30 });
-	Run.PushBack({ 150, 60, 30, 30 });
-	Run.PushBack({ 180, 60, 30, 30 });
-	Run.PushBack({ 210, 60, 30, 30 });
-
-	RunLeft.speed = 0.2f;
-	RunLeft.loop = true;
-
-	RunLeft.PushBack({ 0, 95, 30, 30 });
-	RunLeft.PushBack({ 30, 95, 30, 30 });
-	RunLeft.PushBack({ 60, 95, 30, 30 });
-	RunLeft.PushBack({ 90, 95, 30, 30 });
-	RunLeft.PushBack({ 120, 95, 30, 30 });
-	RunLeft.PushBack({ 150, 95, 30, 30 });
-	RunLeft.PushBack({ 180, 95, 30, 30 });
-	RunLeft.PushBack({ 210, 95, 30, 30 });
-
-	Run.speed = 0.2f;
-	Run.loop = true;
-
-	ChargeJump.PushBack({ 0, 30, 30, 30 });
-	ChargeJump.PushBack({ 30, 30, 30, 30 });
-	ChargeJump.PushBack({ 60, 30, 30, 30 });
-
-	ChargeJump.speed = 0.1f;
-	ChargeJump.loop = false;
-
-	ChargeJumpLeft.PushBack({ 0, 150, 30, 30 });
-	ChargeJumpLeft.PushBack({ 30, 150, 30, 30 });
-	ChargeJumpLeft.PushBack({ 60, 150, 30, 30 });
-	ChargeJumpLeft.speed = 0.1f;
-	ChargeJumpLeft.loop = false;
-
-	Jump.PushBack({ 90, 30, 30, 30 });
-	Jump.PushBack({ 120, 30, 30, 30 });
-	Jump.PushBack({ 150, 30, 30, 30 });
-	Jump.PushBack({ 180, 30, 30, 30 });
-	Jump.PushBack({ 210, 30, 30, 30 });
-	Jump.PushBack({ 240, 30, 30, 30 });
-	Jump.PushBack({ 270, 30, 30, 30 });
-	Jump.PushBack({ 300, 30, 30, 30 });
-	Jump.PushBack({ 330, 30, 30, 30 });
-	Jump.PushBack({ 360, 30, 30, 30 });
-	Jump.PushBack({ 390, 30, 30, 30 });
-	Jump.PushBack({ 420, 30, 30, 30 });
-
-	Jump.speed = 0.1f;
-	Jump.loop = false;
-
-	//Fall.PushBack({ 0, 185, 30, 30 });
-	Fall.PushBack({ 30, 185, 30, 30 });
-	Fall.PushBack({ 60, 185, 30, 30 });
-	Fall.PushBack({ 90, 185, 30, 30 });
-	Fall.PushBack({ 120, 185, 30, 30 });
-	Fall.PushBack({ 150, 185, 30, 30 });
-
-	Fall.speed = 0.1f;
-	Fall.loop = true;
-
-	//FallLeft.PushBack({ 0, 215, 30, 30 });
-	FallLeft.PushBack({ 30, 215, 30, 30 });
-	FallLeft.PushBack({ 60, 215, 30, 30 });
-	FallLeft.PushBack({ 90, 215, 30, 30 });
-	FallLeft.PushBack({ 120, 215, 30, 30 });
-	FallLeft.PushBack({ 150, 215, 30, 30 });
-
-	FallLeft.speed = 0.1f;
-	FallLeft.loop = true;
 }
 
 Player::~Player() {
 
 }
 
+void Player::InitAnims() {
+	// Idle
+	for (pugi::xml_node node = parameters.child("Idle").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Idle.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Idle.speed = parameters.child("Idle").attribute("animspeed").as_float();
+	Idle.loop = parameters.child("Idle").attribute("loop").as_bool();
+
+	// IdleLeft
+	for (pugi::xml_node node = parameters.child("IdleLeft").child("pushback"); node; node = node.next_sibling("pushback")) {
+		IdleLeft.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	IdleLeft.speed = parameters.child("IdleLeft").attribute("animspeed").as_float();
+	IdleLeft.loop = parameters.child("IdleLeft").attribute("loop").as_bool();
+
+	// Run
+	for (pugi::xml_node node = parameters.child("Run").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Run.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Run.speed = parameters.child("Run").attribute("animspeed").as_float();
+	Run.loop = parameters.child("Run").attribute("loop").as_bool();
+
+	// RunLeft
+	for (pugi::xml_node node = parameters.child("RunLeft").child("pushback"); node; node = node.next_sibling("pushback")) {
+		RunLeft.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	RunLeft.speed = parameters.child("RunLeft").attribute("animspeed").as_float();
+	RunLeft.loop = parameters.child("RunLeft").attribute("loop").as_bool();
+
+	// ChargeJump
+	for (pugi::xml_node node = parameters.child("ChargeJump").child("pushback"); node; node = node.next_sibling("pushback")) {
+		ChargeJump.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	ChargeJump.speed = parameters.child("ChargeJump").attribute("animspeed").as_float();
+	ChargeJump.loop = parameters.child("ChargeJump").attribute("loop").as_bool();
+
+	// ChargeJumpLeft
+	for (pugi::xml_node node = parameters.child("ChargeJumpLeft").child("pushback"); node; node = node.next_sibling("pushback")) {
+		ChargeJumpLeft.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	ChargeJumpLeft.speed = parameters.child("ChargeJumpLeft").attribute("animspeed").as_float();
+	ChargeJumpLeft.loop = parameters.child("ChargeJumpLeft").attribute("loop").as_bool();
+
+	// Jump
+	for (pugi::xml_node node = parameters.child("Jump").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Jump.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Jump.speed = parameters.child("Jump").attribute("animspeed").as_float();
+	Jump.loop = parameters.child("Jump").attribute("loop").as_bool();
+
+	// Fall
+	for (pugi::xml_node node = parameters.child("Fall").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Fall.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Fall.speed = parameters.child("Fall").attribute("animspeed").as_float();
+	Fall.loop = parameters.child("Fall").attribute("loop").as_bool();
+
+	// FallLeft
+	for (pugi::xml_node node = parameters.child("FallLeft").child("pushback"); node; node = node.next_sibling("pushback")) {
+		FallLeft.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	FallLeft.speed = parameters.child("FallLeft").attribute("animspeed").as_float();
+	FallLeft.loop = parameters.child("FallLeft").attribute("loop").as_bool();
+}
+
 bool Player::Awake() {
 
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
+	
 	texturePath = parameters.attribute("texturepath").as_string();
+
+	InitAnims();
 
 	return true;
 }
@@ -144,7 +149,10 @@ bool Player::Start() {
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
-	app->audio->PlayMusic("Assets/Audio/Music/LeFestinLetHimCook.mp3", 0.0f);
+	SString audioPath = parameters.child("musicFile").attribute("path").as_string();
+
+	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
+	
 
 	return true;
 }

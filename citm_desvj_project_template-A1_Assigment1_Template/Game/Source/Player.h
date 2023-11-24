@@ -28,6 +28,8 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
+
+	void InitAnims();
 	
 	Animation* currentAnim;
 
@@ -75,6 +77,10 @@ public:
 	
 	SDL_Rect powerJump;
 	SDL_Rect destinoRect;
+
+	pugi::xml_node configNode;
+
+
 	
 
 	enum jumpState 

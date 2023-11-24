@@ -23,7 +23,83 @@
 
   <scene>
     <map path="Assets/Maps/" name="Level1 Map.tmx"/>
-    <player x="100" y="2150" texturepath="Assets/Textures/idle.png"/>
+    <player x="100" y="2150" texturepath="Assets/Textures/idle.png">
+		<musicFile path="Assets/Audio/Music/LeFestinLetHimCook.mp3"/>
+	  <Idle animspeed="0.2f" loop="true">
+		  <pushback x="0" y="0" width="30" height="30"/>
+		  <pushback x="30" y="0" width="30" height="30"/>
+		  <pushback x="60" y="0" width="30" height="30"/>
+		  <pushback x="90" y="0" width="30" height="30"/>
+		  <pushback x="120" y="0" width="30" height="30"/>
+		  <pushback x="150" y="0" width="30" height="30"/>
+	  </Idle>
+	  <IdleLeft animspeed="0.2f" loop="true">
+		  <pushback x="0" y="125" width="30" height="30"/>
+		  <pushback x="30" y="125" width="30" height="30"/>
+		  <pushback x="60" y="125" width="30" height="30"/>
+		  <pushback x="90" y="125" width="30" height="30"/>
+		  <pushback x="120" y="125" width="30" height="30"/>
+		  <pushback x="150" y="125" width="30" height="30"/>
+	  </IdleLeft>
+	  <Run animspeed="0.2f" loop="true">
+		  <pushback x="0" y="60" width="30" height="30"/>
+		  <pushback x="30" y="60" width="30" height="30"/>
+		  <pushback x="60" y="60" width="30" height="30"/>
+		  <pushback x="90" y="60" width="30" height="30"/>
+		  <pushback x="120" y="60" width="30" height="30"/>
+		  <pushback x="150" y="60" width="30" height="30"/>
+		  <pushback x="180" y="60" width="30" height="30"/>
+		  <pushback x="210" y="60" width="30" height="30"/>
+	  </Run>
+	  <RunLeft animspeed="0.2f" loop="true">
+		  <pushback x="0" y="95" width="30" height="30"/>
+		  <pushback x="30" y="95" width="30" height="30"/>
+		  <pushback x="60" y="95" width="30" height="30"/>
+		  <pushback x="90" y="95" width="30" height="30"/>
+		  <pushback x="120" y="95" width="30" height="30"/>
+		  <pushback x="150" y="95" width="30" height="30"/>
+		  <pushback x="180" y="95" width="30" height="30"/>
+		  <pushback x="210" y="95" width="30" height="30"/>
+	  </RunLeft>
+	  <ChargeJump animspeed="0.1f" loop="false">
+		  <pushback x="0" y="30" width="30" height="30"/>
+		  <pushback x="30" y="30" width="30" height="30"/>
+		  <pushback x="60" y="30" width="30" height="30"/>
+	  </ChargeJump>
+	  <ChargeJumpLeft animspeed="0.1f" loop="false">
+		  <pushback x="0" y="150" width="30" height="30"/>
+		  <pushback x="30" y="150" width="30" height="30"/>
+		  <pushback x="60" y="150" width="30" height="30"/>
+	  </ChargeJumpLeft>
+	  <Jump animspeed="0.1f" loop="false">
+		  <pushback x="90" y="30" width="30" height="30"/>
+		  <pushback x="120" y="30" width="30" height="30"/>
+		  <pushback x="150" y="30" width="30" height="30"/>
+		  <pushback x="180" y="30" width="30" height="30"/>
+		  <pushback x="210" y="30" width="30" height="30"/>
+		  <pushback x="240" y="30" width="30" height="30"/>
+		  <pushback x="270" y="30" width="30" height="30"/>
+		  <pushback x="300" y="30" width="30" height="30"/>
+		  <pushback x="330" y="30" width="30" height="30"/>
+		  <pushback x="360" y="30" width="30" height="30"/>
+		  <pushback x="390" y="30" width="30" height="30"/>
+		  <pushback x="420" y="30" width="30" height="30"/>
+	  </Jump>
+	  <Fall animspeed="0.1f" loop="true">
+		  <pushback x="30" y="185" width="30" height="30"/>
+		  <pushback x="60" y="185" width="30" height="30"/>
+		  <pushback x="90" y="185" width="30" height="30"/>
+		  <pushback x="120" y="185" width="30" height="30"/>
+		  <pushback x="150" y="185" width="30" height="30"/>
+	  </Fall>
+	  <FallLeft animspeed="0.1f" loop="true">
+		  <pushback x="30" y="215" width="30" height="30"/>
+		  <pushback x="60" y="185" width="30" height="30"/>
+		  <pushback x="90" y="185" width="30" height="30"/>
+		  <pushback x="120" y="185" width="30" height="30"/>
+		  <pushback x="150" y="185" width="30" height="30"/>
+	  </FallLeft>
+		</player>
   </scene>
   
 </config>

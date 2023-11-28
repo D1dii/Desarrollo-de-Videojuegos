@@ -23,7 +23,7 @@
 
   <scene>
     <map path="Assets/Maps/" name="Level1 Map.tmx"/>
-    <player x="100" y="2150" texturepath="Assets/Textures/idle.png">
+    <player x="100" y="2172" texturepath="Assets/Textures/idle.png">
 		<musicFile path="Assets/Audio/Music/LeFestinLetHimCook.mp3"/>
 	  <Idle animspeed="0.2f" loop="true">
 		  <pushback x="0" y="0" width="30" height="30"/>

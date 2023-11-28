@@ -281,7 +281,6 @@ bool Player::Update(float dt)
 			currentAnim = &FallLeft;
 		}
 	}*/
-
 	switch (player)
 	{
 	case Player::JUMPING:

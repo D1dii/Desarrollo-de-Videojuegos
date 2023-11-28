@@ -51,8 +51,8 @@ public:
 	float speedPower = 1.0f;
 	float jumpX = 0;
 	float jumpY = 0;
-	float triX = 0;
-	float triY = 0;
+	float triX = 200;
+	float triY = 200;
 	float savePos = position.x;
 	float savePosY = position.y;
 	int mouseX = 0;

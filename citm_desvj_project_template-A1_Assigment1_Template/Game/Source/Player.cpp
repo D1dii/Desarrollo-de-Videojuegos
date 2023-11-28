@@ -212,14 +212,23 @@ bool Player::Update(float dt)
 		savePos = position.x * scale;
 		savePosY = position.y * scale;
 
-		triX = savePos - mouseX;
-		triY = savePosY - mouseY;
+		/*triX = savePos - mouseX;
+		triY = savePosY - mouseY;*/
 
-		if (mouseX < savePos) {
+		/*if (mouseX < savePos) {
 			isFacingLeft = true;
 		}
 		else {
 			isFacingLeft = false;
+		}*/
+
+		if (isFacingLeft == true) {
+			triX = 250;
+			triY = 400;
+		}
+		else {
+			triX = -250;
+			triY = 400;
 		}
 
 		powerJump.w = 0;
@@ -290,7 +299,6 @@ bool Player::Update(float dt)
 		}
 		break;
 	case Player::POWER_JUMP:
-		
 		angle = atan2(triY, triX) * DEGTORAD;
 		jumpX = speedPower * cos(angle);
 		jumpY = -speedPower * sin(angle);
@@ -298,10 +306,10 @@ bool Player::Update(float dt)
 		vel = b2Vec2(-triX, -triY);
 		triY += GRAVITY_Y;
 		vel.Normalize();
-		vel.x *= power*0.75;
-		vel.x *= dt*0.75;
-		vel.y *= power*0.75;
-		vel.y *= dt*0.75;
+		vel.x *= power*0.55;
+		vel.x *= dt*0.55;
+		vel.y *= power*0.55;
+		vel.y *= dt*0.55;
 		
 		break;
 	case Player::FLOOR:

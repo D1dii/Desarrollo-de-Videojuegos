@@ -298,6 +298,7 @@ bool Player::Update(float dt)
 			isFacingLeft = false;
 			vel = b2Vec2(speedx * dt, -speedy * dt * 2);
 		}
+		
 		break;
 	case Player::POWER_JUMP:
 		angle = atan2(triY, triX) * DEGTORAD;
@@ -314,7 +315,6 @@ bool Player::Update(float dt)
 		
 		break;
 	case Player::FLOOR:
-
 		speedy = 1.0f;
 		b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 		if (justFall == true) {

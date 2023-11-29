@@ -203,6 +203,8 @@ bool Player::Update(float dt)
 		if (power < 0.6f) {
 			power += 0.025f;
 			powerJump.w += 1;
+			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) isFacingLeft = false;
+			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) isFacingLeft = true;
 		}
 		
 	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && player != jumpState::POWER_JUMP) {

@@ -150,7 +150,6 @@ public:
 
 private:
 
-	
 	bool LoadObjectGroups(pugi::xml_node MapNode);
 
 public: 

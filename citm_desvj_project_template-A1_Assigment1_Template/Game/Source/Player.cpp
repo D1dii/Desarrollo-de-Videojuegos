@@ -15,9 +15,6 @@ Player::Player() : Entity(EntityType::PLAYER)
 
 	name.Create("Player");
 	isFacingLeft = false;
-
-	
-
 }
 
 Player::~Player() {

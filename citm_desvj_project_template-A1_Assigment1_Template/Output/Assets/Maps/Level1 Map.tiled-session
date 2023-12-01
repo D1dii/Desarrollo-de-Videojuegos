@@ -7,19 +7,33 @@
         "": {
             "scaleInDock": 2
         },
-        "Level1 Map.tmx": {
-            "scale": 1.5,
+        "C:/Users/didacgp/Downloads/handout 13/citm_desvj_project_template-L13_Pathfinding_AStart_module/Output/Assets/Maps/MapTemplate.tmx": {
+            "scale": 0.479638671875,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 218.66666666666666,
-                "y": 279.33333333333326
+                "x": 998.6684312328209,
+                "y": 398.21643082561343
+            }
+        },
+        "C:/Users/didacgp/Downloads/handout 13/citm_desvj_project_template-L13_Pathfinding_AStart_module/Output/Assets/Maps/MapTemplate.tmx#MapMetadata": {
+            "scaleInDock": 1
+        },
+        "C:/Users/didacgp/Downloads/handout 13/citm_desvj_project_template-L13_Pathfinding_AStart_module/Output/Assets/Maps/MapTemplate.tmx#tmw_desert_spacing": {
+            "scaleInDock": 1
+        },
+        "Level1 Map.tmx": {
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 359,
+                "y": 1984
             }
         },
         "Level1 Map.tmx#Tiny Tower FREE": {
             "scaleInDock": 1.5
         }
     },
-    "last.imagePath": "C:/Users/didacgp/Documents/GitHub/Desarrollo-de-Videojuegos/citm_desvj_project_template-A1_Assigment1_Template/Output/Assets/Tiny Tower Free Pack",
+    "last.imagePath": "C:/Users/didacgp/Documents/GitHub/Desarrollo-de-Videojuegos/citm_desvj_project_template-A1_Assigment1_Template/Output/Assets/Maps",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
         "Level1 Map.tmx"
@@ -27,11 +41,13 @@
     "project": "Level1 Map.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "C:/Users/didacgp/Downloads/handout 13/citm_desvj_project_template-L13_Pathfinding_AStart_module/Output/Assets/Maps/MapTemplate.tmx",
         "Level1 Map.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
         "height": 16,
         "width": 16
-    }
+    },
+    "tileset.useTransparentColor": true
 }

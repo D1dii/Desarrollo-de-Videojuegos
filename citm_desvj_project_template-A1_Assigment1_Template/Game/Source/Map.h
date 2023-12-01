@@ -4,6 +4,9 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
+#include "PQueue.h"
+#include "DynArray.h"
+#include "Pathfinding.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
@@ -14,13 +17,25 @@ struct TileSet
 	int	firstgid;
 	int margin;
 	int	spacing;
-	int	tileWidth;
-	int	tileHeight;
+	int	tilewidth;
+	int	tileheight;
 	int columns;
 	int tilecount;
 
 	SDL_Texture* texture;
-	SDL_Rect GetTileRect(int gid) const;
+	// L06: DONE 7: Implement the method that receives the gid and returns a Rect
+
+	SDL_Rect GetRect(uint gid) {
+		SDL_Rect rect = { 0 };
+
+		int relativeIndex = gid - firstgid;
+		rect.w = tilewidth;
+		rect.h = tileheight;
+		rect.x = margin + (tilewidth + spacing) * (relativeIndex % columns);
+		rect.y = margin + (tileheight + spacing) * (relativeIndex / columns);
+
+		return rect;
+	}
 };
 
 //  We create an enum for map type, just for convenience,
@@ -67,21 +82,21 @@ struct MapLayer
 	int id; 
 	int width;
 	int height;
-	uint* data;
+	uint* tiles;
 
 	Properties properties;
 
-	MapLayer() : data(NULL)
+	MapLayer() : tiles(NULL)
 	{}
 
 	~MapLayer()
 	{
-		RELEASE(data);
+		RELEASE(tiles);
 	}
 
 	inline uint Get(int x, int y) const
 	{
-		return data[(y * width) + x];
+		return tiles[(y * width) + x];
 	}
 };
 
@@ -89,8 +104,8 @@ struct MapData
 {
 	int width;
 	int	height;
-	int	tileWidth;
-	int	tileHeight;
+	int	tilewidth;
+	int	tileheight;
 	List<TileSet*> tilesets;
 	MapTypes type;
 
@@ -124,14 +139,18 @@ public:
 	iPoint MapToWorld(int x, int y) const;
 	iPoint Map::WorldToMap(int x, int y);
 
-private:
-
-	bool LoadMap(pugi::xml_node mapFile);
-	bool LoadTileSet(pugi::xml_node mapFile);
-	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
-	bool LoadAllLayers(pugi::xml_node mapNode);
 	TileSet* GetTilesetFromTileId(int gid) const;
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
+
+	// L13: Create navigation map for pathfinding
+	void CreateNavigationMap(int& width, int& height, uchar** buffer) const;
+
+	int GetTileWidth();
+	int GetTileHeight();
+
+private:
+
+	
 	bool LoadObjectGroups(pugi::xml_node MapNode);
 
 public: 
@@ -139,10 +158,13 @@ public:
 	MapData mapData;
 	SString name;
 	SString path;
+	PathFinding* pathfinding;
 
 private:
 
 	bool mapLoaded;
+	MapLayer* navigationLayer;
+	int blockedGid = 546;
 };
 
 #endif // __MAP_H__

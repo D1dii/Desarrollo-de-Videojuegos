@@ -80,9 +80,6 @@ public:
 
 	pugi::xml_node configNode;
 
-
-	
-
 	enum jumpState 
 	{
 		JUMPING,

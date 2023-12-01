@@ -38,6 +38,11 @@ bool Scene::Awake(pugi::xml_node& config)
 		player->parameters = config.child("player");
 	}
 
+	if (config.child("enemy")) {
+		enemy = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
+		enemy->parameters = config.child("enemy");
+	}
+
 	if (config.child("map")) {
 		//Get the map name from the config file and assigns the value in the module
 		app->map->name = config.child("map").attribute("name").as_string();
@@ -68,8 +73,8 @@ bool Scene::Start()
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,
 		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
+		app->map->mapData.tilewidth,
+		app->map->mapData.tileheight,
 		app->map->mapData.tilesets.Count());
 
 	return true;
@@ -126,4 +131,8 @@ bool Scene::CleanUp()
 	LOG("Freeing scene");
 
 	return true;
+}
+
+iPoint Scene::GetPLayerPosition() {
+	return player->position;
 }

@@ -272,14 +272,7 @@ bool Player::Update(float dt)
 
 	}
 
-	/*if (pbody->body->GetLinearVelocity().y > 5.0f) {
-		if (isFacingLeft != true) {
-			currentAnim = &Fall;
-		}
-		else {
-			currentAnim = &FallLeft;
-		}
-	}*/
+	
 	switch (player)
 	{
 	case Player::JUMPING:

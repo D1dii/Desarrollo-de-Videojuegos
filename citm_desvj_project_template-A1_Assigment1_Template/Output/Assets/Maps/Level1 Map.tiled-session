@@ -22,12 +22,15 @@
             "scaleInDock": 1
         },
         "Level1 Map.tmx": {
-            "scale": 1,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 359,
-                "y": 1984
+                "x": 264.66666666666663,
+                "y": 2064
             }
+        },
+        "Level1 Map.tmx#Map Meta Data": {
+            "scaleInDock": 1
         },
         "Level1 Map.tmx#Tiny Tower FREE": {
             "scaleInDock": 1.5
@@ -41,8 +44,8 @@
     "project": "Level1 Map.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "C:/Users/didacgp/Downloads/handout 13/citm_desvj_project_template-L13_Pathfinding_AStart_module/Output/Assets/Maps/MapTemplate.tmx",
-        "Level1 Map.tmx"
+        "Level1 Map.tmx",
+        "C:/Users/didacgp/Downloads/handout 13/citm_desvj_project_template-L13_Pathfinding_AStart_module/Output/Assets/Maps/MapTemplate.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {

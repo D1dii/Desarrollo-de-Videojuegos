@@ -37,6 +37,12 @@ public:
 	const char* texturePath;
 
 	SDL_Texture* texture = NULL;
+	SDL_Texture* pathTest = NULL;
+
+	int counterPath = 0;
+	int timer = 0;
+
+	PhysBody* enemyCollider;
 
 private:
 };

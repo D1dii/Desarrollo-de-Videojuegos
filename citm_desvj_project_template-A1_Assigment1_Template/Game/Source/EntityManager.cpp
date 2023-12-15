@@ -4,6 +4,7 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "Enemy.h"
+#include "FlyEnemy.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -91,6 +92,8 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	case EntityType::ENEMY:
 		entity = new Enemy();
 		break;
+	case EntityType::FLY_ENEMY:
+		entity = new FlyEnemy();
 	default:
 		break;
 	}

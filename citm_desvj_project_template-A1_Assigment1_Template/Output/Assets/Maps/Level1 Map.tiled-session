@@ -22,11 +22,11 @@
             "scaleInDock": 1
         },
         "Level1 Map.tmx": {
-            "scale": 1.5,
+            "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 249.33333333333331,
-                "y": 1878.6666666666665
+                "x": 253,
+                "y": 1911
             }
         },
         "Level1 Map.tmx#Map Meta Data": {

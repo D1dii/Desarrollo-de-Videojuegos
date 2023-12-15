@@ -77,7 +77,7 @@ bool Enemy::Update(float dt)
 	}
 
 	if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
-		iPoint pos = app->map->MapToWorld(path->At(1)->x, path->At(1)->y);
+
 
 		if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 2) {
 			enemyCollider->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));

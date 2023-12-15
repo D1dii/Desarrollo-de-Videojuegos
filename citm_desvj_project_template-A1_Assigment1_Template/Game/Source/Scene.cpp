@@ -43,6 +43,11 @@ bool Scene::Awake(pugi::xml_node& config)
 		enemy->parameters = config.child("enemy");
 	}
 
+	if (config.child("FlyEnemy")) {
+		flyenemy = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
+		flyenemy->parameters = config.child("FlyEnemy");
+	}
+
 	if (config.child("map")) {
 		//Get the map name from the config file and assigns the value in the module
 		app->map->name = config.child("map").attribute("name").as_string();

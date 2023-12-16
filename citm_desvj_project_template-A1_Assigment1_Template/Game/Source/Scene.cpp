@@ -147,20 +147,38 @@ iPoint Scene::GetPLayerPosition() {
 
 bool Scene::LoadState(pugi::xml_node node)
 {
-	player->position.x = node.child("position").attribute("x").as_int();
-	player->position.y = node.child("position").attribute("y").as_int();
+	player->position.x = node.child("positionPlayer").attribute("x").as_int();
+	player->position.y = node.child("positionPlayer").attribute("y").as_int();
 
-	player->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("position").attribute("x").as_int()), PIXEL_TO_METERS(node.child("position").attribute("y").as_int()) }, 0);
+	player->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionPlayer").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionPlayer").attribute("y").as_int()) }, 0);
+
+
+	enemy->position.x = node.child("positionEnemy").attribute("x").as_int();
+	enemy->position.y = node.child("positionEnemy").attribute("y").as_int();
+
+	enemy->enemyCollider->body->SetTransform({ PIXEL_TO_METERS(node.child("positionEnemy").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionEnemy").attribute("y").as_int()) }, 0);
+
+	flyenemy->position.x = node.child("positionFlyEnemy").attribute("x").as_int();
+	flyenemy->position.y = node.child("positionFlyEnemy").attribute("y").as_int();
+
+	flyenemy->enemyCollider->body->SetTransform({ PIXEL_TO_METERS(node.child("positionFlyEnemy").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionFlyEnemy").attribute("y").as_int()) }, 0);
 
 	return true;
 }
 
 bool Scene::SaveState(pugi::xml_node node)
 {
-	pugi::xml_node playerNode = node.append_child("position");
+	pugi::xml_node playerNode = node.append_child("positionPlayer");
 	playerNode.append_attribute("x").set_value(player->position.x);
 	playerNode.append_attribute("y").set_value(player->position.y);
 
+	pugi::xml_node enemyNode = node.append_child("positionEnemy");
+	enemyNode.append_attribute("x").set_value(enemy->position.x);
+	enemyNode.append_attribute("y").set_value(enemy->position.y);
+
+	pugi::xml_node flyEnemyNode = node.append_child("positionFlyEnemy");
+	flyEnemyNode.append_attribute("x").set_value(flyenemy->position.x);
+	flyEnemyNode.append_attribute("y").set_value(flyenemy->position.y);
 
 	return true;
 }

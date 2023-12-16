@@ -5,7 +5,9 @@
 	<window />
 	<textures />
 	<audio />
-	<scene />
+	<scene>
+		<position x="0" y="0"/>
+	</scene> />
 	<renderer>
 		<camera x="0" y="0" />
 	</renderer>

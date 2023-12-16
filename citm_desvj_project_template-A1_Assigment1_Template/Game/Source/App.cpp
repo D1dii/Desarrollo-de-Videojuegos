@@ -220,6 +220,16 @@ void App::FinishUpdate()
 		gameTitle.GetString(), averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
 
 	app->win->SetTitle(title);
+
+	if (loadRequest) {
+		loadRequest = false;
+		LoadFromFile();
+	}
+
+	if (saveRequest) {
+		saveRequest = false;
+		SaveFromFile();
+	}
 }
 
 // Call modules before each loop iteration
@@ -335,3 +345,29 @@ const char* App::GetOrganization() const
 }
 
 
+bool App::SaveFromFile() {
+
+	bool ret = true;
+
+	pugi::xml_document saveFile;
+	pugi::xml_node gameState = saveFile.append_child("game_state");
+
+	// Iterates all modules and call the save of each with the part of the XML node that corresponds to the module
+	ListItem<Module*>* item;
+	item = modules.start;
+
+	while (item != NULL && ret == true)
+	{
+		pugi::xml_node module = gameState.append_child(item->data->name.GetString());
+		ret = item->data->SaveState(module);
+		item = item->next;
+	}
+
+	ret = saveFile.save_file("save_game.xml");
+
+	if (ret) LOG("Saved");
+	else LOG("Error saving game state");
+
+	return ret;
+
+}

@@ -414,4 +414,3 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	}
 }
-

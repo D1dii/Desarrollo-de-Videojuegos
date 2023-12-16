@@ -30,6 +30,8 @@ public:
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
 	void InitAnims();
+
+	
 	
 	Animation* currentAnim;
 

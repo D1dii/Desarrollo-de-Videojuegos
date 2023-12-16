@@ -31,8 +31,8 @@ void FlyEnemy::InitAnims()
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Idle.speed = parameters.child("Moving").attribute("animspeed").as_float();
-	Idle.loop = parameters.child("Moving").attribute("loop").as_bool();
+	Moving.speed = parameters.child("Moving").attribute("animspeed").as_float();
+	Moving.loop = parameters.child("Moving").attribute("loop").as_bool();
 	//attacking
 	for (pugi::xml_node node = parameters.child("Attacking").child("pushback"); node; node = node.next_sibling("pushback")) {
 		Attack.PushBack({ node.attribute("x").as_int(),
@@ -40,8 +40,8 @@ void FlyEnemy::InitAnims()
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Idle.speed = parameters.child("Attacking").attribute("animspeed").as_float();
-	Idle.loop = parameters.child("Attacking").attribute("loop").as_bool();
+	Attack.speed = parameters.child("Attacking").attribute("animspeed").as_float();
+	Attack.loop = parameters.child("Attacking").attribute("loop").as_bool();
 }
 
 bool FlyEnemy::Awake()

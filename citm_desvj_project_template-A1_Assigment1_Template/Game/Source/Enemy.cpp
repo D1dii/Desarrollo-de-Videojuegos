@@ -31,8 +31,8 @@ void Enemy::InitAnims()
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Idle.speed = parameters.child("Walking").attribute("animspeed").as_float();
-	Idle.loop = parameters.child("Walking").attribute("loop").as_bool();
+	Walking.speed = parameters.child("Walking").attribute("animspeed").as_float();
+	Walking.loop = parameters.child("Walking").attribute("loop").as_bool();
 
 	//Shooting
 	for (pugi::xml_node node = parameters.child("Shooting").child("pushback"); node; node = node.next_sibling("pushback")) {
@@ -41,8 +41,8 @@ void Enemy::InitAnims()
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Idle.speed = parameters.child("Shooting").attribute("animspeed").as_float();
-	Idle.loop = parameters.child("Shooting").attribute("loop").as_bool();
+	Shooting.speed = parameters.child("Shooting").attribute("animspeed").as_float();
+	Shooting.loop = parameters.child("Shooting").attribute("loop").as_bool();
 }
 
 bool Enemy::Awake()

@@ -44,10 +44,6 @@ public:
 
 	PhysBody* enemyCollider;
 
-	SDL_Rect bound;
-
-	bool debug = false;
-
 private:
 };
 

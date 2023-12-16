@@ -25,23 +25,23 @@ FlyEnemy::~FlyEnemy()
 void FlyEnemy::InitAnims()
 {
 	//moving/idle
-	for (pugi::xml_node node = parameters.child("Idle").child("pushback"); node; node = node.next_sibling("pushback")) {
+	for (pugi::xml_node node = parameters.child("Moving").child("pushback"); node; node = node.next_sibling("pushback")) {
 		Moving.PushBack({ node.attribute("x").as_int(),
 						node.attribute("y").as_int(),
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Idle.speed = parameters.child("Idle").attribute("animspeed").as_float();
-	Idle.loop = parameters.child("Idle").attribute("loop").as_bool();
+	Idle.speed = parameters.child("Moving").attribute("animspeed").as_float();
+	Idle.loop = parameters.child("Moving").attribute("loop").as_bool();
 	//attacking
-	for (pugi::xml_node node = parameters.child("Idle").child("pushback"); node; node = node.next_sibling("pushback")) {
+	for (pugi::xml_node node = parameters.child("Attacking").child("pushback"); node; node = node.next_sibling("pushback")) {
 		Attack.PushBack({ node.attribute("x").as_int(),
 						node.attribute("y").as_int(),
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Idle.speed = parameters.child("Idle").attribute("animspeed").as_float();
-	Idle.loop = parameters.child("Idle").attribute("loop").as_bool();
+	Idle.speed = parameters.child("Attacking").attribute("animspeed").as_float();
+	Idle.loop = parameters.child("Attacking").attribute("loop").as_bool();
 }
 
 bool FlyEnemy::Awake()

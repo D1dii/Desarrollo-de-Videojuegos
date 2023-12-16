@@ -24,7 +24,24 @@ FlyEnemy::~FlyEnemy()
 
 void FlyEnemy::InitAnims()
 {
-
+	//moving/idle
+	for (pugi::xml_node node = parameters.child("Idle").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Moving.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Idle.speed = parameters.child("Idle").attribute("animspeed").as_float();
+	Idle.loop = parameters.child("Idle").attribute("loop").as_bool();
+	//attacking
+	for (pugi::xml_node node = parameters.child("Idle").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Attack.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Idle.speed = parameters.child("Idle").attribute("animspeed").as_float();
+	Idle.loop = parameters.child("Idle").attribute("loop").as_bool();
 }
 
 bool FlyEnemy::Awake()
@@ -32,6 +49,8 @@ bool FlyEnemy::Awake()
 
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
+
+	InitAnims();
 
 	texturePath = parameters.attribute("texturepath").as_string();
 
@@ -44,6 +63,8 @@ bool FlyEnemy::Start()
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 	pathTest = app->tex->Load("Assets/Textures/testPathTile.png");
+
+	currentAnim = &Moving;
 
 	bound.x = position.x - 120;
 	bound.y = position.y - 60;

@@ -31,6 +31,8 @@ public:
 	Animation* currentAnim;
 
 	Animation Idle;
+	Animation Walking;
+	Animation Shooting;
 
 public:
 

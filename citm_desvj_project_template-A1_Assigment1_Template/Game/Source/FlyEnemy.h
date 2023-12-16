@@ -29,6 +29,8 @@ public:
 	void InitAnims();
 
 	Animation* currentAnim;
+	Animation Moving;
+	Animation Attack;
 
 	Animation Idle;
 

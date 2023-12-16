@@ -24,7 +24,25 @@ Enemy::~Enemy()
 
 void Enemy::InitAnims()
 {
+	//Walking
+	for (pugi::xml_node node = parameters.child("Idle").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Walking.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Idle.speed = parameters.child("Idle").attribute("animspeed").as_float();
+	Idle.loop = parameters.child("Idle").attribute("loop").as_bool();
 
+	//Shooting
+	for (pugi::xml_node node = parameters.child("Idle").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Shooting.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Idle.speed = parameters.child("Idle").attribute("animspeed").as_float();
+	Idle.loop = parameters.child("Idle").attribute("loop").as_bool();
 }
 
 bool Enemy::Awake()
@@ -32,6 +50,8 @@ bool Enemy::Awake()
 
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
+
+	InitAnims();
 
 	texturePath = parameters.attribute("texturepath").as_string();
 
@@ -66,6 +86,8 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
+
+	currentAnim = &Walking;
 
 	// Activate or deactivate debug mode
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)

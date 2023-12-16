@@ -100,12 +100,12 @@
 		  <pushback x="150" y="185" width="30" height="30"/>
 	  </FallLeft>
 		</player>
-	  <enemy x="200" y="1872" texturepath="Assets/Textures/Enemy.png">
+	  <enemy x="200" y="1872" texturepath="Assets/Textures/brocoli.png">
 		  <Idle animspeed="0.2f" loop="true">
 			  <pushback x="1" y="5" width="12" height="5"/>
 		  </Idle>
 	  </enemy>
-	  <FlyEnemy x="230" y="2002" texturepath="Assets/Textures/FlyEnemy.png">
+	  <FlyEnemy x="230" y="2002" texturepath="Assets/Textures/tomate.png">
 		  <Idle animspeed="0.2f" loop="true">
 			  <pushback x="1" y="5" width="17" height="8" />
 		  </Idle>

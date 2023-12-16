@@ -344,6 +344,54 @@ const char* App::GetOrganization() const
 	return organization.GetString();
 }
 
+// Request a save data in an XML file 
+bool App::LoadRequest() {
+
+	bool ret = true;
+	loadRequest = true;
+	return ret;
+}
+
+// Request to load data from XML file 
+bool App::SaveRequest() {
+	bool ret = true;
+	saveRequest = true;
+	return true;
+}
+
+bool App::LoadFromFile() {
+
+	bool ret = true;
+
+	pugi::xml_document saveFile;
+	pugi::xml_parse_result result = saveFile.load_file("save_game.xml");
+
+	if (result)
+	{
+		LOG("save_game.xml parsed without errors");
+
+		// Iterates all modules and call the load of each with the part of the XML node that corresponds to the module
+		ListItem<Module*>* item;
+		item = modules.start;
+
+		while (item != NULL && ret == true)
+		{
+			ret = item->data->LoadState(saveFile.child("game_state").child(item->data->name.GetString()));
+			item = item->next;
+		}
+
+	}
+	else
+	{
+		LOG("Error loading save_game.xml: %s", result.description());
+		ret = false;
+	}
+
+
+
+	return ret;
+
+}
 
 bool App::SaveFromFile() {
 

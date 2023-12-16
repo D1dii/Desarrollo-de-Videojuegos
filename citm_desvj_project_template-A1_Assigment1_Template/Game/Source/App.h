@@ -51,6 +51,10 @@ public:
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
 
+	bool LoadRequest();
+
+	bool SaveRequest();
+
 private:
 
 	// Load config file
@@ -70,6 +74,10 @@ private:
 
 	// Call modules after each loop iteration
 	bool PostUpdate();
+
+	bool LoadFromFile();
+
+	bool SaveFromFile();
 
 public:
 
@@ -114,6 +122,9 @@ private:
 	uint32 secondsSinceStartup = 0;
 
 	uint32 maxFrameDuration = 16;
+
+	bool loadRequest = false;
+	bool saveRequest = false;
 
 };
 

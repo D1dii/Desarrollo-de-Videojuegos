@@ -151,6 +151,21 @@
 			  <pushback x = "128" y = "32" width = "32" height = "32" />
 			  <pushback x = "160" y = "32" width = "32" height = "32" />
 		  </Shooting>
+		  <WalkingRight animspeed = "0.1f" loop ="true">
+			  <pushback x = "0" y = "0" width = "32" height = "32" />
+			  <pushback x = "32" y = "0" width = "32" height = "32" />
+			  <pushback x = "64" y = "0" width = "32" height = "32" />
+			  <pushback x = "96" y = "0" width = "32" height = "32" />
+			  <pushback x = "128" y = "0" width = "32" height = "32" />
+		  </WalkingRight>
+		  <ShootingRight animspeed = "0.1f" loop ="true">
+			  <pushback x = "0" y = "32" width = "32" height = "32" />
+			  <pushback x = "32" y = "32" width = "32" height = "32" />
+			  <pushback x = "64" y = "32" width = "32" height = "32" />
+			  <pushback x = "96" y = "32" width = "32" height = "32" />
+			  <pushback x = "128" y = "32" width = "32" height = "32" />
+			  <pushback x = "160" y = "32" width = "32" height = "32" />
+		  </ShootingRight>
 	  </enemy2>
 	  <FlyEnemy x="230" y="2002" texturepath="Assets/Textures/tomate.png">
 		  <Moving animspeed = "0.1f" loop ="true">
@@ -168,6 +183,21 @@
 			  <pushback x = "160" y = "32" width = "32" height = "32" />
 			  <pushback x = "192" y = "32" width = "32" height = "32" />
 		  </Attacking>
+		  <MovingRight animspeed = "0.1f" loop ="true">
+			  <pushback x = "0" y = "0" width = "32" height = "32" />
+			  <pushback x = "32" y = "0" width = "32" height = "32" />
+			  <pushback x = "64" y = "0" width = "32" height = "32" />
+			  <pushback x = "96" y = "0" width = "32" height = "32" />
+		  </MovingRight>
+		  <AttackingRight animspeed = "0.1f" loop ="false">
+			  <pushback x = "0" y = "32" width = "32" height = "32" />
+			  <pushback x = "32" y = "32" width = "32" height = "32" />
+			  <pushback x = "64" y = "32" width = "32" height = "32" />
+			  <pushback x = "96" y = "32" width = "32" height = "32" />
+			  <pushback x = "128" y = "32" width = "32" height = "32" />
+			  <pushback x = "160" y = "32" width = "32" height = "32" />
+			  <pushback x = "192" y = "32" width = "32" height = "32" />
+		  </AttackingRight>
 	  </FlyEnemy>
 		 
   </scene>

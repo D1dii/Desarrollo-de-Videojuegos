@@ -31,6 +31,8 @@ public:
 	Animation* currentAnim;
 	Animation Moving;
 	Animation Attack;
+	Animation MovingRight;
+	Animation AttackRight;
 
 	Animation Idle;
 

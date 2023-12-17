@@ -33,7 +33,8 @@ public:
 	Animation Idle;
 	Animation Walking;
 	Animation Shooting;
-
+	Animation WalkingRight;
+	Animation ShootingRight;
 public:
 
 	const char* texturePath;

@@ -45,12 +45,17 @@ public:
 	int timer = 0;
 
 	PhysBody* enemyCollider;
+	PhysBody* shoot;
 
 	SDL_Rect bound;
 
 	bool debug = false;
 
 	bool isDead = false;
+
+	bool isShooting = false;
+
+	int shootTimer = 0;
 
 private:
 };

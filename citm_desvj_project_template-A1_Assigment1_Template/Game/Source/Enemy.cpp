@@ -71,15 +71,22 @@ bool Enemy::Start()
 	bound.h = 120;
 
 	int enemy[8] = {
-		0, 0,
-		12, 0,
-		12, 16,
-		0, 16,
+		-8, 0,
+		16, 0,
+		16, 24,
+		-8, 24,
 	};
 
 	enemyCollider = app->physics->CreateChain(position.x + 8, position.y, enemy, 8, bodyType::DYNAMIC);
 	enemyCollider->listener = this;
 	enemyCollider->ctype = ColliderType::ENEMY;
+
+	shoot = app->physics->CreateCircle(position.x, position.y, 5, bodyType::DYNAMIC, true);
+	shoot->listener = this;
+	shoot->ctype = ColliderType::ENEMY_ATTACK;
+	shoot->body->SetGravityScale(0);
+
+	currentAnim = &Walking;
 
 	return true;
 }
@@ -87,11 +94,11 @@ bool Enemy::Start()
 bool Enemy::Update(float dt)
 {
 
-	currentAnim = &Walking;
-
 	// Activate or deactivate debug mode
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
+
+	currentAnim = &Walking;
 
 	if (isDead == false) {
 		if (app->scene->GetPLayerPosition().x >= bound.x
@@ -117,21 +124,42 @@ bool Enemy::Update(float dt)
 
 			if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
 
-				if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 2) {
+				if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
 					enemyCollider->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+					isShooting = false;
 				}
-				else if (abs(enemyPos.x - playerPos.x) > 2) {
+				else if (abs(enemyPos.x - playerPos.x) > 3) {
 					enemyCollider->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
+					isShooting = false;
 				}
-				else if (abs(enemyPos.x - playerPos.x) < 2) {
+				else if (abs(enemyPos.x - playerPos.x) < 3) {
 					enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
 					enemyCollider->body->SetLinearDamping(0);
+
+					currentAnim = &Shooting;
+					if(shootTimer >= 30) isShooting = true;
+					
+					if (shootTimer >= 60) {
+						shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
+						isShooting = false;
+						shootTimer = 0;
+					}
+					shootTimer++;
 				}
 			}
 		}
 
-		position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 5);
-		position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 4);
+		position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 12);
+		position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 6);
+
+		if (isShooting == false) {
+			shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
+		}
+		else if (isShooting) {
+			
+			shoot->body->SetLinearVelocity(b2Vec2(-1.5f, 0));
+		}
+		
 
 		bound.x = position.x - 120;
 		bound.y = position.y - 60;
@@ -142,8 +170,11 @@ bool Enemy::Update(float dt)
 			app->render->DrawRectangle(bound, 0, 255, 0, 80);
 		}
 
-		app->render->DrawTexture(texture, position.x, position.y);
+		currentAnim->Update();
+		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	}
+	
+
 
 	return true;
 }
@@ -158,6 +189,8 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 
 	pugi::xml_node node = parameters;
+
+	
 
 	switch (physB->ctype)
 	{

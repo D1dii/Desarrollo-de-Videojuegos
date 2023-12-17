@@ -236,16 +236,6 @@ bool Player::Update(float dt)
 		savePos = position.x * scale;
 		savePosY = position.y * scale;
 
-		/*triX = savePos - mouseX;
-		triY = savePosY - mouseY;*/
-
-		/*if (mouseX < savePos) {
-			isFacingLeft = true;
-		}
-		else {
-			isFacingLeft = false;
-		}*/
-
 		if (isFacingLeft == true) {
 			triX = 250;
 			triY = 400;
@@ -389,8 +379,8 @@ bool Player::Update(float dt)
 
 	// Respawn on the start
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
-		position.x = 100;
-		position.y = 2150;
+		position.x = 90;
+		position.y = 2172;
 		pbody->body->SetTransform({PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y)}, 0);
 	}
 
@@ -426,7 +416,19 @@ bool Player::Update(float dt)
 
 	currentAnim->Update();
 
+	if (!canDmg) {
+		dmgTimer++;
+	}
 
+	if (dmgTimer >= 25) {
+		canDmg = true;
+		dmgTimer = 0;
+	}
+
+	if (lifes == 0) {
+		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)90), PIXEL_TO_METERS((float32)2172) }, 0);
+		lifes = 3;
+	}
 
 	SDL_RendererFlip flip = (isFacingLeft) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
@@ -462,8 +464,17 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			fallTimer = 0;
 		}
 		break;
+	case ColliderType::ENEMY_ATTACK:
+		
+		if (canDmg) {
+			lifes--;
+			canDmg = false;
+		}
+		
+		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
 		break;
+		
 	}
 }

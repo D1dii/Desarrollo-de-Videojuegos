@@ -76,6 +76,10 @@ public:
 
 	int fallTimer = 0;
 
+	int lifes = 3;
+	bool canDmg = true;
+	int dmgTimer = 0;
+
 	SDL_Texture* texture = NULL;
 	
 	PhysBody* pbody;

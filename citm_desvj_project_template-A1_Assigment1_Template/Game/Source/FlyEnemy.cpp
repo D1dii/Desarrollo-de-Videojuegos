@@ -93,6 +93,8 @@ bool FlyEnemy::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
 
+	currentAnim = &Moving;
+
 	if (isDead == false) {
 		if (app->scene->GetPLayerPosition().x > bound.x
 			&& app->scene->GetPLayerPosition().x < bound.x + bound.w
@@ -143,7 +145,8 @@ bool FlyEnemy::Update(float dt)
 			app->render->DrawRectangle(bound, 0, 255, 0, 80);
 		}
 
-		app->render->DrawTexture(texture, position.x, position.y);
+		currentAnim->Update();
+		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	}
 
 	

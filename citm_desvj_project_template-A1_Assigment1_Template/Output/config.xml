@@ -134,6 +134,21 @@
 			  <pushback x = "128" y = "32" width = "32" height = "32" />
 			  <pushback x = "160" y = "32" width = "32" height = "32" />
 		  </Shooting>
+		  <WalkingRight animspeed = "0.1f" loop ="true">
+			  <pushback x = "0" y = "64" width = "32" height = "32" />
+			  <pushback x = "32" y = "64" width = "32" height = "32" />
+			  <pushback x = "64" y = "64" width = "32" height = "32" />
+			  <pushback x = "96" y = "64" width = "32" height = "32" />
+			  <pushback x = "128" y = "64" width = "32" height = "32" />
+		  </WalkingRight>
+		  <ShootingRight animspeed = "0.1f" loop ="true">
+			  <pushback x = "0" y = "96" width = "32" height = "32" />
+			  <pushback x = "32" y = "96" width = "32" height = "32" />
+			  <pushback x = "64" y = "96" width = "32" height = "32" />
+			  <pushback x = "96" y = "96" width = "32" height = "32" />
+			  <pushback x = "128" y = "96" width = "32" height = "32" />
+			  <pushback x = "160" y = "96" width = "32" height = "32" />
+		  </ShootingRight>
 	  </enemy>
 	  <enemy2 x="200" y="1700" texturepath="Assets/Textures/brocoli.png" id="2">
 		  <Walking animspeed = "0.1f" loop ="true">
@@ -152,29 +167,29 @@
 			  <pushback x = "160" y = "32" width = "32" height = "32" />
 		  </Shooting>
 		  <WalkingRight animspeed = "0.1f" loop ="true">
-			  <pushback x = "0" y = "0" width = "32" height = "32" />
-			  <pushback x = "32" y = "0" width = "32" height = "32" />
-			  <pushback x = "64" y = "0" width = "32" height = "32" />
-			  <pushback x = "96" y = "0" width = "32" height = "32" />
-			  <pushback x = "128" y = "0" width = "32" height = "32" />
+			  <pushback x = "0" y = "64" width = "32" height = "32" />
+			  <pushback x = "32" y = "64" width = "32" height = "32" />
+			  <pushback x = "64" y = "64" width = "32" height = "32" />
+			  <pushback x = "96" y = "64" width = "32" height = "32" />
+			  <pushback x = "128" y = "64" width = "32" height = "32" />
 		  </WalkingRight>
 		  <ShootingRight animspeed = "0.1f" loop ="true">
-			  <pushback x = "0" y = "32" width = "32" height = "32" />
-			  <pushback x = "32" y = "32" width = "32" height = "32" />
-			  <pushback x = "64" y = "32" width = "32" height = "32" />
-			  <pushback x = "96" y = "32" width = "32" height = "32" />
-			  <pushback x = "128" y = "32" width = "32" height = "32" />
-			  <pushback x = "160" y = "32" width = "32" height = "32" />
+			  <pushback x = "0" y = "96" width = "32" height = "32" />
+			  <pushback x = "32" y = "96" width = "32" height = "32" />
+			  <pushback x = "64" y = "96" width = "32" height = "32" />
+			  <pushback x = "96" y = "96" width = "32" height = "32" />
+			  <pushback x = "128" y = "96" width = "32" height = "32" />
+			  <pushback x = "160" y = "96" width = "32" height = "32" />
 		  </ShootingRight>
 	  </enemy2>
-	  <FlyEnemy x="230" y="2002" texturepath="Assets/Textures/tomate.png">
+	  <FlyEnemy x="230" y="2002" texturepath="Assets/Textures/tomate.png" id="1">
 		  <Moving animspeed = "0.1f" loop ="true">
 			  <pushback x = "0" y = "0" width = "32" height = "32" />
 			  <pushback x = "32" y = "0" width = "32" height = "32" />
 			  <pushback x = "64" y = "0" width = "32" height = "32" />
 			  <pushback x = "96" y = "0" width = "32" height = "32" />
 		  </Moving>
-		  <Attacking animspeed = "0.1f" loop ="false">
+		  <Attack animspeed = "0.1f" loop ="false">
 			  <pushback x = "0" y = "32" width = "32" height = "32" />
 			  <pushback x = "32" y = "32" width = "32" height = "32" />
 			  <pushback x = "64" y = "32" width = "32" height = "32" />
@@ -182,22 +197,22 @@
 			  <pushback x = "128" y = "32" width = "32" height = "32" />
 			  <pushback x = "160" y = "32" width = "32" height = "32" />
 			  <pushback x = "192" y = "32" width = "32" height = "32" />
-		  </Attacking>
+		  </Attack>
 		  <MovingRight animspeed = "0.1f" loop ="true">
-			  <pushback x = "0" y = "0" width = "32" height = "32" />
-			  <pushback x = "32" y = "0" width = "32" height = "32" />
-			  <pushback x = "64" y = "0" width = "32" height = "32" />
-			  <pushback x = "96" y = "0" width = "32" height = "32" />
+			  <pushback x = "0" y = "64" width = "32" height = "32" />
+			  <pushback x = "32" y = "64" width = "32" height = "32" />
+			  <pushback x = "64" y = "64" width = "32" height = "32" />
+			  <pushback x = "96" y = "64" width = "32" height = "32" />
 		  </MovingRight>
-		  <AttackingRight animspeed = "0.1f" loop ="false">
-			  <pushback x = "0" y = "32" width = "32" height = "32" />
-			  <pushback x = "32" y = "32" width = "32" height = "32" />
-			  <pushback x = "64" y = "32" width = "32" height = "32" />
-			  <pushback x = "96" y = "32" width = "32" height = "32" />
-			  <pushback x = "128" y = "32" width = "32" height = "32" />
-			  <pushback x = "160" y = "32" width = "32" height = "32" />
-			  <pushback x = "192" y = "32" width = "32" height = "32" />
-		  </AttackingRight>
+		  <AttackRight animspeed = "0.1f" loop ="false">
+			  <pushback x = "0" y = "96" width = "32" height = "32" />
+			  <pushback x = "32" y = "96" width = "32" height = "32" />
+			  <pushback x = "64" y = "96" width = "32" height = "32" />
+			  <pushback x = "96" y = "96" width = "32" height = "32" />
+			  <pushback x = "128" y = "96" width = "32" height = "32" />
+			  <pushback x = "160" y = "96" width = "32" height = "32" />
+			  <pushback x = "192" y = "96" width = "32" height = "32" />
+		  </AttackRight>
 	  </FlyEnemy>
 		 
   </scene>

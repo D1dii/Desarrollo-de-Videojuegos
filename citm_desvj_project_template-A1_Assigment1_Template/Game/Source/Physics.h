@@ -30,6 +30,7 @@ enum class ColliderType {
 	ENEMY,
 	ATTACK,
 	ENEMY_ATTACK,
+	DETECT,
 	UNKNOWN
 	// ..
 };

@@ -49,12 +49,20 @@ public:
 	float triX, triY;
 
 	PhysBody* enemyCollider;
+	PhysBody* detect;
+	PhysBody* explosion;
 
 	SDL_Rect bound;
 
 	bool debug = false;
 
 	bool isDead = false;
+
+	bool isFacingLeft = true;
+
+	bool canExplode = true;
+	bool isExploding = false;
+	int explosionTimer = 0;
 
 private:
 };

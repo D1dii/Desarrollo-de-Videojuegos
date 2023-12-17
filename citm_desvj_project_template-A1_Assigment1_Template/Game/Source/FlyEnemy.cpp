@@ -34,14 +34,33 @@ void FlyEnemy::InitAnims()
 	Moving.speed = parameters.child("Moving").attribute("animspeed").as_float();
 	Moving.loop = parameters.child("Moving").attribute("loop").as_bool();
 	//attacking
-	for (pugi::xml_node node = parameters.child("Attacking").child("pushback"); node; node = node.next_sibling("pushback")) {
+	for (pugi::xml_node node = parameters.child("Attack").child("pushback"); node; node = node.next_sibling("pushback")) {
 		Attack.PushBack({ node.attribute("x").as_int(),
 						node.attribute("y").as_int(),
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Attack.speed = parameters.child("Attacking").attribute("animspeed").as_float();
-	Attack.loop = parameters.child("Attacking").attribute("loop").as_bool();
+	Attack.speed = parameters.child("Attack").attribute("animspeed").as_float();
+	Attack.loop = parameters.child("Attack").attribute("loop").as_bool();
+
+	//moving/idle
+	for (pugi::xml_node node = parameters.child("MovingRight").child("pushback"); node; node = node.next_sibling("pushback")) {
+		MovingRight.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	MovingRight.speed = parameters.child("MovingRight").attribute("animspeed").as_float();
+	MovingRight.loop = parameters.child("MovingRight").attribute("loop").as_bool();
+	//attacking
+	for (pugi::xml_node node = parameters.child("AttackRight").child("pushback"); node; node = node.next_sibling("pushback")) {
+		AttackRight.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	AttackRight.speed = parameters.child("AttackRight").attribute("animspeed").as_float();
+	AttackRight.loop = parameters.child("AttackRight").attribute("loop").as_bool();
 }
 
 bool FlyEnemy::Awake()
@@ -78,9 +97,18 @@ bool FlyEnemy::Start()
 		0, 10,
 	};
 
-	enemyCollider = app->physics->CreateCircle(position.x + 10, position.y + 15, 6, bodyType::DYNAMIC);
+	enemyCollider = app->physics->CreateCircle(position.x + 10, position.y + 15, 8, bodyType::DYNAMIC);
 	enemyCollider->listener = this;
 	enemyCollider->ctype = ColliderType::ENEMY;
+
+	detect = app->physics->CreateRectangleSensor(position.x + 25, position.y + 25, 60, 60, bodyType::DYNAMIC);
+	detect->listener = this;
+	detect->ctype = ColliderType::DETECT;
+	detect->body->SetGravityScale(0);
+
+	
+
+
 
 	enemyCollider->body->SetGravityScale(0);
 
@@ -92,8 +120,6 @@ bool FlyEnemy::Update(float dt)
 	// Activate or deactivate debug mode
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
-
-	currentAnim = &Moving;
 
 	if (isDead == false) {
 		if (app->scene->GetPLayerPosition().x > bound.x
@@ -124,17 +150,68 @@ bool FlyEnemy::Update(float dt)
 				triX = position.x - pos.x;
 				triY = position.y - pos.y;
 
+				if ((enemyPos.x - playerPos.x) >= 0) {
+					isFacingLeft = true;
+					
+				}
+				else if ((enemyPos.x - playerPos.x) < 0) {
+					isFacingLeft = false;
+					
+				}
+
 				enemyCollider->body->SetLinearVelocity(b2Vec2(-(triX / 10), -(triY / 10)));
 
 				if (abs(enemyPos.x - playerPos.x) < 2) {
 					enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0));
 					enemyCollider->body->SetLinearDamping(0);
+					//isExploding = true;
+					
 				}
+
+				
+			}
+
+
+		}
+
+		if (isExploding) {
+			enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0));
+			explosionTimer++;
+			if (isFacingLeft) {
+				currentAnim = &Attack;
+			}
+			else if (!isFacingLeft) {
+				currentAnim = &AttackRight;
+			}
+
+			if (explosionTimer >= 60 && canExplode) {
+				explosion = app->physics->CreateRectangleSensor(position.x + 15, position.y + 15, 100, 100, bodyType::DYNAMIC);
+				explosion->listener = this;
+				explosion->ctype = ColliderType::ENEMY_ATTACK;
+				explosion->body->SetGravityScale(0);
+				canExplode = false;
+			}
+			if (explosionTimer >= 70) {
+				explosion->body->SetTransform({ PIXEL_TO_METERS((float32)(100)), PIXEL_TO_METERS((float32)(0)) }, 0);
+				if (parameters.attribute("id").as_int() == 1) {
+					app->entityManager->DestroyEntity(app->scene->flyenemy);
+				}
+				
+				
+			}
+		}
+		else if (!isExploding) {
+			if (isFacingLeft) {
+				currentAnim = &Moving;
+			}
+			else if (!isFacingLeft) {
+				currentAnim = &MovingRight;
 			}
 		}
 
-		position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 8);
-		position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 8);
+		detect->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
+		position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 15);
+		position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 18);
 
 		bound.x = position.x - 150;
 		bound.y = position.y - 75;
@@ -166,7 +243,13 @@ void FlyEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::ATTACK:
 		isDead = true;
-		app->entityManager->DestroyEntity(app->scene->flyenemy);
+		if (parameters.attribute("id").as_int() == 1) {
+			app->entityManager->DestroyEntity(app->scene->flyenemy);
+		}
 		break;
+	}
+
+	if (physA->ctype == ColliderType::DETECT && physB->ctype == ColliderType::PLAYER) {
+		isExploding = true;
 	}
 }

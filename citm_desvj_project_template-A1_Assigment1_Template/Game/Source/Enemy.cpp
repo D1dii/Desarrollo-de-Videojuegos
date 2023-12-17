@@ -43,6 +43,26 @@ void Enemy::InitAnims()
 	}
 	Shooting.speed = parameters.child("Shooting").attribute("animspeed").as_float();
 	Shooting.loop = parameters.child("Shooting").attribute("loop").as_bool();
+
+	//WalkingRight
+	for (pugi::xml_node node = parameters.child("WalkingRight").child("pushback"); node; node = node.next_sibling("pushback")) {
+		WalkingRight.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	WalkingRight.speed = parameters.child("WalkingRight").attribute("animspeed").as_float();
+	WalkingRight.loop = parameters.child("WalkingRight").attribute("loop").as_bool();
+
+	//ShootingRight
+	for (pugi::xml_node node = parameters.child("ShootingRight").child("pushback"); node; node = node.next_sibling("pushback")) {
+		ShootingRight.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	ShootingRight.speed = parameters.child("ShootingRight").attribute("animspeed").as_float();
+	ShootingRight.loop = parameters.child("ShootingRight").attribute("loop").as_bool();
 }
 
 bool Enemy::Awake()
@@ -98,7 +118,7 @@ bool Enemy::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
 
-	currentAnim = &Walking;
+	
 
 	if (isDead == false) {
 		if (app->scene->GetPLayerPosition().x >= bound.x
@@ -126,17 +146,27 @@ bool Enemy::Update(float dt)
 
 				if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
 					enemyCollider->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+					isFacingLeft = false;
+					currentAnim = &WalkingRight;
 					isShooting = false;
 				}
 				else if (abs(enemyPos.x - playerPos.x) > 3) {
 					enemyCollider->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
+					isFacingLeft = true;
+					currentAnim = &Walking;
 					isShooting = false;
 				}
 				else if (abs(enemyPos.x - playerPos.x) < 3) {
 					enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
 					enemyCollider->body->SetLinearDamping(0);
 
-					currentAnim = &Shooting;
+					if (isFacingLeft) {
+						currentAnim = &Shooting;
+					}
+					else {
+						currentAnim = &ShootingRight;
+					}
+					
 					if(shootTimer >= 30) isShooting = true;
 					
 					if (shootTimer >= 60) {
@@ -157,7 +187,13 @@ bool Enemy::Update(float dt)
 		}
 		else if (isShooting) {
 			
-			shoot->body->SetLinearVelocity(b2Vec2(-1.5f, 0));
+			if (isFacingLeft) {
+				shoot->body->SetLinearVelocity(b2Vec2(-1.5f, 0));
+			}
+			else if (isFacingLeft == false) {
+				shoot->body->SetLinearVelocity(b2Vec2(1.5f, 0));
+			}
+			
 		}
 		
 

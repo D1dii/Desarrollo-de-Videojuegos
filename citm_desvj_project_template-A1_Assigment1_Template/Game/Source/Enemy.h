@@ -58,6 +58,8 @@ public:
 
 	int shootTimer = 0;
 
+	bool isFacingLeft = true;
+
 private:
 };
 

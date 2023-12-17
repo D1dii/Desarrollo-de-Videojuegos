@@ -31,8 +31,8 @@ void Enemy::InitAnims()
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Idle.speed = parameters.child("Walking").attribute("animspeed").as_float();
-	Idle.loop = parameters.child("Walking").attribute("loop").as_bool();
+	Walking.speed = parameters.child("Walking").attribute("animspeed").as_float();
+	Walking.loop = parameters.child("Walking").attribute("loop").as_bool();
 
 	//Shooting
 	for (pugi::xml_node node = parameters.child("Shooting").child("pushback"); node; node = node.next_sibling("pushback")) {
@@ -41,8 +41,8 @@ void Enemy::InitAnims()
 						node.attribute("width").as_int(),
 						node.attribute("height").as_int() });
 	}
-	Idle.speed = parameters.child("Shooting").attribute("animspeed").as_float();
-	Idle.loop = parameters.child("Shooting").attribute("loop").as_bool();
+	Shooting.speed = parameters.child("Shooting").attribute("animspeed").as_float();
+	Shooting.loop = parameters.child("Shooting").attribute("loop").as_bool();
 }
 
 bool Enemy::Awake()
@@ -71,15 +71,22 @@ bool Enemy::Start()
 	bound.h = 120;
 
 	int enemy[8] = {
-		0, 0,
-		12, 0,
-		12, 16,
-		0, 16,
+		-8, 0,
+		16, 0,
+		16, 24,
+		-8, 24,
 	};
 
 	enemyCollider = app->physics->CreateChain(position.x + 8, position.y, enemy, 8, bodyType::DYNAMIC);
 	enemyCollider->listener = this;
 	enemyCollider->ctype = ColliderType::ENEMY;
+
+	shoot = app->physics->CreateCircle(position.x, position.y, 5, bodyType::DYNAMIC, true);
+	shoot->listener = this;
+	shoot->ctype = ColliderType::ENEMY_ATTACK;
+	shoot->body->SetGravityScale(0);
+
+	currentAnim = &Walking;
 
 	return true;
 }
@@ -87,62 +94,87 @@ bool Enemy::Start()
 bool Enemy::Update(float dt)
 {
 
-	currentAnim = &Walking;
-
 	// Activate or deactivate debug mode
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
 
-	if (app->scene->GetPLayerPosition().x >= bound.x 
-		&& app->scene->GetPLayerPosition().x <= bound.x + bound.w 
-		&& app->scene->GetPLayerPosition().y >= bound.y 
-		&& app->scene->GetPLayerPosition().y <= bound.y + bound.h) 
-	{
-		iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
-		iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
+	currentAnim = &Walking;
 
-		app->map->pathfinding->CreatePath(enemyPos, playerPos);
+	if (isDead == false) {
+		if (app->scene->GetPLayerPosition().x >= bound.x
+			&& app->scene->GetPLayerPosition().x <= bound.x + bound.w
+			&& app->scene->GetPLayerPosition().y >= bound.y
+			&& app->scene->GetPLayerPosition().y <= bound.y + bound.h)
+		{
+			iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
+			iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
 
-		const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
+			app->map->pathfinding->CreatePath(enemyPos, playerPos);
 
-		if (debug) {
-			for (uint i = 0; i < path->Count(); ++i)
-			{
-				iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-				app->render->DrawTexture(pathTest, pos.x, pos.y);
+			const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
+
+			if (debug) {
+				for (uint i = 0; i < path->Count(); ++i)
+				{
+					iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+					app->render->DrawTexture(pathTest, pos.x, pos.y);
+				}
 			}
+
+
+			if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
+
+				if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
+					enemyCollider->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+					isShooting = false;
+				}
+				else if (abs(enemyPos.x - playerPos.x) > 3) {
+					enemyCollider->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
+					isShooting = false;
+				}
+				else if (abs(enemyPos.x - playerPos.x) < 3) {
+					enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
+					enemyCollider->body->SetLinearDamping(0);
+
+					currentAnim = &Shooting;
+					if(shootTimer >= 30) isShooting = true;
+					
+					if (shootTimer >= 60) {
+						shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
+						isShooting = false;
+						shootTimer = 0;
+					}
+					shootTimer++;
+				}
+			}
+		}
+
+		position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 12);
+		position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 6);
+
+		if (isShooting == false) {
+			shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
+		}
+		else if (isShooting) {
+			
+			shoot->body->SetLinearVelocity(b2Vec2(-1.5f, 0));
 		}
 		
 
-		if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
+		bound.x = position.x - 120;
+		bound.y = position.y - 60;
+		bound.w = 240;
+		bound.h = 120;
 
-
-			if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 2) {
-				enemyCollider->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
-			}
-			else if (abs(enemyPos.x - playerPos.x) > 2) {
-				enemyCollider->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
-			}
-			else if (abs(enemyPos.x - playerPos.x) < 2) {
-				enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
-				enemyCollider->body->SetLinearDamping(0);
-			}
+		if (debug) {
+			app->render->DrawRectangle(bound, 0, 255, 0, 80);
 		}
-	}
 
-	position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 5);
-	position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 4);
-
-	bound.x = position.x - 120;
-	bound.y = position.y - 60;
-	bound.w = 240;
-	bound.h = 120;
-
-	if (debug) {
-		app->render->DrawRectangle(bound, 0, 255, 0, 80);
+		currentAnim->Update();
+		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	}
 	
-	app->render->DrawTexture(texture, position.x, position.y);
+
 
 	return true;
 }
@@ -156,4 +188,21 @@ bool Enemy::CleanUp()
 void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 
+	pugi::xml_node node = parameters;
+
+	
+
+	switch (physB->ctype)
+	{
+	case ColliderType::ATTACK:
+		isDead = true;
+		if (parameters.attribute("id").as_int() == 1) {
+			app->entityManager->DestroyEntity(app->scene->enemy);
+		}
+		else if (parameters.attribute("id").as_int() == 2) {
+			app->entityManager->DestroyEntity(app->scene->enemy2);
+		}
+		
+		break;
+	}
 }

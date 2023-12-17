@@ -58,7 +58,10 @@ private:
 	uint texW, texH;
 	uint windowW, windowH;
 	Player* player;
+public:
+
 	Enemy* enemy;
+	Enemy* enemy2;
 	FlyEnemy* flyenemy;
 
 };

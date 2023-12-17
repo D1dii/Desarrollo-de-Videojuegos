@@ -23,7 +23,7 @@
 
   <scene>
     <map path="Assets/Maps/" name="Level1 Map.tmx"/>
-    <player x="100" y="2172" texturepath="Assets/Textures/idle.png">
+    <player x="90" y="2172" texturepath="Assets/Textures/idle.png">
 		<musicFile path="Assets/Audio/Music/LeFestinLetHimCook.mp3"/>
 	  <Idle animspeed="0.2f" loop="true">
 		  <pushback x="0" y="0" width="30" height="30"/>
@@ -99,8 +99,26 @@
 		  <pushback x="120" y="185" width="30" height="30"/>
 		  <pushback x="150" y="185" width="30" height="30"/>
 	  </FallLeft>
+		<attack animspeed="0.1f" loop="true">
+			<pushback x="0" y="240" width="30" height="30"/>
+			<pushback x="30" y="240" width="30" height="30"/>
+			<pushback x="60" y="240" width="30" height="30"/>
+			<pushback x="90" y="240" width="30" height="30"/>
+			<pushback x="120" y="240" width="30" height="30"/>
+			<pushback x="150" y="240" width="30" height="30"/>
+			<pushback x="180" y="240" width="30" height="30"/>
+		</attack>
+		<attackLeft animspeed="0.1f" loop="true">
+			<pushback x="0" y="270" width="30" height="30"/>
+			<pushback x="30" y="270" width="30" height="30"/>
+			<pushback x="60" y="270" width="30" height="30"/>
+			<pushback x="90" y="270" width="30" height="30"/>
+			<pushback x="120" y="270" width="30" height="30"/>
+			<pushback x="150" y="270" width="30" height="30"/>
+			<pushback x="180" y="270" width="30" height="30"/>
+		</attackLeft>
 		</player>
-	  <enemy x="200" y="1872" texturepath="Assets/Textures/brocoli.png">
+	  <enemy x="200" y="1872" texturepath="Assets/Textures/brocoli.png" id="1">
 		  <Walking animspeed = "0.2f" loop ="true">
 			  <pushback x = "0" y = "0" width = "32" height = "32" />
 			  <pushback x = "32" y = "0" width = "32" height = "32" />
@@ -117,6 +135,23 @@
 			  <pushback x = "160" y = "32" width = "32" height = "32" />
 		  </Shooting>
 	  </enemy>
+	  <enemy2 x="200" y="1700" texturepath="Assets/Textures/brocoli.png" id="2">
+		  <Walking animspeed = "0.2f" loop ="true">
+			  <pushback x = "0" y = "0" width = "32" height = "32" />
+			  <pushback x = "32" y = "0" width = "32" height = "32" />
+			  <pushback x = "64" y = "0" width = "32" height = "32" />
+			  <pushback x = "96" y = "0" width = "32" height = "32" />
+			  <pushback x = "128" y = "0" width = "32" height = "32" />
+		  </Walking>
+		  <Shooting animspeed = "0.2f" loop ="false">
+			  <pushback x = "0" y = "32" width = "32" height = "32" />
+			  <pushback x = "32" y = "32" width = "32" height = "32" />
+			  <pushback x = "64" y = "32" width = "32" height = "32" />
+			  <pushback x = "96" y = "32" width = "32" height = "32" />
+			  <pushback x = "128" y = "32" width = "32" height = "32" />
+			  <pushback x = "160" y = "32" width = "32" height = "32" />
+		  </Shooting>
+	  </enemy2>
 	  <FlyEnemy x="230" y="2002" texturepath="Assets/Textures/tomate.png">
 		  <Moving animspeed = "0.2f" loop ="true">
 			  <pushback x = "0" y = "0" width = "32" height = "32" />

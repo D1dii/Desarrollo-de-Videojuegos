@@ -111,6 +111,26 @@ void Player::InitAnims() {
 	}
 	FallLeft.speed = parameters.child("FallLeft").attribute("animspeed").as_float();
 	FallLeft.loop = parameters.child("FallLeft").attribute("loop").as_bool();
+
+	// attack
+	for (pugi::xml_node node = parameters.child("attack").child("pushback"); node; node = node.next_sibling("pushback")) {
+		attack.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	attack.speed = parameters.child("attack").attribute("animspeed").as_float();
+	attack.loop = parameters.child("attack").attribute("loop").as_bool();
+
+	// attackLeft
+	for (pugi::xml_node node = parameters.child("attackLeft").child("pushback"); node; node = node.next_sibling("pushback")) {
+		attackLeft.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	attackLeft.speed = parameters.child("attackLeft").attribute("animspeed").as_float();
+	attackLeft.loop = parameters.child("attackLeft").attribute("loop").as_bool();
 }
 
 bool Player::Awake() {
@@ -145,6 +165,11 @@ bool Player::Start() {
 	pbody = app->physics->CreateChain(position.x, position.y, player, 8, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
+
+	sword = app->physics->CreateRectangleSensor(position.x + 14, position.y, 12, 16, bodyType::DYNAMIC);
+	sword->listener = this;
+	sword->ctype = ColliderType::ATTACK;
+	sword->body->SetGravityScale(0);
 
 	SString audioPath = parameters.child("musicFile").attribute("path").as_string();
 
@@ -319,6 +344,32 @@ bool Player::Update(float dt)
 		break;
 	}
 
+	// Attacking
+
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+		isAttacking = true;
+	}
+
+	if (isAttacking) {
+		attTimer++;
+		if (isFacingLeft == false) {
+			sword->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 24)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
+			currentAnim = &attack;
+		}
+		else if (isFacingLeft == true) {
+			sword->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
+			currentAnim = &attackLeft;
+		}
+		
+		if (attTimer >= 70) {
+			attTimer = 0;
+			isAttacking = false;
+		}
+	}
+	else {
+		sword->body->SetTransform({ PIXEL_TO_METERS((float32)(0)), PIXEL_TO_METERS((float32)(0)) }, 0);
+	}
+
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(vel);
 
@@ -326,6 +377,8 @@ bool Player::Update(float dt)
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 5);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 7);
+
+	
 
 	// Debug options
 

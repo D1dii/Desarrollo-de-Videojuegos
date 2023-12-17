@@ -50,6 +50,8 @@ public:
 
 	bool debug = false;
 
+	bool isDead = false;
+
 private:
 };
 

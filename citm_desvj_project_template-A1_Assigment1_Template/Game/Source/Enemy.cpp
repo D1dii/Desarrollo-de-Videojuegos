@@ -93,56 +93,57 @@ bool Enemy::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
 
-	if (app->scene->GetPLayerPosition().x >= bound.x 
-		&& app->scene->GetPLayerPosition().x <= bound.x + bound.w 
-		&& app->scene->GetPLayerPosition().y >= bound.y 
-		&& app->scene->GetPLayerPosition().y <= bound.y + bound.h) 
-	{
-		iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
-		iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
+	if (isDead == false) {
+		if (app->scene->GetPLayerPosition().x >= bound.x
+			&& app->scene->GetPLayerPosition().x <= bound.x + bound.w
+			&& app->scene->GetPLayerPosition().y >= bound.y
+			&& app->scene->GetPLayerPosition().y <= bound.y + bound.h)
+		{
+			iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
+			iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
 
-		app->map->pathfinding->CreatePath(enemyPos, playerPos);
+			app->map->pathfinding->CreatePath(enemyPos, playerPos);
 
-		const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
+			const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
+
+			if (debug) {
+				for (uint i = 0; i < path->Count(); ++i)
+				{
+					iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+					app->render->DrawTexture(pathTest, pos.x, pos.y);
+				}
+			}
+
+
+			if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
+
+				if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 2) {
+					enemyCollider->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+				}
+				else if (abs(enemyPos.x - playerPos.x) > 2) {
+					enemyCollider->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
+				}
+				else if (abs(enemyPos.x - playerPos.x) < 2) {
+					enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
+					enemyCollider->body->SetLinearDamping(0);
+				}
+			}
+		}
+
+		position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 5);
+		position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 4);
+
+		bound.x = position.x - 120;
+		bound.y = position.y - 60;
+		bound.w = 240;
+		bound.h = 120;
 
 		if (debug) {
-			for (uint i = 0; i < path->Count(); ++i)
-			{
-				iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-				app->render->DrawTexture(pathTest, pos.x, pos.y);
-			}
+			app->render->DrawRectangle(bound, 0, 255, 0, 80);
 		}
-		
 
-		if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
-
-
-			if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 2) {
-				enemyCollider->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
-			}
-			else if (abs(enemyPos.x - playerPos.x) > 2) {
-				enemyCollider->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
-			}
-			else if (abs(enemyPos.x - playerPos.x) < 2) {
-				enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
-				enemyCollider->body->SetLinearDamping(0);
-			}
-		}
+		app->render->DrawTexture(texture, position.x, position.y);
 	}
-
-	position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 5);
-	position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 4);
-
-	bound.x = position.x - 120;
-	bound.y = position.y - 60;
-	bound.w = 240;
-	bound.h = 120;
-
-	if (debug) {
-		app->render->DrawRectangle(bound, 0, 255, 0, 80);
-	}
-	
-	app->render->DrawTexture(texture, position.x, position.y);
 
 	return true;
 }
@@ -156,4 +157,19 @@ bool Enemy::CleanUp()
 void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 
+	pugi::xml_node node = parameters;
+
+	switch (physB->ctype)
+	{
+	case ColliderType::ATTACK:
+		isDead = true;
+		if (parameters.attribute("id").as_int() == 1) {
+			app->entityManager->DestroyEntity(app->scene->enemy);
+		}
+		else if (parameters.attribute("id").as_int() == 2) {
+			app->entityManager->DestroyEntity(app->scene->enemy2);
+		}
+		
+		break;
+	}
 }

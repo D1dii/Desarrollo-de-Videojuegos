@@ -42,6 +42,8 @@ public:
 	Animation Jump;
 	Animation Fall;
 	Animation FallLeft;
+	Animation attack;
+	Animation attackLeft;
 
 public:
 	float speedx = 0.2f;
@@ -68,11 +70,16 @@ public:
 	bool isFacingLeft;
 	bool justFall = false;
 
+	bool isAttacking = false;
+
+	int attTimer;
+
 	int fallTimer = 0;
 
 	SDL_Texture* texture = NULL;
 	
 	PhysBody* pbody;
+	PhysBody* sword;
 	int pickCoinFxId;
 	
 	SDL_Rect powerJump;

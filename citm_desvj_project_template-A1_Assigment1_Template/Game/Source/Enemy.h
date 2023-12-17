@@ -44,9 +44,7 @@ public:
 
 	int counterPath = 0;
 	int timer = 0;
-
-	PhysBody* enemyCollider;
-	PhysBody* shoot;
+	
 
 	SDL_Rect bound;
 

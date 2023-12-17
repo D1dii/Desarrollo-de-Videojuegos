@@ -48,9 +48,7 @@ public:
 
 	float triX, triY;
 
-	PhysBody* enemyCollider;
-	PhysBody* detect;
-	PhysBody* explosion;
+	
 
 	SDL_Rect bound;
 

@@ -54,6 +54,7 @@ public:
 	b2Body* body;
 	Entity* listener;
 	ColliderType ctype;
+	
 };
 
 // Module --------------------------------------
@@ -76,14 +77,17 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type, bool isSensor = false);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
+	void DestroyObject(PhysBody* pbody);
 	
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
-private:
-
 	// Debug mode
 	bool debug;
+
+private:
+
+	
 
 	// Box2D World
 	b2World* world;

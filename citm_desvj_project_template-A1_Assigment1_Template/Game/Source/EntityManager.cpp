@@ -128,6 +128,17 @@ bool EntityManager::Update(float dt)
 	{
 		pEntity = item->data;
 
+		if (pEntity->pendingDelete) {
+			
+			if(pEntity->pbody != nullptr) app->physics->DestroyObject(pEntity->pbody);
+			if (pEntity->shoot != nullptr) app->physics->DestroyObject(pEntity->shoot);
+			if (pEntity->explosion != nullptr) app->physics->DestroyObject(pEntity->explosion);
+			if (pEntity->detect != nullptr) app->physics->DestroyObject(pEntity->detect);
+			pEntity->pendingDelete = false;
+			DestroyEntity(pEntity);
+
+		}
+
 		if (pEntity->active == false) continue;
 		ret = item->data->Update(dt);
 	}

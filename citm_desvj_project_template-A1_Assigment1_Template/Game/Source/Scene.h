@@ -60,6 +60,8 @@ private:
 	Player* player;
 public:
 
+	pugi::xml_node sceneParameter;
+
 	Enemy* enemy;
 	Enemy* enemy2;
 	FlyEnemy* flyenemy;

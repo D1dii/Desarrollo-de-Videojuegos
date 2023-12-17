@@ -97,9 +97,9 @@ bool Enemy::Start()
 		-8, 24,
 	};
 
-	enemyCollider = app->physics->CreateChain(position.x + 8, position.y, enemy, 8, bodyType::DYNAMIC);
-	enemyCollider->listener = this;
-	enemyCollider->ctype = ColliderType::ENEMY;
+	pbody = app->physics->CreateChain(position.x + 8, position.y, enemy, 8, bodyType::DYNAMIC);
+	pbody->listener = this;
+	pbody->ctype = ColliderType::ENEMY;
 
 	shoot = app->physics->CreateCircle(position.x, position.y, 5, bodyType::DYNAMIC, true);
 	shoot->listener = this;
@@ -118,7 +118,8 @@ bool Enemy::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
 
-	
+	iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
+	iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
 
 	if (isDead == false) {
 		if (app->scene->GetPLayerPosition().x >= bound.x
@@ -126,8 +127,7 @@ bool Enemy::Update(float dt)
 			&& app->scene->GetPLayerPosition().y >= bound.y
 			&& app->scene->GetPLayerPosition().y <= bound.y + bound.h)
 		{
-			iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
-			iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
+			
 
 			app->map->pathfinding->CreatePath(enemyPos, playerPos);
 
@@ -145,20 +145,20 @@ bool Enemy::Update(float dt)
 			if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
 
 				if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
-					enemyCollider->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+					pbody->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
 					isFacingLeft = false;
 					currentAnim = &WalkingRight;
 					isShooting = false;
 				}
 				else if (abs(enemyPos.x - playerPos.x) > 3) {
-					enemyCollider->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
+					pbody->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
 					isFacingLeft = true;
 					currentAnim = &Walking;
 					isShooting = false;
 				}
 				else if (abs(enemyPos.x - playerPos.x) < 3) {
-					enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
-					enemyCollider->body->SetLinearDamping(0);
+					pbody->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
+					pbody->body->SetLinearDamping(0);
 
 					if (isFacingLeft) {
 						currentAnim = &Shooting;
@@ -179,8 +179,8 @@ bool Enemy::Update(float dt)
 			}
 		}
 
-		position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 12);
-		position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 6);
+		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 12);
+		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 6);
 
 		if (isShooting == false) {
 			shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
@@ -202,7 +202,7 @@ bool Enemy::Update(float dt)
 		bound.w = 240;
 		bound.h = 120;
 
-		if (debug) {
+		if (app->physics->debug) {
 			app->render->DrawRectangle(bound, 0, 255, 0, 80);
 		}
 
@@ -210,7 +210,14 @@ bool Enemy::Update(float dt)
 		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	}
 	
-
+	if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
+		isFacingLeft = false;
+		currentAnim = &WalkingRight;
+	}
+	else if (abs(enemyPos.x - playerPos.x) > 3) {
+		isFacingLeft = true;
+		currentAnim = &Walking;
+	}
 
 	return true;
 }
@@ -224,19 +231,17 @@ bool Enemy::CleanUp()
 void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 
-	pugi::xml_node node = parameters;
-
-	
-
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
 		isDead = true;
 		if (parameters.attribute("id").as_int() == 1) {
-			app->entityManager->DestroyEntity(app->scene->enemy);
+			pendingDelete = true;
+			//app->entityManager->DestroyEntity(app->scene->enemy);
 		}
 		else if (parameters.attribute("id").as_int() == 2) {
-			app->entityManager->DestroyEntity(app->scene->enemy2);
+			pendingDelete = true;
+			//app->entityManager->DestroyEntity(app->scene->enemy2);
 		}
 		
 		break;

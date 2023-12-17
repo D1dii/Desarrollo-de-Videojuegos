@@ -97,20 +97,18 @@ bool FlyEnemy::Start()
 		0, 10,
 	};
 
-	enemyCollider = app->physics->CreateCircle(position.x + 10, position.y + 15, 8, bodyType::DYNAMIC);
-	enemyCollider->listener = this;
-	enemyCollider->ctype = ColliderType::ENEMY;
+	pbody = app->physics->CreateCircle(position.x + 10, position.y + 15, 8, bodyType::DYNAMIC);
+	pbody->listener = this;
+	pbody->ctype = ColliderType::ENEMY;
 
 	detect = app->physics->CreateRectangleSensor(position.x + 25, position.y + 25, 60, 60, bodyType::DYNAMIC);
 	detect->listener = this;
 	detect->ctype = ColliderType::DETECT;
 	detect->body->SetGravityScale(0);
 
-	
+	pbody->body->SetGravityScale(0);
 
-
-
-	enemyCollider->body->SetGravityScale(0);
+	debug = false;
 
 	return true;
 }
@@ -159,11 +157,11 @@ bool FlyEnemy::Update(float dt)
 					
 				}
 
-				enemyCollider->body->SetLinearVelocity(b2Vec2(-(triX / 10), -(triY / 10)));
+				pbody->body->SetLinearVelocity(b2Vec2(-(triX / 10), -(triY / 10)));
 
 				if (abs(enemyPos.x - playerPos.x) < 2) {
-					enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0));
-					enemyCollider->body->SetLinearDamping(0);
+					pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+					pbody->body->SetLinearDamping(0);
 					//isExploding = true;
 					
 				}
@@ -175,7 +173,7 @@ bool FlyEnemy::Update(float dt)
 		}
 
 		if (isExploding) {
-			enemyCollider->body->SetLinearVelocity(b2Vec2(0, 0));
+			pbody->body->SetLinearVelocity(b2Vec2(0, 0));
 			explosionTimer++;
 			if (isFacingLeft) {
 				currentAnim = &Attack;
@@ -193,8 +191,9 @@ bool FlyEnemy::Update(float dt)
 			}
 			if (explosionTimer >= 70) {
 				explosion->body->SetTransform({ PIXEL_TO_METERS((float32)(100)), PIXEL_TO_METERS((float32)(0)) }, 0);
+				isDead = true;
 				if (parameters.attribute("id").as_int() == 1) {
-					app->entityManager->DestroyEntity(app->scene->flyenemy);
+					//app->entityManager->DestroyEntity(app->scene->flyenemy);
 				}
 				
 				
@@ -210,15 +209,15 @@ bool FlyEnemy::Update(float dt)
 		}
 
 		detect->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
-		position.x = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.x - 15);
-		position.y = METERS_TO_PIXELS(enemyCollider->body->GetTransform().p.y - 18);
+		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 15);
+		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 18);
 
 		bound.x = position.x - 150;
 		bound.y = position.y - 75;
 		bound.w = 300;
 		bound.h = 150;
 
-		if (debug) {
+		if (app->physics->debug) {
 			app->render->DrawRectangle(bound, 0, 255, 0, 80);
 		}
 
@@ -244,7 +243,8 @@ void FlyEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::ATTACK:
 		isDead = true;
 		if (parameters.attribute("id").as_int() == 1) {
-			app->entityManager->DestroyEntity(app->scene->flyenemy);
+			pendingDelete = true;
+			//app->entityManager->DestroyEntity(app->scene->flyenemy);
 		}
 		break;
 	}

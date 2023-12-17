@@ -449,32 +449,37 @@ bool Player::CleanUp()
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
-	switch (physB->ctype)
-	{
-	case ColliderType::ITEM:
-		LOG("Collision ITEM");
-		app->audio->PlayFx(pickCoinFxId);
-		break;
-	case ColliderType::PLATFORM:
-		LOG("Collision PLATFORM");
-		if (player == jumpState::JUMPING || player == jumpState::POWER_JUMP) {
-			player = jumpState::FLOOR;
-			power = 0;
-			justFall = true;
-			fallTimer = 0;
+
+	if (physA->ctype == ColliderType::PLAYER) {
+		switch (physB->ctype)
+		{
+		case ColliderType::ITEM:
+			LOG("Collision ITEM");
+			app->audio->PlayFx(pickCoinFxId);
+			break;
+		case ColliderType::PLATFORM:
+			LOG("Collision PLATFORM");
+			if (player == jumpState::JUMPING || player == jumpState::POWER_JUMP) {
+				player = jumpState::FLOOR;
+				power = 0;
+				justFall = true;
+				fallTimer = 0;
+			}
+			break;
+		case ColliderType::ENEMY_ATTACK:
+			LOG("Collision ENEMY_ATTACK");
+
+			if (canDmg) {
+				lifes--;
+				canDmg = false;
+			}
+
+			break;
+		case ColliderType::UNKNOWN:
+			LOG("Collision UNKNOWN");
+			break;
+
 		}
-		break;
-	case ColliderType::ENEMY_ATTACK:
-		
-		if (canDmg) {
-			lifes--;
-			canDmg = false;
-		}
-		
-		break;
-	case ColliderType::UNKNOWN:
-		LOG("Collision UNKNOWN");
-		break;
-		
 	}
+	
 }

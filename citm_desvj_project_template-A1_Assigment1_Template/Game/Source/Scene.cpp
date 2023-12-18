@@ -89,6 +89,11 @@ bool Scene::Start()
 		app->map->mapData.tileheight,
 		app->map->mapData.tilesets.Count());
 
+	pozo = app->physics->CreateRectangleSensor(275, 2250, 350, 30, bodyType::DYNAMIC);
+	pozo->listener = enemy;
+	pozo->ctype = ColliderType::POZO;
+	pozo->body->SetGravityScale(0);
+
 	return true;
 }
 

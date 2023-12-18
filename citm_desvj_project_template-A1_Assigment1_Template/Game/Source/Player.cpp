@@ -473,8 +473,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				lifes--;
 				canDmg = false;
 			}
-
 			break;
+		case ColliderType::POZO:
+			lifes = 0;
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");
 			break;

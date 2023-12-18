@@ -44,6 +44,7 @@ public:
 	Animation FallLeft;
 	Animation attack;
 	Animation attackLeft;
+	Animation lifes;
 
 public:
 	float speedx = 0.2f;

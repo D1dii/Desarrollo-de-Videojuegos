@@ -65,6 +65,7 @@ public:
 	Enemy* enemy;
 	Enemy* enemy2;
 	FlyEnemy* flyenemy;
+	FlyEnemy* flyenemy2;
 	PhysBody* pozo;
 
 };

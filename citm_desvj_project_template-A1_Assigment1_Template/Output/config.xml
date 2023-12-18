@@ -25,6 +25,7 @@
     <map path="Assets/Maps/" name="Level1 Map.tmx"/>
     <player x="90" y="2172" texturepath="Assets/Textures/idle.png">
 		<musicFile path="Assets/Audio/Music/LeFestinLetHimCook.mp3"/>
+		<jumpAudio path="Assets/Audio/Fx/jumpAudio.wav"/>
 	  <Idle animspeed="0.2f" loop="true">
 		  <pushback x="0" y="0" width="30" height="30"/>
 		  <pushback x="30" y="0" width="30" height="30"/>
@@ -117,8 +118,15 @@
 			<pushback x="150" y="270" width="30" height="30"/>
 			<pushback x="180" y="270" width="30" height="30"/>
 		</attackLeft>
+		<lifeAnim animspeed="1" loop="true">
+			<pushback x="0" y="0" width="96" height="32"/>
+			<pushback x="96" y="0" width="96" height="32"/>
+			<pushback x="192" y="0" width="96" height="32"/>
+			<pushback x="288" y="0" width="96" height="32"/>
+		</lifeAnim>
 		</player>
 	  <enemy x="200" y="1872" texturepath="Assets/Textures/brocoli.png" id="1">
+		  <deathAudio path="Assets/Audio/Fx/muerteAudio.wav"/>
 		  <Walking animspeed = "0.1f" loop ="true">
 			  <pushback x = "0" y = "0" width = "32" height = "32" />
 			  <pushback x = "32" y = "0" width = "32" height = "32" />
@@ -150,7 +158,8 @@
 			  <pushback x = "160" y = "96" width = "32" height = "32" />
 		  </ShootingRight>
 	  </enemy>
-	  <enemy2 x="200" y="1700" texturepath="Assets/Textures/brocoli.png" id="2">
+	  <enemy2 x="432" y="1584" texturepath="Assets/Textures/brocoli.png" id="2">
+		  <deathAudio path="Assets/Audio/Fx/muerteAudio.wav"/>
 		  <Walking animspeed = "0.1f" loop ="true">
 			  <pushback x = "0" y = "0" width = "32" height = "32" />
 			  <pushback x = "32" y = "0" width = "32" height = "32" />
@@ -182,7 +191,8 @@
 			  <pushback x = "160" y = "96" width = "32" height = "32" />
 		  </ShootingRight>
 	  </enemy2>
-	  <FlyEnemy x="230" y="2002" texturepath="Assets/Textures/tomate.png" id="1">
+	  <FlyEnemy x="250" y="2020" texturepath="Assets/Textures/tomate.png" id="1">
+		  <deathAudio path="Assets/Audio/Fx/muerteAudio.wav"/>
 		  <Moving animspeed = "0.1f" loop ="true">
 			  <pushback x = "0" y = "0" width = "32" height = "32" />
 			  <pushback x = "32" y = "0" width = "32" height = "32" />
@@ -214,6 +224,39 @@
 			  <pushback x = "192" y = "96" width = "32" height = "32" />
 		  </AttackRight>
 	  </FlyEnemy>
+	  <FlyEnemy2 x="224" y="960" texturepath="Assets/Textures/tomate.png" id="2">
+		  <deathAudio path="Assets/Audio/Fx/muerteAudio.wav"/>
+		  <Moving animspeed = "0.1f" loop ="true">
+			  <pushback x = "0" y = "0" width = "32" height = "32" />
+			  <pushback x = "32" y = "0" width = "32" height = "32" />
+			  <pushback x = "64" y = "0" width = "32" height = "32" />
+			  <pushback x = "96" y = "0" width = "32" height = "32" />
+		  </Moving>
+		  <Attack animspeed = "0.1f" loop ="false">
+			  <pushback x = "0" y = "32" width = "32" height = "32" />
+			  <pushback x = "32" y = "32" width = "32" height = "32" />
+			  <pushback x = "64" y = "32" width = "32" height = "32" />
+			  <pushback x = "96" y = "32" width = "32" height = "32" />
+			  <pushback x = "128" y = "32" width = "32" height = "32" />
+			  <pushback x = "160" y = "32" width = "32" height = "32" />
+			  <pushback x = "192" y = "32" width = "32" height = "32" />
+		  </Attack>
+		  <MovingRight animspeed = "0.1f" loop ="true">
+			  <pushback x = "0" y = "64" width = "32" height = "32" />
+			  <pushback x = "32" y = "64" width = "32" height = "32" />
+			  <pushback x = "64" y = "64" width = "32" height = "32" />
+			  <pushback x = "96" y = "64" width = "32" height = "32" />
+		  </MovingRight>
+		  <AttackRight animspeed = "0.1f" loop ="false">
+			  <pushback x = "0" y = "96" width = "32" height = "32" />
+			  <pushback x = "32" y = "96" width = "32" height = "32" />
+			  <pushback x = "64" y = "96" width = "32" height = "32" />
+			  <pushback x = "96" y = "96" width = "32" height = "32" />
+			  <pushback x = "128" y = "96" width = "32" height = "32" />
+			  <pushback x = "160" y = "96" width = "32" height = "32" />
+			  <pushback x = "192" y = "96" width = "32" height = "32" />
+		  </AttackRight>
+	  </FlyEnemy2>
 		 
   </scene>
   

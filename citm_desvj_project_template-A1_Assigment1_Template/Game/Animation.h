@@ -66,6 +66,11 @@ public:
 
 		return frames[actualFrame];
 	}
+
+	void SetCurrentFrame(int index)
+	{
+		if(index < totalFrames) currentFrame = index;
+	}
 };
 
 #endif#pragma once

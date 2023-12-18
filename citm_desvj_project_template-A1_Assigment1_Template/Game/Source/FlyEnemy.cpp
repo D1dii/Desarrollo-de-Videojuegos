@@ -108,7 +108,7 @@ bool FlyEnemy::Start()
 
 	pbody->body->SetGravityScale(0);
 
-	debug = false;
+	deathFx = app->audio->LoadFx(parameters.child("deathAudio").attribute("path").as_string());
 
 	return true;
 }
@@ -192,10 +192,8 @@ bool FlyEnemy::Update(float dt)
 			if (explosionTimer >= 70) {
 				explosion->body->SetTransform({ PIXEL_TO_METERS((float32)(100)), PIXEL_TO_METERS((float32)(0)) }, 0);
 				isDead = true;
-				if (parameters.attribute("id").as_int() == 1) {
-					//app->entityManager->DestroyEntity(app->scene->flyenemy);
-				}
-				
+				pendingDelete = true;
+				app->audio->PlayFx(deathFx);
 				
 			}
 		}
@@ -244,7 +242,11 @@ void FlyEnemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		isDead = true;
 		if (parameters.attribute("id").as_int() == 1) {
 			pendingDelete = true;
-			//app->entityManager->DestroyEntity(app->scene->flyenemy);
+			app->audio->PlayFx(deathFx);
+		} 
+		else if (parameters.attribute("id").as_int() == 2) {
+			pendingDelete = true;
+			app->audio->PlayFx(deathFx);
 		}
 		break;
 	}

@@ -6,14 +6,15 @@
 	<audio />
 	<:anonymous />
 	<scene>
-		<positionPlayer x="27" y="1912" />
-		<positionEnemy x="196" y="1857" isDead="false" />
-		<positionEnemy2 x="196" y="1713" isDead="false" />
-		<positionFlyEnemy x="224" y="1999" isDead="false" />
+		<positionPlayer x="27" y="1064" lifeLost="0" />
+		<positionEnemy x="183" y="1857" isDead="false" />
+		<positionEnemy2 x="407" y="1569" isDead="false" />
+		<positionFlyEnemy x="230" y="1999" isDead="false" />
+		<positionFlyEnemy2 x="203" y="939" isDead="false" />
 	</scene>
 	<:anonymous />
 	<entitymanager />
 	<renderer>
-		<camera x="0" y="-3364" />
+		<camera x="0" y="-1668" />
 	</renderer>
 </game_state>

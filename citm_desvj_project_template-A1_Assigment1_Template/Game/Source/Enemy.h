@@ -58,6 +58,8 @@ public:
 
 	bool isFacingLeft = true;
 
+	uint deathFx;
+
 private:
 };
 

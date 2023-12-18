@@ -32,6 +32,7 @@ public:
 	void InitAnims();
 	
 	Animation* currentAnim;
+	Animation* lifeCurrentAnim;
 
 	Animation Idle;
 	Animation IdleLeft;
@@ -44,7 +45,7 @@ public:
 	Animation FallLeft;
 	Animation attack;
 	Animation attackLeft;
-	Animation lifes;
+	Animation lifeAnim;
 
 public:
 	float speedx = 0.2f;
@@ -78,10 +79,12 @@ public:
 	int fallTimer = 0;
 
 	int lifes = 3;
+	int lifeFrame = 0;
 	bool canDmg = true;
 	int dmgTimer = 0;
 
 	SDL_Texture* texture = NULL;
+	SDL_Texture* hearts = NULL;
 	
 	PhysBody* pbody;
 	PhysBody* sword;
@@ -89,6 +92,8 @@ public:
 	
 	SDL_Rect powerJump;
 	SDL_Rect destinoRect;
+
+	uint jumpFx;
 
 	pugi::xml_node configNode;
 

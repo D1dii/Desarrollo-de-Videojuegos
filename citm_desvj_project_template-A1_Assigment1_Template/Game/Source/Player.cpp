@@ -131,6 +131,16 @@ void Player::InitAnims() {
 	}
 	attackLeft.speed = parameters.child("attackLeft").attribute("animspeed").as_float();
 	attackLeft.loop = parameters.child("attackLeft").attribute("loop").as_bool();
+
+	// lifes
+	for (pugi::xml_node node = parameters.child("lifeAnim").child("pushback"); node; node = node.next_sibling("pushback")) {
+		lifeAnim.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	lifeAnim.speed = parameters.child("lifeAnim").attribute("animspeed").as_float();
+	lifeAnim.loop = parameters.child("lifeAnim").attribute("loop").as_bool();
 }
 
 bool Player::Awake() {
@@ -139,6 +149,7 @@ bool Player::Awake() {
 	position.y = parameters.attribute("y").as_int();
 	
 	texturePath = parameters.attribute("texturepath").as_string();
+	
 
 	InitAnims();
 
@@ -149,6 +160,7 @@ bool Player::Start() {
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
+	hearts = app->tex->Load("Assets/Textures/hp.png");
 	
 	powerJump.h = 0;
 	powerJump.w = 0;
@@ -175,7 +187,9 @@ bool Player::Start() {
 
 	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
 	
-
+	jumpFx = app->audio->LoadFx(parameters.child("jumpAudio").attribute("path").as_string());
+	
+	
 	return true;
 }
 
@@ -214,6 +228,8 @@ bool Player::Update(float dt)
 	}
 	
 	uint scale = app->win->GetScale();
+
+	
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::POWER_JUMP) {
 		if (isFacingLeft != true) {
@@ -247,7 +263,8 @@ bool Player::Update(float dt)
 
 		powerJump.w = 0;
 		
-		
+		app->audio->PlayFx(jumpFx);
+
 		player = jumpState::POWER_JUMP;
 	}
 
@@ -386,14 +403,14 @@ bool Player::Update(float dt)
 
 	// Spawn on debug checkpoints
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
-		position.x = 368;
-		position.y = 1568;
+		position.x = 416;
+		position.y = 1440;
 		pbody->body->SetTransform({PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
-		position.x = 80;
-		position.y = 912;
+		position.x = 32;
+		position.y = 1072;
 		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 	}
 
@@ -414,7 +431,9 @@ bool Player::Update(float dt)
 	powerJump.x = position.x;
 	powerJump.y = position.y - 30;
 
+	lifeCurrentAnim = &lifeAnim;
 	currentAnim->Update();
+	lifeCurrentAnim->SetCurrentFrame(lifeFrame);
 
 	if (!canDmg) {
 		dmgTimer++;
@@ -427,12 +446,14 @@ bool Player::Update(float dt)
 
 	if (lifes == 0) {
 		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)90), PIXEL_TO_METERS((float32)2172) }, 0);
+		lifeCurrentAnim->SetCurrentFrame(0);
 		lifes = 3;
 	}
 
 	SDL_RendererFlip flip = (isFacingLeft) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
+	app->render->DrawTexture(hearts, app->render->camera.x + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());
 	
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
 
@@ -472,6 +493,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			if (canDmg) {
 				lifes--;
 				canDmg = false;
+				if (lifeFrame < 4) {
+					lifeFrame++;
+				}
+				else if (lifeFrame >= 4) {
+					lifeFrame = 0;
+				}
+				lifeCurrentAnim->SetCurrentFrame(lifeFrame);
 			}
 			break;
 		case ColliderType::POZO:

@@ -108,6 +108,8 @@ bool Enemy::Start()
 
 	currentAnim = &Walking;
 
+	deathFx = app->audio->LoadFx(parameters.child("deathAudio").attribute("path").as_string());
+
 	return true;
 }
 
@@ -178,6 +180,14 @@ bool Enemy::Update(float dt)
 				}
 			}
 		}
+		else {
+			if (isFacingLeft) {
+				currentAnim = &Walking;
+			}
+			else if (!isFacingLeft) {
+				currentAnim = &WalkingRight;
+			}
+		}
 
 		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 12);
 		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 6);
@@ -237,11 +247,11 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 		isDead = true;
 		if (parameters.attribute("id").as_int() == 1) {
 			pendingDelete = true;
-			//app->entityManager->DestroyEntity(app->scene->enemy);
+			app->audio->PlayFx(deathFx);
 		}
 		else if (parameters.attribute("id").as_int() == 2) {
 			pendingDelete = true;
-			//app->entityManager->DestroyEntity(app->scene->enemy2);
+			app->audio->PlayFx(deathFx);
 		}
 		
 		break;

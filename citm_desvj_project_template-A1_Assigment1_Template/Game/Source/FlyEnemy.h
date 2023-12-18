@@ -48,7 +48,7 @@ public:
 
 	float triX, triY;
 
-	
+	uint deathFx;
 
 	SDL_Rect bound;
 

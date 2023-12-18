@@ -7,6 +7,9 @@ Let Him Cook!
 Description: You're in a tilter platformer. Control your power and jump through the obstacles to reach the top. Face your enemies and most importantly,
 don't fall!
 
+(Some final parts of the level cannot be passed without godmode because of a mechanic still pending to be implemented (go up ladders) we are sorry but we think
+the final product will be better with this!)
+
 Controls:
 
 A: Move left

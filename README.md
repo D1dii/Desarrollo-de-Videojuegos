@@ -10,29 +10,40 @@ don't fall!
 (Some final parts of the level cannot be passed without godmode because of a mechanic still pending to be implemented (go up ladders) we are sorry but we think
 the final product will be better with this!)
 
-Controls:
+# Controls:
 
 A: Move left
 D: Move right
 
 Hold Spacebar: Charge Jump
+
 Release Spacebar: Jump
+
 (Note: Similar mechanic to other games like Jump King, where, the more you press the jump button, the further you'll jump. Use this mechanic to
 cover various distances and heights with your jump. Precision is key to avoid falling down.)
 
 Debug options:
 
 F1: Spawn at the start of the map.
+
 F2: Spawn at the debug checkpoint 1.
+
 F3: Spawn at the debug checkpoint 2.
+
 F4: Show the powerJump bar for reference.
+
 F5: Save game
+
 F6: Load game
+
 F9: Show colliders and pathfinding.
+
 F10: Godmode (move with WASD freely through the map).
+
 F11: Change between 30/60 FPS.
 
-Work Distribution:
+## Work Distribution:
+
 https://trello.com/b/Rild0Zac/let-him-cook
 
 ## License

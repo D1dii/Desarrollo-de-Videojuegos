@@ -170,7 +170,7 @@ bool Scene::LoadState(pugi::xml_node node)
 
 	player->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionPlayer").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionPlayer").attribute("y").as_int()) }, 0);
 
-	if (node.child("positionEnemy").attribute("isDead").as_bool() == false) {
+	if (!node.child("positionEnemy").attribute("isDead").as_bool()) {
 		enemy->pendingDelete = true;
 		enemy = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
 		enemy->parameters = sceneParameter.child("enemy");
@@ -179,17 +179,12 @@ bool Scene::LoadState(pugi::xml_node node)
 		enemy->position.x = node.child("positionEnemy").attribute("x").as_int();
 		enemy->position.y = node.child("positionEnemy").attribute("y").as_int();
 		enemy->isDead = node.child("positionEnemy").attribute("isDead").as_bool();
-		
+		enemy->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionEnemy").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionEnemy").attribute("y").as_int()) }, 0);
 	}
-	else {
-		enemy->position.x = node.child("positionEnemy").attribute("x").as_int();
-		enemy->position.y = node.child("positionEnemy").attribute("y").as_int();
-		enemy->isDead = node.child("positionEnemy").attribute("isDead").as_bool();
-	}
+	
 
-	enemy->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionEnemy").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionEnemy").attribute("y").as_int()) }, 0);
-
-	if (node.child("positionEnemy2").attribute("isDead").as_bool() == false) {
+	
+	if (!node.child("positionEnemy2").attribute("isDead").as_bool()) {
 		enemy2->pendingDelete = true;
 		enemy2 = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
 		enemy2->parameters = sceneParameter.child("enemy2");
@@ -198,17 +193,12 @@ bool Scene::LoadState(pugi::xml_node node)
 		enemy2->position.x = node.child("positionEnemy2").attribute("x").as_int();
 		enemy2->position.y = node.child("positionEnemy2").attribute("y").as_int();
 		enemy2->isDead = node.child("positionEnemy2").attribute("isDead").as_bool();
-
+		enemy2->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionEnemy2").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionEnemy2").attribute("y").as_int()) }, 0);
 	}
-	else {
-		enemy2->position.x = node.child("positionEnemy2").attribute("x").as_int();
-		enemy2->position.y = node.child("positionEnemy2").attribute("y").as_int();
-		enemy2->isDead = node.child("positionEnemy2").attribute("isDead").as_bool();
-	}
+	
 
-	enemy2->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionEnemy2").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionEnemy2").attribute("y").as_int()) }, 0);
-
-	if (node.child("positionFlyEnemy").attribute("isDead").as_bool() == false) {
+	
+	if (!node.child("positionFlyEnemy").attribute("isDead").as_bool()) {
 		flyenemy->pendingDelete = true;
 		flyenemy = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
 		flyenemy->parameters = sceneParameter.child("FlyEnemy");
@@ -217,17 +207,12 @@ bool Scene::LoadState(pugi::xml_node node)
 		flyenemy->position.x = node.child("positionFlyEnemy").attribute("x").as_int();
 		flyenemy->position.y = node.child("positionFlyEnemy").attribute("y").as_int();
 		flyenemy->isDead = node.child("positionFlyEnemy").attribute("isDead").as_bool();
-
+		flyenemy->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionFlyEnemy").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionFlyEnemy").attribute("y").as_int()) }, 0);
 	}
-	else {
-		flyenemy->position.x = node.child("positionFlyEnemy").attribute("x").as_int();
-		flyenemy->position.y = node.child("positionFlyEnemy").attribute("y").as_int();
-		flyenemy->isDead = node.child("positionFlyEnemy").attribute("isDead").as_bool();
-	}
+	
 
-	flyenemy->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionFlyEnemy").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionFlyEnemy").attribute("y").as_int()) }, 0);
-
-	if (node.child("positionFlyEnemy2").attribute("isDead").as_bool() == false) {
+	
+	if (!node.child("positionFlyEnemy2").attribute("isDead").as_bool()) {
 		flyenemy2->pendingDelete = true;
 		flyenemy2 = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
 		flyenemy2->parameters = sceneParameter.child("FlyEnemy2");
@@ -236,16 +221,11 @@ bool Scene::LoadState(pugi::xml_node node)
 		flyenemy2->position.x = node.child("positionFlyEnemy2").attribute("x").as_int();
 		flyenemy2->position.y = node.child("positionFlyEnemy2").attribute("y").as_int();
 		flyenemy2->isDead = node.child("positionFlyEnemy2").attribute("isDead").as_bool();
-
+		flyenemy2->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionFlyEnemy2").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionFlyEnemy2").attribute("y").as_int()) }, 0);
 	}
-	else {
-		flyenemy2->position.x = node.child("positionFlyEnemy2").attribute("x").as_int();
-		flyenemy2->position.y = node.child("positionFlyEnemy2").attribute("y").as_int();
-		flyenemy2->isDead = node.child("positionFlyEnemy2").attribute("isDead").as_bool();
-	}
+	
 
-	flyenemy2->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionFlyEnemy2").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionFlyEnemy2").attribute("y").as_int()) }, 0);
-
+	
 
 	return true;
 }

@@ -245,15 +245,8 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::ATTACK:
 		isDead = true;
-		if (parameters.attribute("id").as_int() == 1) {
-			pendingDelete = true;
-			app->audio->PlayFx(deathFx);
-		}
-		else if (parameters.attribute("id").as_int() == 2) {
-			pendingDelete = true;
-			app->audio->PlayFx(deathFx);
-		}
-		
+		pendingDelete = true;
+		app->audio->PlayFx(deathFx);
 		break;
 	}
 }

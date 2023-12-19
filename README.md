@@ -26,6 +26,8 @@ F1: Spawn at the start of the map.
 F2: Spawn at the debug checkpoint 1.
 F3: Spawn at the debug checkpoint 2.
 F4: Show the powerJump bar for reference.
+F5: Save game
+F6: Load game
 F9: Show colliders and pathfinding.
 F10: Godmode (move with WASD freely through the map).
 F11: Change between 30/60 FPS.

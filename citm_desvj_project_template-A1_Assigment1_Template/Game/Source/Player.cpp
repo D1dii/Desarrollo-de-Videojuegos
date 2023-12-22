@@ -445,12 +445,15 @@ bool Player::Update(float dt)
 	}
 
 	if (lifes == 0) {
-		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)90), PIXEL_TO_METERS((float32)2172) }, 0);
+		app->LoadRequest();
 		lifeCurrentAnim->SetCurrentFrame(0);
+		lifeFrame = 0;
 		lifes = 3;
 	}
 
 	SDL_RendererFlip flip = (isFacingLeft) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+	
 
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	app->render->DrawTexture(hearts, app->render->camera.x + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());

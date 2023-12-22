@@ -86,6 +86,10 @@ bool Map::Update(float dt)
 
     }
 
+    if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
+        CleanUp();
+    }
+
     return true;
 }
 
@@ -186,24 +190,6 @@ void Map::CreateNavigationMap(int& width, int& height, uchar** buffer) const
 
 }
 
-//TileSet* Map::GetTilesetFromTileId(int gid) const
-//{
-//    ListItem<TileSet*>* item = mapData.tilesets.start;
-//    TileSet* set = NULL;
-//
-//    while (item)
-//    {
-//        set = item->data;
-//        if (gid < (item->data->firstgid + item->data->tilecount))
-//        {
-//            break;
-//        }
-//        item = item->next;
-//    }
-//
-//    return set;
-//}
-
 // Called before quitting
 bool Map::CleanUp()
 {
@@ -232,6 +218,8 @@ bool Map::CleanUp()
         RELEASE(layerItem->data);
         layerItem = layerItem->next;
     }
+
+    app->physics->DestroyPlatforms();
 
     return true;
 }
@@ -326,10 +314,6 @@ bool Map::Load(SString mapFileName)
             mapData.maplayers.Add(mapLayer);
         }
 
-
-        // L07 DONE 3: Create colliders      
-        // L07 DONE 7: Assign collider type
-        // Later you can create a function here to load and create the colliders from the map
 
         // CALL TO CREATE COLLIDERS FROM MAP
 
@@ -426,6 +410,7 @@ bool Map::LoadObjectGroups(pugi::xml_node mapNode)
 
     return ret;
 }
+
 
 Properties::Property* Properties::GetProperty(const char* name)
 {

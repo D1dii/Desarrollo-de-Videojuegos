@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Map.h"
 
+
 #include "Defs.h"
 #include "Log.h"
 
@@ -99,6 +100,10 @@ bool Scene::Start()
 	pozo->ctype = ColliderType::POZO;
 	pozo->body->SetGravityScale(0);
 
+	checkPoint = app->tex->Load("Assets/Textures/Checkpoint.png");
+
+	checkPointUI = app->tex->Load("Assets/Textures/NumCheck5.png");
+
 	return true;
 }
 
@@ -130,11 +135,40 @@ bool Scene::Update(float dt)
 	}
 		
 
+	if (checkPoints == 0) {
+		checkPointUI = app->tex->Load("Assets/Textures/NumCheck5.png");
+	} 
+	else if (checkPoints == 1) {
+		checkPointUI = app->tex->Load("Assets/Textures/NumCheck4.png");
+	}
+	else if (checkPoints == 2) {
+		checkPointUI = app->tex->Load("Assets/Textures/NumCheck3.png");
+	}
+	else if (checkPoints == 3) {
+		checkPointUI = app->tex->Load("Assets/Textures/NumCheck2.png");
+	}
+	else if (checkPoints == 4) {
+		checkPointUI = app->tex->Load("Assets/Textures/NumCheck1.png");
+	}
+	else if (checkPoints == 5) {
+		checkPointUI = app->tex->Load("Assets/Textures/NumCheck0.png");
+	}
+
 	// Renders the image in the center of the screen 
 	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
 
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveRequest();
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadRequest();
+	if (checkPoints < 5) {
+		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveRequest();
+		if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadRequest();
+	}
+	
+	if (checkPoints >= 1) app->render->DrawTexture(checkPoint, check1.x, check1.y);
+	if (checkPoints >= 2) app->render->DrawTexture(checkPoint, check2.x, check2.y);
+	if (checkPoints >= 3) app->render->DrawTexture(checkPoint, check3.x, check3.y);
+	if (checkPoints >= 4) app->render->DrawTexture(checkPoint, check4.x, check4.y);
+	if (checkPoints >= 5) app->render->DrawTexture(checkPoint, check5.x, check5.y);
+
+	app->render->DrawTexture(checkPointUI, app->render->camera.x + 20, player->position.y - 185);
 
 	return true;
 }
@@ -236,6 +270,25 @@ bool Scene::SaveState(pugi::xml_node node)
 	playerNode.append_attribute("x").set_value(player->position.x);
 	playerNode.append_attribute("y").set_value(player->position.y);
 	playerNode.append_attribute("lifeLost").set_value(player->lifeFrame);
+	
+
+	if (checkPoints == 0) {
+		check1 = player->position;
+	}
+	else if (checkPoints == 1) {
+		check2 = player->position;
+	}
+	else if (checkPoints == 2) {
+		check3 = player->position;
+	}
+	else if (checkPoints == 3) {
+		check4 = player->position;
+	}
+	else if (checkPoints == 4) {
+		check5 = player->position;
+	}
+
+	checkPoints++;
 
 	pugi::xml_node enemyNode = node.append_child("positionEnemy");
 	enemyNode.append_attribute("x").set_value(enemy->position.x);

@@ -4,17 +4,15 @@
 	<input />
 	<textures />
 	<audio />
-	<:anonymous />
 	<scene>
-		<positionPlayer x="129" y="2056" lifeLost="0" />
+		<positionPlayer x="32" y="2104" lifeLost="0" />
 		<positionEnemy x="196" y="1857" isDead="false" />
 		<positionEnemy2 x="419" y="1569" isDead="false" />
-		<positionFlyEnemy x="172" y="2031" isDead="true" />
+		<positionFlyEnemy x="245" y="2017" isDead="false" />
 		<positionFlyEnemy2 x="218" y="957" isDead="false" />
 	</scene>
-	<:anonymous />
 	<entitymanager />
 	<renderer>
-		<camera x="0" y="-3652" />
+		<camera x="0" y="-3748" />
 	</renderer>
 </game_state>

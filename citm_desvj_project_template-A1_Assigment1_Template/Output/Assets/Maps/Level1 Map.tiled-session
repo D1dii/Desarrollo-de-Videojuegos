@@ -1,11 +1,18 @@
 {
-    "activeFile": "Level1 Map.tmx",
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Level2 Map.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 2
+            "scaleInDock": 1
+        },
+        "#Tiny Tower": {
+            "scaleInEditor": 1
         },
         "C:/Users/didacgp/Downloads/handout 13/citm_desvj_project_template-L13_Pathfinding_AStart_module/Output/Assets/Maps/MapTemplate.tmx": {
             "scale": 0.479638671875,
@@ -23,10 +30,10 @@
         },
         "Level1 Map.tmx": {
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 253,
-                "y": 1911
+                "x": 407,
+                "y": 1986.5
             }
         },
         "Level1 Map.tmx#Map Meta Data": {
@@ -34,17 +41,35 @@
         },
         "Level1 Map.tmx#Tiny Tower FREE": {
             "scaleInDock": 1.5
+        },
+        "Level2 Map.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 341.3333333333333,
+                "y": 102.66666666666669
+            }
+        },
+        "Level2 Map.tmx#Tiny Tower": {
+            "scaleInDock": 1
+        },
+        "Level2 Map.tmx#Witch": {
+            "scaleInDock": 2
         }
     },
     "last.imagePath": "C:/Users/didacgp/Documents/GitHub/Desarrollo-de-Videojuegos/citm_desvj_project_template-A1_Assigment1_Template/Output/Assets/Maps",
     "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
     "openFiles": [
-        "Level1 Map.tmx"
+        "Level1 Map.tmx",
+        "Level2 Map.tmx"
     ],
     "project": "Level1 Map.tiled-project",
     "property.type": "bool",
     "recentFiles": [
         "Level1 Map.tmx",
+        "Level2 Map.tmx",
         "C:/Users/didacgp/Downloads/handout 13/citm_desvj_project_template-L13_Pathfinding_AStart_module/Output/Assets/Maps/MapTemplate.tmx"
     ],
     "tileset.embedInMap": true,

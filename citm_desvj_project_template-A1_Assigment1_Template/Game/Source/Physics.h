@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Entity.h"
+#include "List.h"
 
 #include "Box2D/Box2D/Box2D.h"
 
@@ -63,6 +64,8 @@ class Physics : public Module, public b2ContactListener // TODO
 {
 public:
 
+	List<PhysBody*> physBodies;
+
 	// Constructors & Destructors
 	Physics();
 	~Physics();
@@ -79,6 +82,7 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 	void DestroyObject(PhysBody* pbody);
+	void DestroyPlatforms();
 	
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
@@ -87,8 +91,6 @@ public:
 	bool debug;
 
 private:
-
-	
 
 	// Box2D World
 	b2World* world;

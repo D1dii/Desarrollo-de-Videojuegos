@@ -101,6 +101,8 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 
+	physBodies.Add(pbody);
+
 	return pbody;
 }
 
@@ -139,6 +141,8 @@ PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type, bool i
 	pbody->width = radious * 0.5f;
 	pbody->height = radious * 0.5f;
 
+	physBodies.Add(pbody);
+
 	// Return our PhysBody class
 	return pbody;
 }
@@ -174,6 +178,8 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
+
+	physBodies.Add(pbody);
 
 	// Return our PhysBody class
 	return pbody;
@@ -216,6 +222,8 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
+
+	physBodies.Add(pbody);
 
 	// Return our PhysBody class
 	return pbody;
@@ -398,6 +406,20 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	}
 
 	return ret;
+}
+
+void Physics::DestroyPlatforms()
+{
+	ListItem<PhysBody*>* item;
+	item = physBodies.start;
+
+	while (item)
+	{
+		if (item->data->ctype == ColliderType::PLATFORM) {
+			DestroyObject(item->data);
+		}
+		item = item->next;
+	}
 }
 
 void Physics::DestroyObject(PhysBody* pbody)

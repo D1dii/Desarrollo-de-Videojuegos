@@ -54,6 +54,7 @@ public:
 
 private:
 	SDL_Texture* img;
+	
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
@@ -62,11 +63,22 @@ public:
 
 	pugi::xml_node sceneParameter;
 
+	SDL_Texture* checkPoint = nullptr;
+	SDL_Texture* checkPointUI = nullptr;
+
 	Enemy* enemy;
 	Enemy* enemy2;
 	FlyEnemy* flyenemy;
 	FlyEnemy* flyenemy2;
 	PhysBody* pozo;
+
+	int checkPoints = 0;
+
+	iPoint check1;
+	iPoint check2;
+	iPoint check3;
+	iPoint check4;
+	iPoint check5;
 
 };
 

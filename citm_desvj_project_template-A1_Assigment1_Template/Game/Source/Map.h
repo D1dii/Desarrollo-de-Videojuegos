@@ -156,11 +156,12 @@ public:
 
 	MapData mapData;
 	SString name;
+	SString name2 = "Level2 Map.tmx";
 	SString path;
 	PathFinding* pathfinding;
 
 private:
-
+	bool isMap1 = true;
 	bool mapLoaded;
 	MapLayer* navigationLayer;
 	int blockedGid = 546;

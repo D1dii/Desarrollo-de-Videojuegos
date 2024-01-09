@@ -22,7 +22,7 @@
   </audio>
 
   <scene>
-    <map path="Assets/Maps/" name="Level1 Map.tmx"/>
+    <map path="Assets/Maps/" name="Level1 Map.tmx" name2="Level2 Map.tmx"/>
     <player x="90" y="2172" texturepath="Assets/Textures/idle.png">
 		<musicFile path="Assets/Audio/Music/LeFestinLetHimCook.mp3"/>
 		<jumpAudio path="Assets/Audio/Fx/jumpAudio.wav"/>

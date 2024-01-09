@@ -29,11 +29,11 @@
             "scaleInDock": 1
         },
         "Level1 Map.tmx": {
-            "scale": 2,
-            "selectedLayer": 2,
+            "scale": 0.33,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 407,
-                "y": 1986.5
+                "x": 657.5757575757576,
+                "y": 1060.6060606060605
             }
         },
         "Level1 Map.tmx#Map Meta Data": {
@@ -43,11 +43,11 @@
             "scaleInDock": 1.5
         },
         "Level2 Map.tmx": {
-            "scale": 0.75,
+            "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 341.3333333333333,
-                "y": 102.66666666666669
+                "x": 254.5,
+                "y": 141
             }
         },
         "Level2 Map.tmx#Tiny Tower": {

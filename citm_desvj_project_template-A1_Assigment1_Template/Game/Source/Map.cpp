@@ -33,9 +33,21 @@ bool Map::Awake(pugi::xml_node& config)
 bool Map::Start() {
 
     //Calls the functon to load the map, make sure that the filename is assigned
-    SString mapPath = path;
-    mapPath += name;
-    bool ret = Load(mapPath);
+    bool ret;
+
+    if (isMap1) 
+    {
+        SString mapPath = path;
+        mapPath += name;
+        ret = Load(mapPath);
+    }
+    else if (!isMap1) 
+    {
+        SString mapPath2 = path;
+        mapPath2 += name2;
+        ret = Load(mapPath2);
+        
+    }
 
     //Initialize pathfinding 
     pathfinding = new PathFinding();
@@ -88,6 +100,8 @@ bool Map::Update(float dt)
 
     if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
         CleanUp();
+        isMap1 = false;
+        Start();
     }
 
     return true;
@@ -218,6 +232,7 @@ bool Map::CleanUp()
         RELEASE(layerItem->data);
         layerItem = layerItem->next;
     }
+    mapData.maplayers.Clear();
 
     app->physics->DestroyPlatforms();
 

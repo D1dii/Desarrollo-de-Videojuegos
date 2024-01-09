@@ -33,6 +33,7 @@ public:
 	
 	Animation* currentAnim;
 	Animation* lifeCurrentAnim;
+	Animation* chargebarcurrentanim;
 
 	Animation Idle;
 	Animation IdleLeft;
@@ -46,6 +47,7 @@ public:
 	Animation attack;
 	Animation attackLeft;
 	Animation lifeAnim;
+	Animation ChargeBar;
 
 public:
 	float speedx = 0.2f;
@@ -62,6 +64,8 @@ public:
 	int mouseX = 0;
 	int mouseY = 0;
 	float angle;
+	int charge = 0;
+	bool isCharging = false;
 
 	int direction = 2;
 	const char* texturePath;
@@ -85,6 +89,7 @@ public:
 
 	SDL_Texture* texture = NULL;
 	SDL_Texture* hearts = NULL;
+	SDL_Texture* chargebar = NULL;
 	
 	PhysBody* pbody;
 	PhysBody* sword;

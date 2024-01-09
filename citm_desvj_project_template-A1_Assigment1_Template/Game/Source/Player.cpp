@@ -141,6 +141,15 @@ void Player::InitAnims() {
 	}
 	lifeAnim.speed = parameters.child("lifeAnim").attribute("animspeed").as_float();
 	lifeAnim.loop = parameters.child("lifeAnim").attribute("loop").as_bool();
+
+	for (pugi::xml_node node = parameters.child("ChargeBar").child("pushback"); node; node = node.next_sibling("pushback")) {
+		ChargeBar.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	ChargeBar.speed = parameters.child("ChargeBar").attribute("animspeed").as_float();
+	ChargeBar.loop = parameters.child("ChargeBar").attribute("loop").as_bool();
 }
 
 bool Player::Awake() {
@@ -161,7 +170,7 @@ bool Player::Start() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 	hearts = app->tex->Load("Assets/Textures/hp.png");
-	
+	chargebar = app->tex->Load("Assets/Textures/charge bar.png");
 	powerJump.h = 0;
 	powerJump.w = 0;
 	powerJump.x = position.x;
@@ -232,20 +241,45 @@ bool Player::Update(float dt)
 	
 	
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::POWER_JUMP) {
+		isCharging = true;
 		if (isFacingLeft != true) {
 			currentAnim = &ChargeJump;
+			chargebarcurrentanim = &ChargeBar;
 		}
 		else {
 			currentAnim = &ChargeJumpLeft;
+			chargebarcurrentanim = &ChargeBar;
 		}
-		if (power < 0.6f) {
-			power += 0.025f;
+		if (power <= 0.6f) {
+			power += 0.0125f;
+			if (power < 0.2f) {
+				ChargeBar.SetCurrentFrame(0);
+			}
+			else if (power >= 0.2f && power < 0.4f) {
+				ChargeBar.SetCurrentFrame(1);
+			}
+			else  if (power >= 0.4f && power < 0.6f) {
+				ChargeBar.SetCurrentFrame(2);
+			}
+			else  if (power >= 0.6f) {
+				ChargeBar.SetCurrentFrame(3);
+			}
 			powerJump.w += 1;
 			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) isFacingLeft = false;
 			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) isFacingLeft = true;
 		}
 		
 	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && player != jumpState::POWER_JUMP) {
+		isCharging = false;
+		if (power < 0.2f) {
+			power = 0.1;
+		} else if (power >= 0.2f && power < 0.4f) {
+			power = 0.2f;
+		} else  if (power >= 0.4f && power < 0.6f) {
+			power = 0.4f;
+		} else  if (power >= 0.6f) {
+			power = 0.6f;
+		}
 		SDL_GetMouseState(&mouseX, &mouseY);
 		mouseX = mouseX;
 		mouseY = mouseY - app->render->camera.y;
@@ -453,7 +487,9 @@ bool Player::Update(float dt)
 
 	SDL_RendererFlip flip = (isFacingLeft) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 
-	
+	if (isCharging == true) {
+		app->render->DrawTexture(chargebar, position.x, position.y - 5, &chargebarcurrentanim->GetCurrentFrame());
+	}
 
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	app->render->DrawTexture(hearts, app->render->camera.x + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());
@@ -486,6 +522,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			if (player == jumpState::JUMPING || player == jumpState::POWER_JUMP) {
 				player = jumpState::FLOOR;
 				power = 0;
+				charge = 0;
 				justFall = true;
 				fallTimer = 0;
 			}
@@ -506,6 +543,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			}
 			break;
 		case ColliderType::POZO:
+			charge = 0;
 			lifes = 0;
 		case ColliderType::UNKNOWN:
 			LOG("Collision UNKNOWN");

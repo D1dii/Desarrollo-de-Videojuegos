@@ -364,10 +364,10 @@ bool Player::Update(float dt)
 		vel = b2Vec2(-triX, -triY);
 		triY += GRAVITY_Y;
 		vel.Normalize();
-		vel.x *= power*0.55;
-		vel.x *= dt*0.55;
-		vel.y *= power*0.55;
-		vel.y *= dt*0.55;
+		vel.x *= power*4.6;
+		//vel.x *= dt*0.55;
+		//vel.y *= power;
+		vel.y *= dt*0.2;
 		
 		break;
 	case Player::FLOOR:

@@ -6,6 +6,8 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Map.h"
+#include "GuiControl.h"
+#include "GuiManager.h"
 
 
 #include "Defs.h"
@@ -73,11 +75,6 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
-	// NOTE: We have to avoid the use of paths in the code, we will move it later to a config file
-	//img = app->tex->Load("Assets/Textures/test.png");
-	
-	//Music is commented so that you can add your own music
-	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
@@ -103,6 +100,9 @@ bool Scene::Start()
 	checkPoint = app->tex->Load("Assets/Textures/Checkpoint.png");
 
 	checkPointUI = app->tex->Load("Assets/Textures/NumCheck5.png");
+
+	SDL_Rect btPos = { windowW / 2 - 60, windowH / 2 - 10, 248, 32 };
+	gcButtom = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
 
 	return true;
 }
@@ -194,6 +194,13 @@ bool Scene::CleanUp()
 
 iPoint Scene::GetPLayerPosition() {
 	return player->position;
+}
+
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+{
+	LOG("Press Gui Control: %d", control->id);
+
+	return true;
 }
 
 bool Scene::LoadState(pugi::xml_node node)

@@ -6,6 +6,8 @@
 #include "Item.h"
 #include "Enemy.h"
 #include "FlyEnemy.h"
+#include "GuiControl.h"
+#include "GuiControlButton.h"
 
 #include "Physics.h"
 
@@ -44,7 +46,11 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	// Return player position
 	iPoint GetPLayerPosition();
+
+	// Handles multiple Gui Event methods
+	bool OnGuiMouseClickEvent(GuiControl* control);
 
 	//
 	bool LoadState(pugi::xml_node node);
@@ -59,6 +65,7 @@ private:
 	uint texW, texH;
 	uint windowW, windowH;
 	Player* player;
+	GuiControlButton* gcButtom;
 public:
 
 	pugi::xml_node sceneParameter;

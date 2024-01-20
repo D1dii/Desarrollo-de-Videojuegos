@@ -357,17 +357,33 @@ bool Player::Update(float dt)
 		
 		break;
 	case Player::POWER_JUMP:
+
 		angle = atan2(triY, triX) * DEGTORAD;
 		jumpX = speedPower * cos(angle);
 		jumpY = -speedPower * sin(angle);
-
 		vel = b2Vec2(-triX, -triY);
 		triY += GRAVITY_Y;
 		vel.Normalize();
-		vel.x *= power*4.6;
+		//deja esto por si tenemos que cambiar algo del salto
 		//vel.x *= dt*0.55;
 		//vel.y *= power;
-		vel.y *= dt*0.2;
+
+		if (power == 0.1f) {
+			vel.x *= power * 8;
+			vel.y *= dt * 0.1;
+		}
+		else if (power == 0.2f) {
+			vel.x *= power * 7;
+			vel.y *= dt * 0.15;
+		}
+		else  if (power == 0.4f) {
+			vel.x *= power * 6;
+			vel.y *= dt * 0.2;
+		}
+		else  if (power == 0.6f) {
+			vel.x *= power * 5;
+			vel.y *= dt * 0.2;
+		}
 		
 		break;
 	case Player::FLOOR:

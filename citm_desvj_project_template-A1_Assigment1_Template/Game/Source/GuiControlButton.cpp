@@ -5,10 +5,11 @@
 #include "Window.h"
 #include "Textures.h"
 
-GuiControlButton::GuiControlButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
+GuiControlButton::GuiControlButton(uint32 id, SDL_Rect bounds, const char* text, SDL_Texture* tex) : GuiControl(GuiControlType::BUTTON, id)
 {
 	this->bounds = bounds;
 	this->text = text;
+	this->texture = tex;
 
 	canClick = true;
 	drawBasic = false;
@@ -21,15 +22,17 @@ GuiControlButton::~GuiControlButton()
 
 bool GuiControlButton::Update(float dt)
 {
-	uint scale = app->win->GetScale();
+	int scale = app->win->GetScale();
+	//SetTexture(texture);
 
 	if (state != GuiControlState::DISABLED)
 	{
 		
 		app->input->GetMousePosition(mouseX, mouseY);
+		int mouseYBounds = mouseY - app->render->camera.y / scale;
 
 		//If the position of the mouse if inside the bounds of the button 
-		if (mouseX > bounds.x / scale && mouseX < bounds.x / scale + bounds.w / scale && mouseY > bounds.y / scale && mouseY < bounds.y / scale + bounds.h / scale) {
+		if (mouseX > bounds.x / scale && mouseX < bounds.x / scale + bounds.w / scale && mouseYBounds > bounds.y && mouseYBounds < bounds.y + bounds.h) {
 
 			state = GuiControlState::FOCUSED;
 
@@ -49,20 +52,16 @@ bool GuiControlButton::Update(float dt)
 		switch (state)
 		{
 		case GuiControlState::DISABLED:
-			NewGameTest = app->tex->Load("Assets/Textures/NewGameDisabled.png");
-			app->render->DrawTexture(NewGameTest, bounds.x / scale, 2100);
+			app->render->DrawTexture(texture, bounds.x / scale, bounds.y, &DisabledBounds);
 			break;
 		case GuiControlState::NORMAL:
-			NewGameTest = app->tex->Load("Assets/Textures/NewGameNormal.png");
-			app->render->DrawTexture(NewGameTest, bounds.x / scale, 2100);
+			app->render->DrawTexture(texture, bounds.x / scale, bounds.y, &NormalBounds);
 			break;
 		case GuiControlState::FOCUSED:
-			NewGameTest = app->tex->Load("Assets/Textures/NewGameFocused.png");
-			app->render->DrawTexture(NewGameTest, bounds.x / scale, 2100);
+			app->render->DrawTexture(texture, bounds.x / scale, bounds.y, &FocusedBounds);
 			break;
 		case GuiControlState::PRESSED:
-			NewGameTest = app->tex->Load("Assets/Textures/NewGamePressed.png");
-			app->render->DrawTexture(NewGameTest, bounds.x / scale, 2100);
+			app->render->DrawTexture(texture, bounds.x / scale, bounds.y, &PressedBounds);
 			break;
 		}
 

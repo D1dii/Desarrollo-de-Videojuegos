@@ -11,7 +11,7 @@ class GuiControlButton : public GuiControl
 
 public:
 
-	GuiControlButton(uint32 id, SDL_Rect bounds, const char* text);
+	GuiControlButton(uint32 id, SDL_Rect bounds, const char* text, SDL_Texture* tex = NULL);
 	virtual ~GuiControlButton();
 
 	// Called each loop iteration
@@ -24,7 +24,10 @@ private:
 
 	bool canClick = true;
 	bool drawBasic = false;
-	SDL_Texture* NewGameTest = nullptr;
+	SDL_Rect NormalBounds = { 0, 0, 128, 32 };
+	SDL_Rect DisabledBounds = { 0, 32, 128, 32 };
+	SDL_Rect FocusedBounds = { 0, 64, 128, 32 };
+	SDL_Rect PressedBounds = { 0, 96, 128, 32 };
 };
 
 #endif // __GUICONTROLBUTTON_H__

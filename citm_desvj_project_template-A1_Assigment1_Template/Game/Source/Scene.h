@@ -66,6 +66,7 @@ private:
 	uint windowW, windowH;
 	Player* player;
 	GuiControlButton* gcButtom;
+	GuiControlButton* test;
 public:
 
 	pugi::xml_node sceneParameter;
@@ -86,6 +87,9 @@ public:
 	iPoint check3;
 	iPoint check4;
 	iPoint check5;
+
+	SDL_Texture* NewGameButton = nullptr;
+	SDL_Texture* NewGameButtonTest = nullptr;
 
 };
 

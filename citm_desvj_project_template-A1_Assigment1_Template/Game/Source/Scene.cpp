@@ -100,9 +100,11 @@ bool Scene::Start()
 	checkPoint = app->tex->Load("Assets/Textures/Checkpoint.png");
 
 	checkPointUI = app->tex->Load("Assets/Textures/NumCheck5.png");
+	NewGameButton = app->tex->Load("Assets/Textures/NewGameTitle-Sheet.png");
 
-	SDL_Rect btPos = { windowW / 2 - 60, windowH / 2 - 10, 248, 32 };
-	gcButtom = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
+	SDL_Rect btPos = { windowW / 2 - 60, 2100, 248, 32 };
+	gcButtom = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this, NewGameButton);
+
 
 	return true;
 }

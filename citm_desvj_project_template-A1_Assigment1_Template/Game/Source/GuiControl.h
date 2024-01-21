@@ -41,7 +41,7 @@ public:
 	GuiControl(GuiControlType type, uint32 id) : type(type), id(id), state(GuiControlState::NORMAL) {}
 
 	// Constructor
-	GuiControl(GuiControlType type, SDL_Rect bounds, const char* text) :
+	GuiControl(GuiControlType type, SDL_Rect bounds, const char* text, SDL_Texture* tex) :
 		type(type),
 		state(GuiControlState::NORMAL),
 		bounds(bounds),

@@ -97,7 +97,7 @@ bool Scene::Start()
 		app->map->mapData.tileheight,
 		app->map->mapData.tilesets.Count());
 
-	checkPoints = 0;
+	
 
 	checkPoint = app->tex->Load("Assets/Textures/Checkpoint.png");
 

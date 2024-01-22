@@ -56,13 +56,13 @@ bool SceneMenu::Start()
 	Continue = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Continue", ContinuePos, this, ContinueButton);
 
 	SDL_Rect SettingsPos = { 120, 150, 128, 32 };
-	Settings = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "Continue", SettingsPos, this, SettingsButton);
+	Settings = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "Settings", SettingsPos, this, SettingsButton);
 
 	SDL_Rect CreditsPos = { 120, 185, 128, 32 };
-	Credits = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "Continue", CreditsPos, this, CreditsButton);
+	Credits = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "Credits", CreditsPos, this, CreditsButton);
 
 	SDL_Rect ExitPos = { 120, 220, 128, 32 };
-	Exit = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Continue", ExitPos, this, ExitButton);
+	Exit = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Exit", ExitPos, this, ExitButton);
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;

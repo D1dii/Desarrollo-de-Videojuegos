@@ -100,6 +100,7 @@ bool Map::Update(float dt)
 
     if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
         CleanUp();
+        app->physics->DestroyPlatforms();
         isMap1 = false;
         Start();
     }
@@ -234,7 +235,8 @@ bool Map::CleanUp()
     }
     mapData.maplayers.Clear();
 
-    app->physics->DestroyPlatforms();
+   
+   
 
     return true;
 }

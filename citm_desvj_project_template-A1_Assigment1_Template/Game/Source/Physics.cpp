@@ -325,6 +325,9 @@ bool Physics::CleanUp()
 	LOG("Destroying physics world");
 
 	// Delete the whole physics world!
+	/*DestroyPlatforms();
+	DestroyEntities();
+	DestroyOthers();*/
 	delete world;
 
 	return true;
@@ -415,7 +418,40 @@ void Physics::DestroyPlatforms()
 
 	while (item)
 	{
-		if (item->data->ctype == ColliderType::PLATFORM) {
+		if (item->data->ctype == ColliderType::PLATFORM ||
+			item->data->ctype == ColliderType::POZO) {
+			DestroyObject(item->data);
+		}
+		item = item->next;
+	}
+}
+
+void Physics::DestroyEntities()
+{
+	ListItem<PhysBody*>* item;
+	item = physBodies.start;
+
+	while (item)
+	{
+		if (item->data->ctype == ColliderType::ENEMY || 
+			item->data->ctype == ColliderType::PLAYER) {
+			DestroyObject(item->data);
+		}
+		item = item->next;
+	}
+}
+
+void Physics::DestroyOthers()
+{
+	ListItem<PhysBody*>* item;
+	item = physBodies.start;
+
+	while (item)
+	{
+		if (item->data->ctype == ColliderType::ATTACK ||
+			item->data->ctype == ColliderType::ENEMY_ATTACK ||
+			item->data->ctype == ColliderType::DETECT ||
+			item->data->ctype == ColliderType::ITEM) {
 			DestroyObject(item->data);
 		}
 		item = item->next;

@@ -44,9 +44,25 @@ bool SceneMenu::Start()
 	app->win->GetWindowSize(windowW, windowH);
 
 	NewGameButton = app->tex->Load("Assets/Textures/NewGameTitle-Sheet.png");
+	ContinueButton = app->tex->Load("Assets/Textures/ContinueTitle-Sheet.png");
+	SettingsButton = app->tex->Load("Assets/Textures/SettingsTitle-Sheet.png");
+	CreditsButton = app->tex->Load("Assets/Textures/CreditsTitle-Sheet.png");
+	ExitButton = app->tex->Load("Assets/Textures/ExitTitle-Sheet.png");
 
-	SDL_Rect btPos = { 120, 80, 128, 32 };
-	gcButtom = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this, NewGameButton);
+	SDL_Rect NewGamePos = { 120, 80, 128, 32 };
+	NewGame = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "New Game", NewGamePos, this, NewGameButton);
+
+	SDL_Rect ContinuePos = { 120, 115, 128, 32 };
+	Continue = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Continue", ContinuePos, this, ContinueButton);
+
+	SDL_Rect SettingsPos = { 120, 150, 128, 32 };
+	Settings = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "Continue", SettingsPos, this, SettingsButton);
+
+	SDL_Rect CreditsPos = { 120, 185, 128, 32 };
+	Credits = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "Continue", CreditsPos, this, CreditsButton);
+
+	SDL_Rect ExitPos = { 120, 220, 128, 32 };
+	Exit = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Continue", ExitPos, this, ExitButton);
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
@@ -65,22 +81,12 @@ bool SceneMenu::Update(float dt)
 {
 
 
-	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-	{
-		/*app->scene->Enable();
-		app->sceneMenu->Disable();
-		app->physics->Enable();
-		app->map->Enable();
-		app->entityManager->Enable();*/
-	}
-
 	return true;
 }
 
 // Called each loop iteration
 bool SceneMenu::PostUpdate()
 {
-	bool ret = true;
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;

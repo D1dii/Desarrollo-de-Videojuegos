@@ -14,6 +14,7 @@ enum class EntityType
 	ITEM,
 	ENEMY,
 	FLY_ENEMY,
+	POZO,
 	UNKNOWN
 };
 

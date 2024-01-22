@@ -4,15 +4,20 @@
 	<input />
 	<textures />
 	<audio />
+	<:anonymous />
+	<:anonymous />
 	<scene>
-		<positionPlayer x="32" y="2104" lifeLost="0" />
-		<positionEnemy x="196" y="1857" isDead="false" />
-		<positionEnemy2 x="419" y="1569" isDead="false" />
-		<positionFlyEnemy x="245" y="2017" isDead="false" />
-		<positionFlyEnemy2 x="218" y="957" isDead="false" />
+		<positionPlayer x="309" y="2008" lifeLost="0" />
+		<positionEnemy x="183" y="1857" isDead="false" />
+		<positionEnemy2 x="407" y="1569" isDead="false" />
+		<positionFlyEnemy x="153" y="2012" isDead="true" />
+		<positionFlyEnemy2 x="203" y="939" isDead="false" />
 	</scene>
+	<sceneMenu />
 	<entitymanager />
+	<guiManager />
+	<:anonymous />
 	<renderer>
-		<camera x="0" y="-3748" />
+		<camera x="0" y="-3556" />
 	</renderer>
 </game_state>

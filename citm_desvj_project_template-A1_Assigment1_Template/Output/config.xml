@@ -265,6 +265,9 @@
 				<pushback x = "192" y = "96" width = "32" height = "32" />
 			</AttackRight>
 		</FlyEnemy2>
+		<Pozo x="224" y="960">
+			
+		</Pozo>
 		
 
 	</scene>

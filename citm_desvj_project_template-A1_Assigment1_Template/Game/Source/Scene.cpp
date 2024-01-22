@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include "SceneMenu.h"
 
 
 #include "Defs.h"
@@ -28,10 +29,6 @@ bool Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
-	sceneParameter = config;
-
-	// iterate all objects in the scene
-	// Check https://pugixml.org/docs/quickstart.html#access
 	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
@@ -63,18 +60,67 @@ bool Scene::Awake(pugi::xml_node& config)
 		flyenemy2->parameters = config.child("FlyEnemy2");
 	}
 
+	if (config.child("Pozo")) {
+		pozo = (Pozo*)app->entityManager->CreateEntity(EntityType::POZO);
+		pozo->parameters = config.child("Pozo");
+	}
+
 	if (config.child("map")) {
 		//Get the map name from the config file and assigns the value in the module
 		app->map->name = config.child("map").attribute("name").as_string();
 		app->map->path = config.child("map").attribute("path").as_string();
 	}
-
+	
 	return ret;
 }
 
 // Called before the first frame
-bool Scene::Start()
+bool Scene::Start(pugi::xml_node& config)
 {
+	if (!firstStart) 
+	{
+		sceneParameter = config;
+
+		// iterate all objects in the scene
+		// Check https://pugixml.org/docs/quickstart.html#access
+		for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+		{
+			Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+			item->parameters = itemNode;
+		}
+
+		if (config.child("player")) {
+			player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
+			player->parameters = config.child("player");
+		}
+
+		if (config.child("enemy")) {
+			enemy = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
+			enemy->parameters = config.child("enemy");
+		}
+
+		if (config.child("enemy2")) {
+			enemy2 = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
+			enemy2->parameters = config.child("enemy2");
+		}
+
+		if (config.child("FlyEnemy")) {
+			flyenemy = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
+			flyenemy->parameters = config.child("FlyEnemy");
+		}
+
+		if (config.child("FlyEnemy2")) {
+			flyenemy2 = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
+			flyenemy2->parameters = config.child("FlyEnemy2");
+		}
+
+		if (config.child("Pozo")) {
+			pozo = (Pozo*)app->entityManager->CreateEntity(EntityType::POZO);
+			pozo->parameters = config.child("Pozo");
+		}
+	}
+	
+	
 
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
@@ -92,10 +138,7 @@ bool Scene::Start()
 		app->map->mapData.tileheight,
 		app->map->mapData.tilesets.Count());
 
-	pozo = app->physics->CreateRectangleSensor(275, 2250, 350, 30, bodyType::DYNAMIC);
-	pozo->listener = enemy;
-	pozo->ctype = ColliderType::POZO;
-	pozo->body->SetGravityScale(0);
+	
 
 	checkPoint = app->tex->Load("Assets/Textures/Checkpoint.png");
 
@@ -116,6 +159,8 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 	float camSpeed = 1; 
+
+	firstStart = false;
 
 	if(app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT)
 		app->render->camera.y -= (int)ceil(camSpeed * dt);
@@ -166,6 +211,15 @@ bool Scene::Update(float dt)
 	if (checkPoints >= 3) app->render->DrawTexture(checkPoint, check3.x, check3.y);
 	if (checkPoints >= 4) app->render->DrawTexture(checkPoint, check4.x, check4.y);
 	if (checkPoints >= 5) app->render->DrawTexture(checkPoint, check5.x, check5.y);
+
+	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+	{
+		app->scene->Disable();
+		app->sceneMenu->Enable();
+		app->physics->Disable();
+		app->map->Disable();
+		app->entityManager->Disable();
+	}
 
 	app->render->DrawTexture(checkPointUI, app->render->camera.x + 20, player->position.y - 185);
 

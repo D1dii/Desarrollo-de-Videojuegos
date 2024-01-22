@@ -122,8 +122,8 @@ bool FlyEnemy::Update(float dt)
 	// Activate or deactivate debug mode
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
-
-	if (isDead == false) {
+	if (isDead == false) 
+	{
 		if (app->scene->GetPLayerPosition().x > bound.x
 			&& app->scene->GetPLayerPosition().x < bound.x + bound.w
 			&& app->scene->GetPLayerPosition().y > bound.y
@@ -154,11 +154,11 @@ bool FlyEnemy::Update(float dt)
 
 				if ((enemyPos.x - playerPos.x) >= 0) {
 					isFacingLeft = true;
-					
+
 				}
 				else if ((enemyPos.x - playerPos.x) < 0) {
 					isFacingLeft = false;
-					
+
 				}
 
 				pbody->body->SetLinearVelocity(b2Vec2(-(triX / 10), -(triY / 10)));
@@ -167,10 +167,10 @@ bool FlyEnemy::Update(float dt)
 					pbody->body->SetLinearVelocity(b2Vec2(0, 0));
 					pbody->body->SetLinearDamping(0);
 					//isExploding = true;
-					
+
 				}
 
-				
+
 			}
 
 
@@ -198,7 +198,7 @@ bool FlyEnemy::Update(float dt)
 				isDead = true;
 				pendingDelete = true;
 				app->audio->PlayFx(deathFx);
-				
+
 			}
 		}
 		else if (!isExploding) {
@@ -226,6 +226,7 @@ bool FlyEnemy::Update(float dt)
 		currentAnim->Update();
 		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	}
+		
 
 	
 

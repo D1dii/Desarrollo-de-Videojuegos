@@ -514,8 +514,6 @@ bool Player::Update(float dt)
 		app->render->DrawTexture(chargebar, position.x, position.y - 5, &chargebarcurrentanim->GetCurrentFrame());
 	}
 
-	
-
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	app->render->DrawTexture(hearts, app->render->camera.x + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());
 	

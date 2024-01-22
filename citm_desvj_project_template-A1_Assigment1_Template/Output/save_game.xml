@@ -7,17 +7,17 @@
 	<:anonymous />
 	<:anonymous />
 	<scene>
-		<positionPlayer x="114" y="2056" lifeLost="0" />
-		<positionEnemy x="183" y="1857" isDead="false" />
-		<positionEnemy2 x="407" y="1569" isDead="false" />
-		<positionFlyEnemy x="97" y="2016" isDead="true" />
-		<positionFlyEnemy2 x="203" y="939" isDead="false" />
+		<positionPlayer x="169" y="1864" lifeLost="0" />
+		<positionEnemy x="196" y="1857" isDead="true" />
+		<positionEnemy2 x="419" y="1569" isDead="false" />
+		<positionFlyEnemy x="183" y="2030" isDead="true" />
+		<positionFlyEnemy2 x="218" y="957" isDead="false" />
 	</scene>
 	<sceneMenu />
 	<entitymanager />
 	<guiManager />
 	<:anonymous />
 	<renderer>
-		<camera x="0" y="-3652" />
+		<camera x="0" y="-3268" />
 	</renderer>
 </game_state>

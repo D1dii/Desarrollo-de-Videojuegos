@@ -81,6 +81,10 @@ bool GuiControlButton::Update(float dt)
 				app->map->Enable();
 				app->entityManager->Enable();
 			}
+			else if (buttonID == 5)
+			{
+				app->sceneMenu->ret = false;
+			}
 			break;
 		}
 

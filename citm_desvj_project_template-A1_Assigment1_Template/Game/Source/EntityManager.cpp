@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Enemy.h"
 #include "FlyEnemy.h"
+#include "Pozo.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -24,6 +25,16 @@ bool EntityManager::Awake(pugi::xml_node& config)
 	LOG("Loading Entity Manager");
 	bool ret = true;
 
+	
+
+	return ret;
+
+}
+
+bool EntityManager::Start() {
+
+	bool ret = true; 
+
 	//Iterates over the entities and calls the Awake
 	ListItem<Entity*>* item;
 	Entity* pEntity = NULL;
@@ -36,24 +47,16 @@ bool EntityManager::Awake(pugi::xml_node& config)
 		ret = item->data->Awake();
 	}
 
-	return ret;
-
-}
-
-bool EntityManager::Start() {
-
-	bool ret = true; 
-
 	//Iterates over the entities and calls Start
-	ListItem<Entity*>* item;
-	Entity* pEntity = NULL;
+	ListItem<Entity*>* item2;
+	Entity* pEntity2 = NULL;
 
-	for (item = entities.start; item != NULL && ret == true; item = item->next)
+	for (item2 = entities.start; item2 != NULL && ret == true; item2 = item2->next)
 	{
-		pEntity = item->data;
+		pEntity2 = item2->data;
 
-		if (pEntity->active == false) continue;
-		ret = item->data->Start();
+		if (pEntity2->active == false) continue;
+		ret = item2->data->Start();
 	}
 
 	return ret;
@@ -94,6 +97,10 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::FLY_ENEMY:
 		entity = new FlyEnemy();
+		break;
+	case EntityType::POZO:
+		entity = new Pozo();
+		break;
 	default:
 		break;
 	}

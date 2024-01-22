@@ -53,18 +53,27 @@ public:
 
 private:
 	SDL_Texture* img;
+	
 
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
 	Player* player;
-	GuiControlButton* gcButtom;
-	GuiControlButton* test;
+	GuiControlButton* NewGame;
+	GuiControlButton* Continue;
+	GuiControlButton* Settings;
+	GuiControlButton* Credits;
+	GuiControlButton* Exit;
 public:
 
 	pugi::xml_node sceneParameter;
+	bool ret = true;
 
 	SDL_Texture* NewGameButton = nullptr;
+	SDL_Texture* ContinueButton = nullptr;
+	SDL_Texture* SettingsButton = nullptr;
+	SDL_Texture* CreditsButton = nullptr;
+	SDL_Texture* ExitButton = nullptr;
 
 };
 

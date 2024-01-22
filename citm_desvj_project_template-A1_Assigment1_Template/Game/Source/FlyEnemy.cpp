@@ -66,18 +66,19 @@ void FlyEnemy::InitAnims()
 bool FlyEnemy::Awake()
 {
 
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
-
-	InitAnims();
-
-	texturePath = parameters.attribute("texturepath").as_string();
+	
 
 	return true;
 }
 
 bool FlyEnemy::Start()
 {
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
+
+	InitAnims();
+
+	texturePath = parameters.attribute("texturepath").as_string();
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);

@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Enemy.h"
 #include "FlyEnemy.h"
+#include "Pozo.h"
 #include "GuiControl.h"
 #include "GuiControlButton.h"
 
@@ -32,7 +33,7 @@ public:
 	bool Awake(pugi::xml_node& conf);
 
 	// Called before the first frame
-	bool Start();
+	bool Start(pugi::xml_node& config);
 
 	// Called before all Updates
 	bool PreUpdate();
@@ -78,7 +79,7 @@ public:
 	Enemy* enemy2;
 	FlyEnemy* flyenemy;
 	FlyEnemy* flyenemy2;
-	PhysBody* pozo;
+	Pozo* pozo;
 
 	int checkPoints = 0;
 
@@ -90,6 +91,8 @@ public:
 
 	SDL_Texture* NewGameButton = nullptr;
 	SDL_Texture* NewGameButtonTest = nullptr;
+
+	bool firstStart = true;
 
 };
 

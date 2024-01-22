@@ -154,18 +154,21 @@ void Player::InitAnims() {
 
 bool Player::Awake() {
 
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
 	
-	texturePath = parameters.attribute("texturepath").as_string();
-	
-
-	InitAnims();
 
 	return true;
 }
 
 bool Player::Start() {
+
+	
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
+
+	texturePath = parameters.attribute("texturepath").as_string();
+
+
+	InitAnims();
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);

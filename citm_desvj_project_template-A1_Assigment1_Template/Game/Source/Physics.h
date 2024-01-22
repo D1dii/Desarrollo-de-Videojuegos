@@ -83,6 +83,8 @@ public:
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 	void DestroyObject(PhysBody* pbody);
 	void DestroyPlatforms();
+	void DestroyEntities();
+	void DestroyOthers();
 	
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

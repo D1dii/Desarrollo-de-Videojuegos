@@ -58,6 +58,8 @@ public:
 
 	bool SaveRequest();
 
+	bool AwakeScene();
+
 private:
 
 	// Load config file

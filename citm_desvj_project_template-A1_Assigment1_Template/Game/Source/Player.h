@@ -72,6 +72,7 @@ public:
 
 	bool godMode = false;
 	bool showBar = false;
+	bool isScene = false;
 	
 	bool isFacingLeft;
 	bool justFall = false;

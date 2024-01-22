@@ -8,6 +8,7 @@
 #include "Physics.h"
 #include "Scene.h"
 #include "SceneMenu.h"
+#include "Player.h"
 
 GuiControlButton::GuiControlButton(uint32 id, SDL_Rect bounds, const char* text, SDL_Texture* tex) : GuiControl(GuiControlType::BUTTON, id)
 {
@@ -80,6 +81,36 @@ bool GuiControlButton::Update(float dt)
 				app->physics->Enable();
 				app->map->Enable();
 				app->entityManager->Enable();
+				if (app->scene->firstStart == false) 
+				{
+					app->AwakeScene();
+					app->scene->player->Start();
+					app->scene->enemy->Start();
+					app->scene->enemy2->Start();
+					app->scene->flyenemy->Start();
+					app->scene->flyenemy2->Start();
+					app->scene->pozo->Start();
+				}
+				
+			}
+			else if (buttonID == 2 && app->scene->isSaved)
+			{
+				app->scene->Enable();
+				app->sceneMenu->Disable();
+				app->physics->Enable();
+				app->map->Enable();
+				app->entityManager->Enable();
+				if (app->scene->firstStart == false)
+				{
+					app->AwakeScene();
+					app->scene->player->Start();
+					app->scene->enemy->Start();
+					app->scene->enemy2->Start();
+					app->scene->flyenemy->Start();
+					app->scene->flyenemy2->Start();
+					app->scene->pozo->Start();
+					app->LoadRequest();
+				}
 			}
 			else if (buttonID == 5)
 			{

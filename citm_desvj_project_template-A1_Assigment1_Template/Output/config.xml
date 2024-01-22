@@ -19,12 +19,14 @@
   <audio>
     <music volume="128"/>
     <fx volume="128"/>
+	
   </audio>
 
 	<scene>
 		<map path="Assets/Maps/" name="Level1 Map.tmx" name2="Level2 Map.tmx"/>
+		<musicFile path="Assets/Audio/Music/LeFestinLetHimCook.mp3"/>
 		<player x="90" y="2172" texturepath="Assets/Textures/idle.png">
-			<musicFile path="Assets/Audio/Music/LeFestinLetHimCook.mp3"/>
+			
 			<jumpAudio path="Assets/Audio/Fx/jumpAudio.wav"/>
 			<Idle animspeed="0.2f" loop="true">
 				<pushback x="0" y="0" width="30" height="30"/>

@@ -33,7 +33,7 @@ public:
 	bool Awake(pugi::xml_node& conf);
 
 	// Called before the first frame
-	bool Start(pugi::xml_node& config);
+	bool Start();
 
 	// Called before all Updates
 	bool PreUpdate();
@@ -59,22 +59,28 @@ public:
 	//
 	bool SaveState(pugi::xml_node node);
 
+	
+
 private:
 	SDL_Texture* img;
 	
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
-	Player* player;
+	
 	GuiControlButton* gcButtom;
 	GuiControlButton* test;
 public:
 
 	pugi::xml_node sceneParameter;
+	
+
+	SString audioPath;
 
 	SDL_Texture* checkPoint = nullptr;
 	SDL_Texture* checkPointUI = nullptr;
 
+	Player* player;
 	Enemy* enemy;
 	Enemy* enemy2;
 	FlyEnemy* flyenemy;
@@ -93,6 +99,7 @@ public:
 	SDL_Texture* NewGameButtonTest = nullptr;
 
 	bool firstStart = true;
+	bool isSaved = false;
 
 };
 

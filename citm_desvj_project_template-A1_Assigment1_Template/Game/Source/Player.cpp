@@ -161,9 +161,15 @@ bool Player::Awake() {
 
 bool Player::Start() {
 
+	if (app->scene->isSaved) {
+		position.x = -300;
+		position.y = 2500;
+	}
+	else if (app->scene->isSaved == false) {
+		position.x = parameters.attribute("x").as_int();
+		position.y = parameters.attribute("y").as_int();
+	}
 	
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
 
 	texturePath = parameters.attribute("texturepath").as_string();
 
@@ -186,6 +192,7 @@ bool Player::Start() {
 		0, 16,
 	};
 
+	
 	pbody = app->physics->CreateChain(position.x, position.y, player, 8, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
@@ -194,10 +201,7 @@ bool Player::Start() {
 	sword->listener = this;
 	sword->ctype = ColliderType::ATTACK;
 	sword->body->SetGravityScale(0);
-
-	SString audioPath = parameters.child("musicFile").attribute("path").as_string();
-
-	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
+	
 	
 	jumpFx = app->audio->LoadFx(parameters.child("jumpAudio").attribute("path").as_string());
 	
@@ -510,12 +514,17 @@ bool Player::Update(float dt)
 		app->render->DrawTexture(chargebar, position.x, position.y - 5, &chargebarcurrentanim->GetCurrentFrame());
 	}
 
+	
+
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	app->render->DrawTexture(hearts, app->render->camera.x + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());
 	
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
 
-	app->render->camera.y = (-position.y + 230) * scale;
+	if (isScene) {
+		app->render->camera.y = (-position.y + 230) * scale;
+	}
+	
 
 	return true;
 }

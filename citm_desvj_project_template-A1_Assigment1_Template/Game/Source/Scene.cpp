@@ -11,6 +11,7 @@
 #include "SceneMenu.h"
 
 
+
 #include "Defs.h"
 #include "Log.h"
 
@@ -70,58 +71,16 @@ bool Scene::Awake(pugi::xml_node& config)
 		app->map->name = config.child("map").attribute("name").as_string();
 		app->map->path = config.child("map").attribute("path").as_string();
 	}
+
+	audioPath = config.child("musicFile").attribute("path").as_string();
 	
 	return ret;
 }
 
 // Called before the first frame
-bool Scene::Start(pugi::xml_node& config)
+bool Scene::Start()
 {
-	if (!firstStart) 
-	{
-		sceneParameter = config;
-
-		// iterate all objects in the scene
-		// Check https://pugixml.org/docs/quickstart.html#access
-		for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
-		{
-			Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-			item->parameters = itemNode;
-		}
-
-		if (config.child("player")) {
-			player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-			player->parameters = config.child("player");
-		}
-
-		if (config.child("enemy")) {
-			enemy = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
-			enemy->parameters = config.child("enemy");
-		}
-
-		if (config.child("enemy2")) {
-			enemy2 = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
-			enemy2->parameters = config.child("enemy2");
-		}
-
-		if (config.child("FlyEnemy")) {
-			flyenemy = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
-			flyenemy->parameters = config.child("FlyEnemy");
-		}
-
-		if (config.child("FlyEnemy2")) {
-			flyenemy2 = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
-			flyenemy2->parameters = config.child("FlyEnemy2");
-		}
-
-		if (config.child("Pozo")) {
-			pozo = (Pozo*)app->entityManager->CreateEntity(EntityType::POZO);
-			pozo->parameters = config.child("Pozo");
-		}
-	}
 	
-	
-
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
 
@@ -143,8 +102,8 @@ bool Scene::Start(pugi::xml_node& config)
 	checkPoint = app->tex->Load("Assets/Textures/Checkpoint.png");
 
 	checkPointUI = app->tex->Load("Assets/Textures/NumCheck5.png");
-	
 
+	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
 
 	return true;
 }
@@ -152,6 +111,8 @@ bool Scene::Start(pugi::xml_node& config)
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
+	firstStart = false;
+
 	return true;
 }
 
@@ -160,12 +121,12 @@ bool Scene::Update(float dt)
 {
 	float camSpeed = 1; 
 
-	firstStart = false;
+	player->isScene = true;
 
 	if(app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT)
 		app->render->camera.y -= (int)ceil(camSpeed * dt);
 
-	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if(app->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT)
 		app->render->camera.y += (int)ceil(camSpeed * dt);
 
 	if(app->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT)
@@ -202,7 +163,11 @@ bool Scene::Update(float dt)
 	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
 
 	if (checkPoints < 5) {
-		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveRequest();
+		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+		{
+			app->SaveRequest();
+			isSaved = true;
+		}
 		if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadRequest();
 	}
 	
@@ -372,3 +337,4 @@ bool Scene::SaveState(pugi::xml_node node)
 
 	return true;
 }
+

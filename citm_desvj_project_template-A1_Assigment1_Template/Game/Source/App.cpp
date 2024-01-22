@@ -114,6 +114,16 @@ bool App::Awake()
 	return ret;
 }
 
+bool App::AwakeScene()
+{
+	bool ret = true;
+
+		pugi::xml_node node = configNode.child("scene");
+		ret = app->scene->Awake(node);
+
+		return ret;
+}
+
 // Called before the first frame
 bool App::Start()
 {

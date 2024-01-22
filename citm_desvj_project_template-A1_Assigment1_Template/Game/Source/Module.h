@@ -3,6 +3,7 @@
 
 #include "SString.h"
 
+
 #include "PugiXml/src/pugixml.hpp"
 
 class App;
@@ -80,6 +81,7 @@ public:
 		if (!active)
 		{
 			active = true;
+
 			Start();
 		}
 	}

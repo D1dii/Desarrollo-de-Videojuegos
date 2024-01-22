@@ -98,9 +98,12 @@ bool FlyEnemy::Start()
 		0, 10,
 	};
 
+	
+	
 	pbody = app->physics->CreateCircle(position.x + 10, position.y + 15, 8, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::ENEMY;
+	
 
 	detect = app->physics->CreateRectangleSensor(position.x + 25, position.y + 25, 60, 60, bodyType::DYNAMIC);
 	detect->listener = this;

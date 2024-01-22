@@ -20,6 +20,8 @@ class EntityManager;
 class Map;
 class Physics;
 class GuiManager;
+class ModuleFadeToBlack;
+class SceneMenu;
 
 class App
 {
@@ -93,6 +95,8 @@ public:
 	Map* map;
 	Physics* physics;
 	GuiManager* guiManager;
+	ModuleFadeToBlack* fade;
+	SceneMenu* sceneMenu;
 
 private:
 

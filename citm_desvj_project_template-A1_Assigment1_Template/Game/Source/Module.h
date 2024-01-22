@@ -12,12 +12,14 @@ class Module
 {
 public:
 
-	Module() : active(false)
-	{}
+	Module(bool startEnabled) : active(startEnabled)
+	{
+
+	}
 
 	void Init()
 	{
-		active = true;
+		
 	}
 
 	// Called before render is available
@@ -73,10 +75,29 @@ public:
 		return true;
 	}
 
+	virtual void Enable()
+	{
+		if (!active)
+		{
+			active = true;
+			Start();
+		}
+	}
+
+	virtual void Disable()
+	{
+		if (active)
+		{
+			active = false;
+			CleanUp();
+		}
+	}
+
 public:
 
 	SString name;
-	bool active;
+	bool active = true;
+	
 
 };
 

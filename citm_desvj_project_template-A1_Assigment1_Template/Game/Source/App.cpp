@@ -8,6 +8,8 @@
 #include "Map.h"
 #include "Physics.h"
 #include "GuiManager.h"
+#include "ModuleFadeToBlack.h"
+#include "SceneMenu.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -25,16 +27,18 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	frames = 0;
 
-	win = new Window();
-	input = new Input();
-	render = new Render();
-	tex = new Textures();
-	audio = new Audio();
-	physics = new Physics();
-	scene = new Scene();
-	map = new Map();
-	entityManager = new EntityManager();
-	guiManager = new GuiManager();
+	win = new Window(true);
+	input = new Input(true);
+	render = new Render(true);
+	tex = new Textures(true);
+	audio = new Audio(true);
+	physics = new Physics(false);
+	scene = new Scene(false);
+	sceneMenu = new SceneMenu(true);
+	map = new Map(false);
+	entityManager = new EntityManager(false);
+	guiManager = new GuiManager(true);
+	fade = new ModuleFadeToBlack(true);
 
 
 	// Ordered for awake / Start / Update
@@ -46,8 +50,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(physics);
 	AddModule(map);
 	AddModule(scene);
+	AddModule(sceneMenu);
 	AddModule(entityManager);
 	AddModule(guiManager);
+	AddModule(fade);
 
 	// Render last to swap buffer
 	AddModule(render);

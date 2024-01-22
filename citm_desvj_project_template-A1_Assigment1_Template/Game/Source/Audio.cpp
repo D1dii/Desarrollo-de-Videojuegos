@@ -9,7 +9,7 @@
 
 Audio* audio = nullptr;
 
-Audio::Audio() : Module()
+Audio::Audio(bool startEnabled) : Module(startEnabled)
 {
     music = NULL;
     name.Create("audio");

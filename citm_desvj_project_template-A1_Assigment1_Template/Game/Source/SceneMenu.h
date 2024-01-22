@@ -1,5 +1,5 @@
-#ifndef __SCENE_H__
-#define __SCENE_H__
+#ifndef __SCENEMENU_H__
+#define __SCENEMENU_H__
 
 #include "Module.h"
 #include "Player.h"
@@ -19,14 +19,14 @@
 
 struct SDL_Texture;
 
-class Scene : public Module
+class SceneMenu : public Module
 {
 public:
 
-	Scene(bool startEnabled);
+	SceneMenu(bool startEnabled);
 
 	// Destructor
-	virtual ~Scene();
+	virtual ~SceneMenu();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& conf);
@@ -46,21 +46,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Return player position
-	iPoint GetPLayerPosition();
-
 	// Handles multiple Gui Event methods
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
-	//
-	bool LoadState(pugi::xml_node node);
-
-	//
-	bool SaveState(pugi::xml_node node);
+	
 
 private:
 	SDL_Texture* img;
-	
+
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
@@ -71,26 +64,8 @@ public:
 
 	pugi::xml_node sceneParameter;
 
-	SDL_Texture* checkPoint = nullptr;
-	SDL_Texture* checkPointUI = nullptr;
-
-	Enemy* enemy;
-	Enemy* enemy2;
-	FlyEnemy* flyenemy;
-	FlyEnemy* flyenemy2;
-	PhysBody* pozo;
-
-	int checkPoints = 0;
-
-	iPoint check1;
-	iPoint check2;
-	iPoint check3;
-	iPoint check4;
-	iPoint check5;
-
 	SDL_Texture* NewGameButton = nullptr;
-	SDL_Texture* NewGameButtonTest = nullptr;
 
 };
 
-#endif // __SCENE_H__
+#endif // __SCENEMENU_H__

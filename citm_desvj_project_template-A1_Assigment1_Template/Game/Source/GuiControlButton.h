@@ -24,10 +24,7 @@ private:
 
 	bool canClick = true;
 	bool drawBasic = false;
-	SDL_Rect NormalBounds = { 0, 0, 128, 32 };
-	SDL_Rect DisabledBounds = { 0, 32, 128, 32 };
-	SDL_Rect FocusedBounds = { 0, 64, 128, 32 };
-	SDL_Rect PressedBounds = { 0, 96, 128, 32 };
+	uint32 buttonID;
 };
 
 #endif // __GUICONTROLBUTTON_H__

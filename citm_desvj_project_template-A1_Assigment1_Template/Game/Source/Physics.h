@@ -67,7 +67,7 @@ public:
 	List<PhysBody*> physBodies;
 
 	// Constructors & Destructors
-	Physics();
+	Physics(bool startEnabled);
 	~Physics();
 
 	// Main module steps

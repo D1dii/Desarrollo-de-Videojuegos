@@ -87,6 +87,7 @@ public:
 	SDL_Color color;        // Tint color
 
 	SDL_Texture* texture;   // Texture atlas reference
+	SDL_Texture* texture2;
 	SDL_Rect section;       // Texture atlas base section
 
 	Module* observer;        // Observer 

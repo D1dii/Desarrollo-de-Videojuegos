@@ -6,6 +6,7 @@
 
 #include "GuiControlButton.h"
 #include "GuiSlider.h"
+#include "GuiCheckBox.h"
 #include "Audio.h"
 
 GuiManager::GuiManager(bool startEnabled) :Module(startEnabled)
@@ -21,7 +22,7 @@ bool GuiManager::Start()
 }
 
 // L15: TODO1: Implement CreateGuiControl function that instantiates a new GUI control and add it to the list of controls
-GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char* text, SDL_Rect bounds, Module* observer, SDL_Texture* tex, SDL_Rect sliderBounds )
+GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char* text, SDL_Rect bounds, Module* observer, SDL_Texture* tex, SDL_Texture* tex2, SDL_Rect sliderBounds )
 {
 	GuiControl* guiControl = nullptr;
 
@@ -31,8 +32,11 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 	case GuiControlType::BUTTON:
 		guiControl = new GuiControlButton(id, bounds, text, tex);
 		break;
+	case GuiControlType::CHECKBOX:
+		guiControl = new GuiCheckBox(id, bounds, text);
+		break;
 	case GuiControlType::SLIDER:
-		guiControl = new GuiSlider(id, bounds, text);
+		guiControl = new GuiSlider(id, bounds, text, tex, tex2);
 		break;
 	}
 
@@ -56,7 +60,7 @@ bool GuiManager::Update(float dt)
 			control->data->Update(dt);
 		}
 		
-		if (app->sceneMenu->showOptions && control->data->id == 6)
+		if (app->sceneMenu->showOptions && (control->data->id == 6 || control->data->id == 7 || control->data->id == 8))
 		{
 			control->data->Update(dt);
 		}

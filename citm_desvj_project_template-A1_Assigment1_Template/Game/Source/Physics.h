@@ -93,8 +93,10 @@ public:
 	// Debug mode
 	bool debug;
 
-private:
-
 	// Box2D World
 	b2World* world;
+
+private:
+
+	
 };

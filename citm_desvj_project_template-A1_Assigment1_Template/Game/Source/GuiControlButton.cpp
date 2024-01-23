@@ -160,6 +160,7 @@ bool GuiControlButton::Update(float dt)
 		else if (buttonID == 3)
 		{
 			app->sceneMenu->isSettingsActive = !app->sceneMenu->isSettingsActive;
+			app->scene->player->options = !app->scene->player->options;
 		}
 		else if (buttonID == 4)
 		{

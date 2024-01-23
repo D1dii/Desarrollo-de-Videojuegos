@@ -10,6 +10,7 @@
 #include "GuiControl.h"
 #include "GuiManager.h"
 #include "ModuleFadeToBlack.h"
+#include "SDL_mixer/include/SDL_mixer.h"
 
 
 #include "Defs.h"
@@ -50,6 +51,8 @@ bool SceneMenu::Start()
 	ExitButton = app->tex->Load("Assets/Textures/ExitTitle-Sheet.png");
 	Cartel = app->tex->Load("Assets/Textures/SettingsCartel.png");
 	CreditsCartel = app->tex->Load("Assets/Textures/CreditsCartel.png");
+	SliderTex = app->tex->Load("Assets/Textures/SliderSprite.png");
+	ButtonSlider = app->tex->Load("Assets/Textures/ButtonSlider.png");
 
 	SDL_Rect NewGamePos = { 120, -520, 128, 32 };
 	NewGame = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "New Game", NewGamePos, this, NewGameButton);
@@ -66,11 +69,21 @@ bool SceneMenu::Start()
 	SDL_Rect ExitPos = { 120, -380, 128, 32 };
 	Exit = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Exit", ExitPos, this, ExitButton);
 
-	SDL_Rect SliderPos = { 275, -450, 100, 10 };
-	Slider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Slider", SliderPos, this, ExitButton);
+	SDL_Rect SliderPos = { 305, -410, 100, 10 };
+	Slider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Slider", SliderPos, this, SliderTex, ButtonSlider);
+
+	SDL_Rect VSyncPos = { 310, -450, 25, 25 };
+	VSync = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 7, "VSync", VSyncPos, this, ExitButton);
+
+	SDL_Rect FullScreenPos = { 375, -450, 25, 25 };
+	FullScreen = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 8, "FullScreen", FullScreenPos, this, ExitButton);
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 1200;
+
+	audioPath = "Assets/Audio/Music/music_spy.ogg";
+
+	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
 
 	return true;
 }
@@ -84,19 +97,23 @@ bool SceneMenu::PreUpdate()
 // Called each loop iteration
 bool SceneMenu::Update(float dt)
 {
-	
-	if (isSettingsActive && positionCartel > 245)
+	int scale = app->win->GetScale();
+
+	if ((isSettingsActive && app->scene->player->options) && positionCartel > 245)
 	{
 		positionCartel -= 2;
 	}
-	else if (!isSettingsActive && positionCartel < 550) 
+	else if ((!isSettingsActive && app->scene->player->options == false) && positionCartel < 550)
 	{
 		positionCartel += 2;
 	}
 
-	if (isSettingsActive && positionCartel <= 245) 
+	if ((isSettingsActive && app->scene->player->options) && positionCartel <= 245)
 	{
 		showOptions = true;
+	}
+	else {
+		showOptions = false;
 	}
 
 	if (isCreditsActive && positionCredits > 245)
@@ -108,8 +125,12 @@ bool SceneMenu::Update(float dt)
 		positionCredits += 2;
 	}
 
-	app->render->DrawTexture(CreditsCartel, positionCredits, -480);
 	app->render->DrawTexture(Cartel, positionCartel, -550);
+	app->render->DrawTexture(CreditsCartel, positionCredits, -480);
+
+	
+	
+	
 	
 
 	return true;
@@ -121,6 +142,10 @@ bool SceneMenu::PostUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
+
+	//volume sounds
+	Mix_VolumeMusic(app->scene->volume);
+	Mix_Volume(-1, app->scene->volume);
 
 	return ret;
 }

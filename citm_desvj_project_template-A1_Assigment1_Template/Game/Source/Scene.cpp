@@ -99,15 +99,21 @@ bool Scene::Start()
 		app->map->mapData.tileheight,
 		app->map->mapData.tilesets.Count());
 
-	
-
 	checkPoint = app->tex->Load("Assets/Textures/Checkpoint.png");
 
 	checkPointUI = app->tex->Load("Assets/Textures/NumCheck5.png");
 
+	SliderTex = app->tex->Load("Assets/Textures/SliderSprite.png");
+	ButtonSlider = app->tex->Load("Assets/Textures/ButtonSlider.png");
 	
+	/*SDL_Rect SliderPos = { 305, player->position.y - 100, 100, 10 };
+	SliderScene = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Slider", SliderPos, this, SliderTex, ButtonSlider);
 
-	
+	SDL_Rect VSyncPos = { 310, player->position.y - 140, 25, 25 };
+	VSyncScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 7, "VSync", VSyncPos, this, SliderTex);
+
+	SDL_Rect FullScreenPos = { 375, player->position.y - 140, 25, 25 };
+	FullScreenScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 8, "FullScreen", FullScreenPos, this, SliderTex);*/
 
 	return true;
 }
@@ -118,6 +124,18 @@ bool Scene::PreUpdate()
 	firstStart = false;
 
 	return true;
+}
+
+void Scene::CreateOptionsButtons()
+{
+	SDL_Rect SliderPos = { 305, player->position.y - 65, 100, 10 };
+	SliderScene = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Slider", SliderPos, this, SliderTex, ButtonSlider);
+
+	SDL_Rect VSyncPos = { 310, player->position.y - 105, 25, 25 };
+	VSyncScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 7, "VSync", VSyncPos, this, SliderTex);
+
+	SDL_Rect FullScreenPos = { 375, player->position.y - 105, 25, 25 };
+	FullScreenScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 8, "FullScreen", FullScreenPos, this, SliderTex);
 }
 
 void Scene::StartMusic()
@@ -131,6 +149,27 @@ bool Scene::Update(float dt)
 	float camSpeed = 1; 
 
 	player->isScene = true;
+
+	int scale = app->win->GetScale();
+
+	if ((app->sceneMenu->isSettingsActive && app->scene->player->options) && app->sceneMenu->positionCartel > 245)
+	{
+		app->sceneMenu->positionCartel -= 2;
+	}
+	else if ((!app->sceneMenu->isSettingsActive && app->scene->player->options == false) && app->sceneMenu->positionCartel < 550)
+	{
+		app->sceneMenu->positionCartel += 2;
+	}
+
+	if ((app->sceneMenu->isSettingsActive && app->scene->player->options) && app->sceneMenu->positionCartel <= 245)
+	{
+		app->sceneMenu->showOptions = true;
+	}
+	else {
+		app->sceneMenu->showOptions = false;
+	}
+
+	app->render->DrawTexture(app->sceneMenu->Cartel, app->sceneMenu->positionCartel, player->position.y - 200);
 
 	if(app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT)
 		app->render->camera.y -= (int)ceil(camSpeed * dt);
@@ -250,9 +289,7 @@ bool Scene::LoadState(pugi::xml_node node)
 	player->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionPlayer").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionPlayer").attribute("y").as_int()) }, 0);
 
 	if (!node.child("positionEnemy").attribute("isDead").as_bool()) {
-		if (isF6) {
-			//enemy->pendingDelete = true;
-		}
+		
 		enemy->pendingDelete = true;
 		enemy = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
 		enemy->parameters = sceneParameter.child("enemy");
@@ -267,9 +304,7 @@ bool Scene::LoadState(pugi::xml_node node)
 
 	
 	if (!node.child("positionEnemy2").attribute("isDead").as_bool()) {
-		if (isF6) {
-			//enemy2->pendingDelete = true;
-		}
+		
 		enemy2->pendingDelete = true;
 		enemy2 = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
 		enemy2->parameters = sceneParameter.child("enemy2");
@@ -284,9 +319,7 @@ bool Scene::LoadState(pugi::xml_node node)
 
 	
 	if (!node.child("positionFlyEnemy").attribute("isDead").as_bool()) {
-		if (isF6 && flyenemy->isDead == false) {
-			//flyenemy->pendingDelete = true;
-		}
+		
 		flyenemy->pendingDelete = true;
 		flyenemy = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
 		flyenemy->parameters = sceneParameter.child("FlyEnemy");
@@ -301,9 +334,7 @@ bool Scene::LoadState(pugi::xml_node node)
 	
 	
 	if (!node.child("positionFlyEnemy2").attribute("isDead").as_bool()) {
-		if (isF6) {
-			//flyenemy2->pendingDelete = true;
-		}
+		
 		flyenemy2->pendingDelete = true;
 		flyenemy2 = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
 		flyenemy2->parameters = sceneParameter.child("FlyEnemy2");

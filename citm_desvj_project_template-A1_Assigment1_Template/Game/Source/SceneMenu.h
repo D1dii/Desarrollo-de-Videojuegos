@@ -9,6 +9,7 @@
 #include "GuiControl.h"
 #include "GuiControlButton.h"
 #include "GuiSlider.h"
+#include "GuiCheckBox.h"
 
 #include "Physics.h"
 
@@ -66,10 +67,14 @@ private:
 	GuiControlButton* Credits;
 	GuiControlButton* Exit;
 	GuiSlider* Slider;
+	GuiCheckBox* VSync;
+	GuiCheckBox* FullScreen;
 public:
 
 	pugi::xml_node sceneParameter;
 	bool ret = true;
+
+	SString audioPath;
 
 	SDL_Texture* NewGameButton = nullptr;
 	SDL_Texture* ContinueButton = nullptr;
@@ -78,6 +83,8 @@ public:
 	SDL_Texture* ExitButton = nullptr;
 	SDL_Texture* Cartel = nullptr;
 	SDL_Texture* CreditsCartel = nullptr;
+	SDL_Texture* SliderTex = nullptr;
+	SDL_Texture* ButtonSlider = nullptr;
 
 	bool isSettingsActive = false;
 	bool isCreditsActive = false;

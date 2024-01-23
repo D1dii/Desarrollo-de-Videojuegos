@@ -5,11 +5,13 @@
 #include "../Audio.h"
 #include "../Window.h"
 
-GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, const char* tex) : GuiControl(GuiControlType::SLIDER, id)
+GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, const char* text, SDL_Texture* tex, SDL_Texture* tex2) : GuiControl(GuiControlType::SLIDER, id)
 {
     this->bounds = bounds;
     this->unit = bounds.w / 100.0f;
-    this->text = tex;
+    this->text = text;
+    this->texture = tex;
+    this->texture2 = tex2;
     if (id == 1)
     {
         //value = app->guimanager->musicVolume;
@@ -76,48 +78,42 @@ bool GuiSlider::Update(float dt)
             break;
 
         case GuiControlState::NORMAL:
-            //app->render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 0, 0, 116, 23 }), 0, 0, 0, 0, false);
-            //app->render->DrawTexture(texture, sliderPosx, bounds.y, &SDL_Rect({ 116, 0, 16, 23 }), 0, 0, 0, 0, false);
-
-            app->render->DrawRectangle(bounds, 0, 100, 50, 255, false, true);
-            app->render->DrawRectangle({ sliderPosx, bounds.y, bounds.h, bounds.h }, 200, 200, 200, 255, true, true);
-            //app->render->DrawRectangle({ 150, -500, 20,20 }, 200, 200, 200, 255, true, true);
-
             if (sliderPosx - bounds.x >= 0)
-                app->render->DrawRectangle({ bounds.x,bounds.y, sliderPosx - bounds.x, bounds.h }, 0, 100, 50, 255, true, true);
+                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x, bounds.h }, 95, 205, 228, 255, true, true);
+
+            app->render->DrawTexture(texture, bounds.x, bounds.y);
+            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
             break;
 
         case GuiControlState::FOCUSED:
 
-            app->render->DrawRectangle(bounds, 0, 100, 50, 255, false, true);
-            app->render->DrawRectangle({ sliderPosx, bounds.y, bounds.h, bounds.h }, 200, 200, 200, 255, true, true);
             if (sliderPosx - bounds.x >= 0)
-                app->render->DrawRectangle({ bounds.x,bounds.y, sliderPosx - bounds.x, bounds.h }, 0, 100, 50, 255, true, true);
-            // app->render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 0, 23, 116, 23 }), 0, 0, 0, 0, false);
-            // app->render->DrawTexture(texture, sliderPosx, bounds.y, &SDL_Rect({ 116, 0, 16, 23 }), 0, 0, 0, 0, false);
+                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x, bounds.h }, 95, 205, 228, 255, true, true);
+
+            app->render->DrawTexture(texture, bounds.x, bounds.y);
+            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
             break;
 
         case GuiControlState::PRESSED:
 
-            app->render->DrawRectangle(bounds, 0, 100, 50, 255, false, true);
-            app->render->DrawRectangle({ sliderPosx, bounds.y,  bounds.h,bounds.h }, 200, 200, 200, 255, true, true);
             if (sliderPosx - bounds.x >= 0)
-                app->render->DrawRectangle({ bounds.x,bounds.y, sliderPosx - bounds.x,bounds.h }, 0, 100, 50, 255, true, true);
-            // app->render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 0, 23, 116, 23 }), 0, 0, 0, 0, false);
-            // app->render->DrawTexture(texture, sliderPosx, bounds.y, &SDL_Rect({ 116, 23 , 16, 23 }), 0, 0, 0, 0, false);
+                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x,bounds.h }, 95, 205, 228, 255, true, true);
+
+            app->render->DrawTexture(texture, bounds.x, bounds.y);
+            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
+           
             app->scene->volume = value2;
             break;
 
         case GuiControlState::SELECTED:
             if (id == 2)
-                //app->audio->PlayFx(app->guimanager->pressButtonFx, 0);
 
-                app->render->DrawRectangle(bounds, 0, 100, 50, 255, false, true);
-            app->render->DrawRectangle({ sliderPosx, bounds.y, bounds.h,bounds.h }, 200, 200, 200, 255, true, true);
             if (sliderPosx - bounds.x >= 0)
-                app->render->DrawRectangle({ bounds.x,bounds.y, sliderPosx - bounds.x,bounds.h }, 0, 100, 50, 255, true, true);
-            //  app->render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 0, 23, 116, 23 }), 0, 0, 0, 0, false);
-            //  app->render->DrawTexture(texture, sliderPosx, bounds.y, &SDL_Rect({ 116, 23 , 16, 23 }), 0, 0, 0, 0, false);
+                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x,bounds.h }, 95, 205, 228, 255, true, true);
+
+            app->render->DrawTexture(texture, bounds.x, bounds.y);
+            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
+            
             NotifyObserver();
             break;
 

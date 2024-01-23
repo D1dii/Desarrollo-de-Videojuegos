@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Scene.h"
+#include "SceneMenu.h"
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
@@ -247,7 +248,7 @@ bool Player::Update(float dt)
 
 	
 	
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::POWER_JUMP) {
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::POWER_JUMP && options == false) {
 		isCharging = true;
 		if (isFacingLeft != true) {
 			currentAnim = &ChargeJump;
@@ -276,7 +277,7 @@ bool Player::Update(float dt)
 			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) isFacingLeft = true;
 		}
 		
-	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && player != jumpState::POWER_JUMP) {
+	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && player != jumpState::POWER_JUMP && options == false) {
 		isCharging = false;
 		if (power < 0.2f) {
 			power = 0.1;
@@ -309,7 +310,7 @@ bool Player::Update(float dt)
 		player = jumpState::POWER_JUMP;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
 		currentAnim = &RunLeft;
 		isFacingLeft = true;
 		if (godMode == false) {
@@ -321,7 +322,7 @@ bool Player::Update(float dt)
 			
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
 		isFacingLeft = false;
 		currentAnim = &Run;
 		if (godMode == false) {
@@ -334,12 +335,12 @@ bool Player::Update(float dt)
 		
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true) {
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true && options == false) {
 		currentAnim = &Run;
 		vel = b2Vec2(0, -speedx * dt);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true) {
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true && options == false) {
 		currentAnim = &Run;
 		vel = b2Vec2(0, speedx * dt);
 
@@ -352,14 +353,24 @@ bool Player::Update(float dt)
 		
 		vel = b2Vec2(0, -speedy * dt * 2);
 		speedy -= jumpa;
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
 			isFacingLeft = true;
 			vel = b2Vec2(-speedx * dt, -speedy * dt * 2);
 		}
 
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE) {
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
 			isFacingLeft = false;
 			vel = b2Vec2(speedx * dt, -speedy * dt * 2);
+		}
+
+		if (options == true) {
+			app->physics->world->SetGravity({ 0,0 });
+			
+		}
+		else if (options == false)
+		{
+			app->physics->world->SetGravity({ 0,10 });
+
 		}
 		
 		break;
@@ -410,11 +421,11 @@ bool Player::Update(float dt)
 
 	// Attacking
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && options == false) {
 		isAttacking = true;
 	}
 
-	if (isAttacking) {
+	if (isAttacking && options == false) {
 		attTimer++;
 		if (isFacingLeft == false) {
 			sword->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 24)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
@@ -447,32 +458,32 @@ bool Player::Update(float dt)
 	// Debug options
 
 	// GodMode
-	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN && options == false) {
 		godMode = !godMode;
 	}
 
 	// Respawn on the start
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && options == false) {
 		position.x = 90;
 		position.y = 2172;
 		pbody->body->SetTransform({PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y)}, 0);
 	}
 
 	// Spawn on debug checkpoints
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && options == false) {
 		position.x = 416;
 		position.y = 1440;
 		pbody->body->SetTransform({PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && options == false) {
 		position.x = 32;
 		position.y = 1072;
 		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 	}
 
 	// Show Power Jump bar
-	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && options == false) {
 		showBar = !showBar;
 		
 		
@@ -519,6 +530,13 @@ bool Player::Update(float dt)
 	
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
 
+	if (app->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	{
+		options = !options;
+		app->sceneMenu->isSettingsActive = !app->sceneMenu->isSettingsActive;
+		app->scene->CreateOptionsButtons();
+	}
+
 	if (isScene) {
 		app->render->camera.y = (-position.y + 230) * scale;
 	}
@@ -535,60 +553,63 @@ bool Player::CleanUp()
 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
+	if (options == false)
+	{
+		if (physA->ctype == ColliderType::PLAYER) {
+			switch (physB->ctype)
+			{
+			case ColliderType::ITEM:
+				LOG("Collision ITEM");
+				app->audio->PlayFx(pickCoinFxId);
+				break;
+			case ColliderType::PLATFORM:
+				LOG("Collision PLATFORM");
+				if (player == jumpState::JUMPING || player == jumpState::POWER_JUMP) {
+					player = jumpState::FLOOR;
+					power = 0;
+					charge = 0;
+					justFall = true;
+					fallTimer = 0;
+				}
+				break;
+			case ColliderType::ENEMY_ATTACK:
+				LOG("Collision ENEMY_ATTACK");
 
-	if (physA->ctype == ColliderType::PLAYER) {
-		switch (physB->ctype)
-		{
-		case ColliderType::ITEM:
-			LOG("Collision ITEM");
-			app->audio->PlayFx(pickCoinFxId);
-			break;
-		case ColliderType::PLATFORM:
-			LOG("Collision PLATFORM");
-			if (player == jumpState::JUMPING || player == jumpState::POWER_JUMP) {
-				player = jumpState::FLOOR;
-				power = 0;
+				if (canDmg && app->scene->isSaved == false) {
+					lifes--;
+					canDmg = false;
+					if (lifeFrame < 4) {
+						lifeFrame++;
+					}
+					else if (lifeFrame >= 4) {
+						lifeFrame = 0;
+					}
+					lifeCurrentAnim->SetCurrentFrame(lifeFrame);
+				}
+				break;
+			case ColliderType::ENEMY_ATTACK_SAVED:
+				if (canDmg && app->scene->isSaved == true) {
+					lifes--;
+					canDmg = false;
+					if (lifeFrame < 4) {
+						lifeFrame++;
+					}
+					else if (lifeFrame >= 4) {
+						lifeFrame = 0;
+					}
+					lifeCurrentAnim->SetCurrentFrame(lifeFrame);
+				}
+				break;
+			case ColliderType::POZO:
 				charge = 0;
-				justFall = true;
-				fallTimer = 0;
-			}
-			break;
-		case ColliderType::ENEMY_ATTACK:
-			LOG("Collision ENEMY_ATTACK");
+				lifes = 0;
+			case ColliderType::UNKNOWN:
+				LOG("Collision UNKNOWN");
+				break;
 
-			if (canDmg && app->scene->isSaved == false) {
-				lifes--;
-				canDmg = false;
-				if (lifeFrame < 4) {
-					lifeFrame++;
-				}
-				else if (lifeFrame >= 4) {
-					lifeFrame = 0;
-				}
-				lifeCurrentAnim->SetCurrentFrame(lifeFrame);
 			}
-			break;
-		case ColliderType::ENEMY_ATTACK_SAVED:
-			if (canDmg && app->scene->isSaved == true) {
-				lifes--;
-				canDmg = false;
-				if (lifeFrame < 4) {
-					lifeFrame++;
-				}
-				else if (lifeFrame >= 4) {
-					lifeFrame = 0;
-				}
-				lifeCurrentAnim->SetCurrentFrame(lifeFrame);
-			}
-			break;
-		case ColliderType::POZO:
-			charge = 0;
-			lifes = 0;
-		case ColliderType::UNKNOWN:
-			LOG("Collision UNKNOWN");
-			break;
-
 		}
 	}
+	
 	
 }

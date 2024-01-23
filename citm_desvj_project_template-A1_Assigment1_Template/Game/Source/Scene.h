@@ -9,6 +9,8 @@
 #include "Pozo.h"
 #include "GuiControl.h"
 #include "GuiControlButton.h"
+#include "GuiCheckBox.h"
+#include "GuiSlider.h"
 
 #include "Physics.h"
 
@@ -60,6 +62,8 @@ public:
 	bool SaveState(pugi::xml_node node);
 
 	void StartMusic();
+
+	void CreateOptionsButtons();
 	
 
 private:
@@ -96,13 +100,18 @@ public:
 	iPoint check4;
 	iPoint check5;
 
-	SDL_Texture* NewGameButton = nullptr;
-	SDL_Texture* NewGameButtonTest = nullptr;
+	SDL_Texture* SliderTex = nullptr;
+	SDL_Texture* ButtonSlider = nullptr;
+
+	GuiSlider* SliderScene;
+	GuiCheckBox* VSyncScene;
+	GuiCheckBox* FullScreenScene;
 
 	bool firstStart = true;
 	bool isSaved = false;
 	bool isInScene = false;
 	bool isF6 = false;
+	
 
 	float volume = 90;
 

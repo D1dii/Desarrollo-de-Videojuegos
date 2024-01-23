@@ -74,6 +74,13 @@ public:
 	SDL_Texture* SettingsButton = nullptr;
 	SDL_Texture* CreditsButton = nullptr;
 	SDL_Texture* ExitButton = nullptr;
+	SDL_Texture* Cartel = nullptr;
+	SDL_Texture* CreditsCartel = nullptr;
+
+	bool isSettingsActive = false;
+	bool isCreditsActive = false;
+	int positionCartel = 550;
+	int positionCredits = 475;
 
 };
 

@@ -120,8 +120,6 @@ bool GuiControlButton::Update(float dt)
 				pugi::xml_document saveFile;
 				pugi::xml_parse_result result = saveFile.load_file("save_game.xml");
 
-
-
 				if (saveFile.child("game_state").child("scene").child("positionEnemy").attribute("isDead").as_bool() == false)
 				{
 					app->scene->enemy->Start();
@@ -154,6 +152,14 @@ bool GuiControlButton::Update(float dt)
 				app->LoadRequest();
 				app->scene->player->lifes = 0;
 			}
+		}
+		else if (buttonID == 3)
+		{
+			app->sceneMenu->isSettingsActive = !app->sceneMenu->isSettingsActive;
+		}
+		else if (buttonID == 4)
+		{
+			app->sceneMenu->isCreditsActive = !app->sceneMenu->isCreditsActive;
 		}
 		else if (buttonID == 5)
 		{

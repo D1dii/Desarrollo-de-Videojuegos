@@ -1,8 +1,11 @@
 #include "GuiManager.h"
 #include "App.h"
 #include "Textures.h"
+#include "Scene.h"
+#include "SceneMenu.h"
 
 #include "GuiControlButton.h"
+#include "GuiSlider.h"
 #include "Audio.h"
 
 GuiManager::GuiManager(bool startEnabled) :Module(startEnabled)
@@ -28,6 +31,9 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 	case GuiControlType::BUTTON:
 		guiControl = new GuiControlButton(id, bounds, text, tex);
 		break;
+	case GuiControlType::SLIDER:
+		guiControl = new GuiSlider(id, bounds, text);
+		break;
 	}
 
 	//Set the observer
@@ -46,7 +52,15 @@ bool GuiManager::Update(float dt)
 
 	while (control != nullptr)
 	{
-		control->data->Update(dt);
+		if (app->scene->isInScene == false && (control->data->id == 1 || control->data->id == 2 || control->data->id == 3 || control->data->id == 4 || control->data->id == 5)) {
+			control->data->Update(dt);
+		}
+		
+		if (app->sceneMenu->showOptions && control->data->id == 6)
+		{
+			control->data->Update(dt);
+		}
+		
 		control = control->next;
 	}
 

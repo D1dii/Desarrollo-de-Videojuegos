@@ -8,6 +8,7 @@
 #include "FlyEnemy.h"
 #include "GuiControl.h"
 #include "GuiControlButton.h"
+#include "GuiSlider.h"
 
 #include "Physics.h"
 
@@ -64,6 +65,7 @@ private:
 	GuiControlButton* Settings;
 	GuiControlButton* Credits;
 	GuiControlButton* Exit;
+	GuiSlider* Slider;
 public:
 
 	pugi::xml_node sceneParameter;
@@ -81,6 +83,7 @@ public:
 	bool isCreditsActive = false;
 	int positionCartel = 550;
 	int positionCredits = 475;
+	bool showOptions = false;
 
 };
 

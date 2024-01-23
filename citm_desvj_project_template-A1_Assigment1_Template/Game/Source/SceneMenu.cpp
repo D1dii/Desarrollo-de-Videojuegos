@@ -66,6 +66,9 @@ bool SceneMenu::Start()
 	SDL_Rect ExitPos = { 120, -380, 128, 32 };
 	Exit = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Exit", ExitPos, this, ExitButton);
 
+	SDL_Rect SliderPos = { 275, -450, 100, 10 };
+	Slider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Exit", SliderPos, this, ExitButton);
+
 	app->render->camera.x = 0;
 	app->render->camera.y = 1200;
 
@@ -89,6 +92,11 @@ bool SceneMenu::Update(float dt)
 	else if (!isSettingsActive && positionCartel < 550) 
 	{
 		positionCartel += 2;
+	}
+
+	if (isSettingsActive && positionCartel <= 245) 
+	{
+		showOptions = true;
 	}
 
 	if (isCreditsActive && positionCredits > 245)

@@ -103,7 +103,8 @@ bool GuiControlButton::Update(float dt)
 				app->scene->flyenemy2->Start();
 				app->scene->pozo->Start();
 			}
-
+			app->scene->isInScene = true;
+			app->scene->StartMusic();
 		}
 		else if (buttonID == 2 && app->scene->isSaved)
 		{
@@ -116,6 +117,7 @@ bool GuiControlButton::Update(float dt)
 			{
 				app->AwakeScene();
 				app->scene->player->Start();
+				
 
 				pugi::xml_document saveFile;
 				pugi::xml_parse_result result = saveFile.load_file("save_game.xml");
@@ -152,6 +154,8 @@ bool GuiControlButton::Update(float dt)
 				app->LoadRequest();
 				app->scene->player->lifes = 0;
 			}
+			app->scene->isInScene = true;
+			app->scene->StartMusic();
 		}
 		else if (buttonID == 3)
 		{

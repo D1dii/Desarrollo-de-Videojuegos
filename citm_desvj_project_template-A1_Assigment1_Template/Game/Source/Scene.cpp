@@ -10,7 +10,7 @@
 #include "GuiManager.h"
 #include "SceneMenu.h"
 
-
+#include "SDL_mixer/include/SDL_mixer.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -103,7 +103,9 @@ bool Scene::Start()
 
 	checkPointUI = app->tex->Load("Assets/Textures/NumCheck5.png");
 
-	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
+	
+
+	
 
 	return true;
 }
@@ -114,6 +116,11 @@ bool Scene::PreUpdate()
 	firstStart = false;
 
 	return true;
+}
+
+void Scene::StartMusic()
+{
+	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
 }
 
 // Called each loop iteration
@@ -183,6 +190,7 @@ bool Scene::Update(float dt)
 		app->sceneMenu->Enable();
 		app->map->Disable();
 		app->entityManager->Disable();
+		isInScene = false;
 	}
 
 	app->render->DrawTexture(checkPointUI, app->render->camera.x + 20, player->position.y - 185);
@@ -197,6 +205,10 @@ bool Scene::PostUpdate()
 
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
+
+	//volume sounds
+	Mix_VolumeMusic(volume);
+	Mix_Volume(-1, volume);
 
 	return ret;
 }

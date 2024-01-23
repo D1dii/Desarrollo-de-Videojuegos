@@ -66,8 +66,6 @@ void FlyEnemy::InitAnims()
 bool FlyEnemy::Awake()
 {
 
-	
-
 	return true;
 }
 

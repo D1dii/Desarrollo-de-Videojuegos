@@ -30,6 +30,7 @@
     <ClCompile Include="Source\ModuleFadeToBlack.cpp" />
     <ClCompile Include="Source\SceneMenu.cpp" />
     <ClCompile Include="Source\Pozo.cpp" />
+    <ClCompile Include="Source\GuiSlider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -90,6 +91,7 @@
     <ClInclude Include="Source\ModuleFadeToBlack.h" />
     <ClInclude Include="Source\SceneMenu.h" />
     <ClInclude Include="Source\Pozo.h" />
+    <ClInclude Include="Source\GuiSlider.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

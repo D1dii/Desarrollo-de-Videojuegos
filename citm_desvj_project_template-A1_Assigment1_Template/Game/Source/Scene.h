@@ -59,6 +59,7 @@ public:
 	//
 	bool SaveState(pugi::xml_node node);
 
+	void StartMusic();
 	
 
 private:
@@ -100,6 +101,9 @@ public:
 
 	bool firstStart = true;
 	bool isSaved = false;
+	bool isInScene = false;
+
+	float volume = 90;
 
 };
 

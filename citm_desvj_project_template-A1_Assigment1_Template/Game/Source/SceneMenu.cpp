@@ -48,24 +48,26 @@ bool SceneMenu::Start()
 	SettingsButton = app->tex->Load("Assets/Textures/SettingsTitle-Sheet.png");
 	CreditsButton = app->tex->Load("Assets/Textures/CreditsTitle-Sheet.png");
 	ExitButton = app->tex->Load("Assets/Textures/ExitTitle-Sheet.png");
+	Cartel = app->tex->Load("Assets/Textures/SettingsCartel.png");
+	CreditsCartel = app->tex->Load("Assets/Textures/CreditsCartel.png");
 
-	SDL_Rect NewGamePos = { 120, 80, 128, 32 };
+	SDL_Rect NewGamePos = { 120, -520, 128, 32 };
 	NewGame = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "New Game", NewGamePos, this, NewGameButton);
 
-	SDL_Rect ContinuePos = { 120, 115, 128, 32 };
+	SDL_Rect ContinuePos = { 120, -485, 128, 32 };
 	Continue = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Continue", ContinuePos, this, ContinueButton);
 
-	SDL_Rect SettingsPos = { 120, 150, 128, 32 };
+	SDL_Rect SettingsPos = { 120, -450, 128, 32 };
 	Settings = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "Settings", SettingsPos, this, SettingsButton);
 
-	SDL_Rect CreditsPos = { 120, 185, 128, 32 };
+	SDL_Rect CreditsPos = { 120, -420, 128, 32 };
 	Credits = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "Credits", CreditsPos, this, CreditsButton);
 
-	SDL_Rect ExitPos = { 120, 220, 128, 32 };
+	SDL_Rect ExitPos = { 120, -380, 128, 32 };
 	Exit = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Exit", ExitPos, this, ExitButton);
 
 	app->render->camera.x = 0;
-	app->render->camera.y = 0;
+	app->render->camera.y = 1200;
 
 	return true;
 }
@@ -79,7 +81,28 @@ bool SceneMenu::PreUpdate()
 // Called each loop iteration
 bool SceneMenu::Update(float dt)
 {
+	
+	if (isSettingsActive && positionCartel > 245)
+	{
+		positionCartel -= 2;
+	}
+	else if (!isSettingsActive && positionCartel < 550) 
+	{
+		positionCartel += 2;
+	}
 
+	if (isCreditsActive && positionCredits > 245)
+	{
+		positionCredits -= 2;
+	}
+	else if (!isCreditsActive && positionCredits < 475)
+	{
+		positionCredits += 2;
+	}
+
+	app->render->DrawTexture(CreditsCartel, positionCredits, -480);
+	app->render->DrawTexture(Cartel, positionCartel, -550);
+	
 
 	return true;
 }

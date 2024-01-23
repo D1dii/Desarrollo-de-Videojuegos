@@ -30,6 +30,8 @@ bool Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
+	sceneParameter = config;
+
 	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
@@ -251,6 +253,7 @@ bool Scene::LoadState(pugi::xml_node node)
 		if (isF6) {
 			//enemy->pendingDelete = true;
 		}
+		enemy->pendingDelete = true;
 		enemy = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
 		enemy->parameters = sceneParameter.child("enemy");
 		enemy->Awake();
@@ -267,6 +270,7 @@ bool Scene::LoadState(pugi::xml_node node)
 		if (isF6) {
 			//enemy2->pendingDelete = true;
 		}
+		enemy2->pendingDelete = true;
 		enemy2 = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
 		enemy2->parameters = sceneParameter.child("enemy2");
 		enemy2->Awake();
@@ -284,7 +288,6 @@ bool Scene::LoadState(pugi::xml_node node)
 			//flyenemy->pendingDelete = true;
 		}
 		flyenemy->pendingDelete = true;
-		flyenemy->pendingDelete = false;
 		flyenemy = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
 		flyenemy->parameters = sceneParameter.child("FlyEnemy");
 		flyenemy->Awake();
@@ -301,6 +304,7 @@ bool Scene::LoadState(pugi::xml_node node)
 		if (isF6) {
 			//flyenemy2->pendingDelete = true;
 		}
+		flyenemy2->pendingDelete = true;
 		flyenemy2 = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
 		flyenemy2->parameters = sceneParameter.child("FlyEnemy2");
 		flyenemy2->Awake();

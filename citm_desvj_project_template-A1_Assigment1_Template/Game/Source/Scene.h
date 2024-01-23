@@ -64,6 +64,8 @@ public:
 	void StartMusic();
 
 	void CreateOptionsButtons();
+
+	void DeleteButtons();
 	
 
 private:

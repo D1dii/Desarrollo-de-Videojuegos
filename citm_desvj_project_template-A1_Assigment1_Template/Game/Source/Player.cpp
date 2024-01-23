@@ -10,6 +10,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "Window.h"
+#include "GuiManager.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -534,7 +535,16 @@ bool Player::Update(float dt)
 	{
 		options = !options;
 		app->sceneMenu->isSettingsActive = !app->sceneMenu->isSettingsActive;
-		app->scene->CreateOptionsButtons();
+		if (options) {
+			app->guiManager->MoveButtons(305, position.y - 65, 9);
+			app->guiManager->MoveButtons(310, position.y - 105, 10);
+			app->guiManager->MoveButtons(375, position.y - 105, 11);
+		}
+		else if (!options)
+		{
+			app->scene->DeleteButtons();
+		}
+		
 	}
 
 	if (isScene) {

@@ -60,15 +60,38 @@ bool GuiManager::Update(float dt)
 			control->data->Update(dt);
 		}
 		
-		if (app->sceneMenu->showOptions && (control->data->id == 6 || control->data->id == 7 || control->data->id == 8))
+		if (app->sceneMenu->showOptions && (control->data->id == 6 || control->data->id == 7 || control->data->id == 8 ||control->data->id == 10 || control->data->id == 11))
 		{
 			control->data->Update(dt);
 		}
+
+		if (control->data->id == 9)
+		{
+			control->data->Update(dt);
+		}
+
+
 		
 		control = control->next;
 	}
 
 	return true;
+}
+
+void GuiManager::MoveButtons(int posX, int posY, int id)
+{
+	ListItem<GuiControl*>* control = guiControlsList.start;
+
+	while (control != nullptr)
+	{
+		if (control->data->id == id)
+		{
+			control->data->bounds.x = posX;
+			control->data->bounds.y = posY;
+		}
+
+		control = control->next;
+	}
 }
 
 bool GuiManager::CleanUp()

@@ -4,6 +4,7 @@
 #include "../GuiManager.h"
 #include "../Audio.h"
 #include "../Window.h"
+#include "SceneMenu.h"
 
 GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, const char* text, SDL_Texture* tex, SDL_Texture* tex2) : GuiControl(GuiControlType::SLIDER, id)
 {
@@ -72,55 +73,71 @@ bool GuiSlider::Update(float dt)
         }
         else state = GuiControlState::NORMAL;
 
-        switch (state)
-        {
-        case GuiControlState::DISABLED:
-            break;
-
-        case GuiControlState::NORMAL:
-            if (sliderPosx - bounds.x >= 0)
-                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x, bounds.h }, 95, 205, 228, 255, true, true);
-
-            app->render->DrawTexture(texture, bounds.x, bounds.y);
-            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
-            break;
-
-        case GuiControlState::FOCUSED:
-
-            if (sliderPosx - bounds.x >= 0)
-                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x, bounds.h }, 95, 205, 228, 255, true, true);
-
-            app->render->DrawTexture(texture, bounds.x, bounds.y);
-            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
-            break;
-
-        case GuiControlState::PRESSED:
-
-            if (sliderPosx - bounds.x >= 0)
-                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x,bounds.h }, 95, 205, 228, 255, true, true);
-
-            app->render->DrawTexture(texture, bounds.x, bounds.y);
-            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
-           
-            app->scene->volume = value2;
-            break;
-
-        case GuiControlState::SELECTED:
-            if (id == 2)
-
-            if (sliderPosx - bounds.x >= 0)
-                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x,bounds.h }, 95, 205, 228, 255, true, true);
-
-            app->render->DrawTexture(texture, bounds.x, bounds.y);
-            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
-            
-            NotifyObserver();
-            break;
-
-        default:
-            break;
-        }
+        
       
+    }
+
+    switch (state)
+    {
+    case GuiControlState::DISABLED:
+        break;
+
+    case GuiControlState::NORMAL:
+        if (app->sceneMenu->showOptions) {
+            if (sliderPosx - bounds.x >= 0)
+                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x, bounds.h }, 95, 205, 228, 255, true, true);
+
+            app->render->DrawTexture(texture, bounds.x, bounds.y);
+            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
+        }
+
+        app->scene->volume = value2;
+        break;
+
+    case GuiControlState::FOCUSED:
+
+        if (app->sceneMenu->showOptions) {
+            if (sliderPosx - bounds.x >= 0)
+                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x, bounds.h }, 95, 205, 228, 255, true, true);
+
+            app->render->DrawTexture(texture, bounds.x, bounds.y);
+            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
+        }
+
+        app->scene->volume = value2;
+        break;
+
+    case GuiControlState::PRESSED:
+
+        if (app->sceneMenu->showOptions) {
+            if (sliderPosx - bounds.x >= 0)
+                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x, bounds.h }, 95, 205, 228, 255, true, true);
+
+            app->render->DrawTexture(texture, bounds.x, bounds.y);
+            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
+        }
+
+        app->scene->volume = value2;
+        break;
+
+    case GuiControlState::SELECTED:
+
+
+        if (app->sceneMenu->showOptions) {
+            if (sliderPosx - bounds.x >= 0)
+                app->render->DrawRectangle({ bounds.x + 1,bounds.y + 2, sliderPosx - bounds.x, bounds.h }, 95, 205, 228, 255, true, true);
+
+            app->render->DrawTexture(texture, bounds.x, bounds.y);
+            app->render->DrawTexture(texture2, sliderPosx, bounds.y - 1);
+        }
+
+        app->scene->volume = value2;
+
+        NotifyObserver();
+        break;
+
+    default:
+        break;
     }
 
     app->scene->volume = value2;

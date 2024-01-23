@@ -28,6 +28,8 @@ public:
 	// Additional methods
 	GuiControl* CreateGuiControl(GuiControlType type, int id, const char* text, SDL_Rect bounds, Module* observer, SDL_Texture* tex, SDL_Texture* tex2 = NULL, SDL_Rect sliderBounds = { 0,0,0,0 });
 
+	void MoveButtons(int posX, int posY, int id);
+
 public:
 
 	List<GuiControl*> guiControlsList;

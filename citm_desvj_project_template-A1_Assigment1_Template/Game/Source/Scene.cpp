@@ -106,14 +106,7 @@ bool Scene::Start()
 	SliderTex = app->tex->Load("Assets/Textures/SliderSprite.png");
 	ButtonSlider = app->tex->Load("Assets/Textures/ButtonSlider.png");
 	
-	/*SDL_Rect SliderPos = { 305, player->position.y - 100, 100, 10 };
-	SliderScene = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Slider", SliderPos, this, SliderTex, ButtonSlider);
-
-	SDL_Rect VSyncPos = { 310, player->position.y - 140, 25, 25 };
-	VSyncScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 7, "VSync", VSyncPos, this, SliderTex);
-
-	SDL_Rect FullScreenPos = { 375, player->position.y - 140, 25, 25 };
-	FullScreenScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 8, "FullScreen", FullScreenPos, this, SliderTex);*/
+	CreateOptionsButtons();
 
 	return true;
 }
@@ -129,13 +122,20 @@ bool Scene::PreUpdate()
 void Scene::CreateOptionsButtons()
 {
 	SDL_Rect SliderPos = { 305, player->position.y - 65, 100, 10 };
-	SliderScene = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Slider", SliderPos, this, SliderTex, ButtonSlider);
+	SliderScene = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 9, "Slider", SliderPos, this, SliderTex, ButtonSlider);
 
 	SDL_Rect VSyncPos = { 310, player->position.y - 105, 25, 25 };
-	VSyncScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 7, "VSync", VSyncPos, this, SliderTex);
+	VSyncScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 10, "VSync", VSyncPos, this, SliderTex);
 
 	SDL_Rect FullScreenPos = { 375, player->position.y - 105, 25, 25 };
-	FullScreenScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 8, "FullScreen", FullScreenPos, this, SliderTex);
+	FullScreenScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 11, "FullScreen", FullScreenPos, this, SliderTex);
+}
+
+void Scene::DeleteButtons()
+{
+	SliderScene = nullptr;
+	VSyncScene = nullptr;
+	FullScreenScene = nullptr;
 }
 
 void Scene::StartMusic()
@@ -240,6 +240,8 @@ bool Scene::Update(float dt)
 		isInScene = false;
 		isF6 = false;
 	}
+
+	
 
 	app->render->DrawTexture(checkPointUI, app->render->camera.x + 20, player->position.y - 185);
 

@@ -113,47 +113,47 @@ bool GuiControlButton::Update(float dt)
 			app->physics->Enable();
 			app->map->Enable();
 			app->entityManager->Enable();
-			if (app->scene->firstStart == false)
+			
+			app->AwakeScene();
+			app->scene->player->Start();
+			
+
+			pugi::xml_document saveFile;
+			pugi::xml_parse_result result = saveFile.load_file("save_game.xml");
+
+			if (saveFile.child("game_state").child("scene").child("positionEnemy").attribute("isDead").as_bool() == false)
 			{
-				app->AwakeScene();
-				app->scene->player->Start();
-				
+				app->scene->enemy->Start();
 
-				pugi::xml_document saveFile;
-				pugi::xml_parse_result result = saveFile.load_file("save_game.xml");
-
-				if (saveFile.child("game_state").child("scene").child("positionEnemy").attribute("isDead").as_bool() == false)
-				{
-					app->scene->enemy->Start();
-				}
-				else {
-					app->scene->enemy->isDead = true;
-				}
-				if (saveFile.child("game_state").child("scene").child("positionEnemy2").attribute("isDead").as_bool() == false)
-				{
-					app->scene->enemy2->Start();
-				}
-				else {
-					app->scene->enemy2->isDead = true;
-				}
-				if (saveFile.child("game_state").child("scene").child("positionFlyEnemy").attribute("isDead").as_bool() == false)
-				{
-					app->scene->flyenemy->Start();
-				}
-				else {
-					app->scene->flyenemy->isDead = true;
-				}
-				if (saveFile.child("game_state").child("scene").child("positionFlyEnemy2").attribute("isDead").as_bool() == false)
-				{
-					app->scene->flyenemy2->Start();
-				}
-				else {
-					app->scene->flyenemy2->isDead = true;
-				}
-				app->scene->pozo->Start();
-				app->LoadRequest();
-				app->scene->player->lifes = 0;
 			}
+			else {
+				app->scene->enemy->isDead = true;
+			}
+			if (saveFile.child("game_state").child("scene").child("positionEnemy2").attribute("isDead").as_bool() == false)
+			{
+				app->scene->enemy2->Start();
+			}
+			else {
+				app->scene->enemy2->isDead = true;
+			}
+			if (saveFile.child("game_state").child("scene").child("positionFlyEnemy").attribute("isDead").as_bool() == false)
+			{
+				app->scene->flyenemy->Start();
+			}
+			else {
+				app->scene->flyenemy->isDead = true;
+			}
+			if (saveFile.child("game_state").child("scene").child("positionFlyEnemy2").attribute("isDead").as_bool() == false)
+			{
+				app->scene->flyenemy2->Start();
+			}
+			else {	
+				app->scene->flyenemy2->isDead = true;
+			}
+			app->scene->pozo->Start();
+			app->LoadRequest();
+			app->scene->player->lifes = 0;
+			
 			app->scene->isInScene = true;
 			app->scene->StartMusic();
 		}

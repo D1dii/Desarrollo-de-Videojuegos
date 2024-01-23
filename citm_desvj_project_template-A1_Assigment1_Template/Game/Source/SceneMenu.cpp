@@ -67,7 +67,7 @@ bool SceneMenu::Start()
 	Exit = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Exit", ExitPos, this, ExitButton);
 
 	SDL_Rect SliderPos = { 275, -450, 100, 10 };
-	Slider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Exit", SliderPos, this, ExitButton);
+	Slider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 6, "Slider", SliderPos, this, ExitButton);
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 1200;

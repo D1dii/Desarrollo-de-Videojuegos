@@ -102,6 +102,7 @@ public:
 	bool firstStart = true;
 	bool isSaved = false;
 	bool isInScene = false;
+	bool isF6 = false;
 
 	float volume = 90;
 

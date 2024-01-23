@@ -556,7 +556,20 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		case ColliderType::ENEMY_ATTACK:
 			LOG("Collision ENEMY_ATTACK");
 
-			if (canDmg) {
+			if (canDmg && app->scene->isSaved == false) {
+				lifes--;
+				canDmg = false;
+				if (lifeFrame < 4) {
+					lifeFrame++;
+				}
+				else if (lifeFrame >= 4) {
+					lifeFrame = 0;
+				}
+				lifeCurrentAnim->SetCurrentFrame(lifeFrame);
+			}
+			break;
+		case ColliderType::ENEMY_ATTACK_SAVED:
+			if (canDmg && app->scene->isSaved == true) {
 				lifes--;
 				canDmg = false;
 				if (lifeFrame < 4) {

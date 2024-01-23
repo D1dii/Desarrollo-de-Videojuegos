@@ -98,13 +98,21 @@ bool Enemy::Start()
 		-8, 24,
 	};
 
+	pendingDelete = false;
+
 	pbody = app->physics->CreateChain(position.x + 8, position.y, enemy, 8, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::ENEMY;
 
 	shoot = app->physics->CreateCircle(position.x, position.y, 5, bodyType::DYNAMIC, true);
 	shoot->listener = this;
-	shoot->ctype = ColliderType::ENEMY_ATTACK;
+	if (app->scene->isSaved) {
+		shoot->ctype = ColliderType::ENEMY_ATTACK_SAVED;
+	}
+	else {
+		shoot->ctype = ColliderType::ENEMY_ATTACK;
+	}
+	
 	shoot->body->SetGravityScale(0);
 
 	currentAnim = &Walking;
@@ -206,7 +214,6 @@ bool Enemy::Update(float dt)
 			}
 			
 		}
-		
 
 		bound.x = position.x - 120;
 		bound.y = position.y - 60;

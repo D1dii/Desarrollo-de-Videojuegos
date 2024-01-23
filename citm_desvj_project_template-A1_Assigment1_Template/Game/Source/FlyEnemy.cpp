@@ -71,6 +71,7 @@ bool FlyEnemy::Awake()
 
 bool FlyEnemy::Start()
 {
+
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 
@@ -96,7 +97,7 @@ bool FlyEnemy::Start()
 		0, 10,
 	};
 
-	
+	pendingDelete = false;
 	
 	pbody = app->physics->CreateCircle(position.x + 10, position.y + 15, 8, bodyType::DYNAMIC);
 	pbody->listener = this;
@@ -187,7 +188,12 @@ bool FlyEnemy::Update(float dt)
 			if (explosionTimer >= 60 && canExplode) {
 				explosion = app->physics->CreateRectangleSensor(position.x + 15, position.y + 15, 100, 100, bodyType::DYNAMIC);
 				explosion->listener = this;
-				explosion->ctype = ColliderType::ENEMY_ATTACK;
+				if (app->scene->isSaved) {
+					explosion->ctype = ColliderType::ENEMY_ATTACK_SAVED;
+				}
+				else {
+					explosion->ctype = ColliderType::ENEMY_ATTACK;
+				}
 				explosion->body->SetGravityScale(0);
 				canExplode = false;
 			}

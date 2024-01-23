@@ -31,6 +31,7 @@ enum class ColliderType {
 	ENEMY,
 	ATTACK,
 	ENEMY_ATTACK,
+	ENEMY_ATTACK_SAVED,
 	DETECT,
 	POZO,
 	UNKNOWN

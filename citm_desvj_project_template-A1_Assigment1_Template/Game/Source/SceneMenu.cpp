@@ -53,6 +53,7 @@ bool SceneMenu::Start()
 	CreditsCartel = app->tex->Load("Assets/Textures/CreditsCartel.png");
 	SliderTex = app->tex->Load("Assets/Textures/SliderSprite.png");
 	ButtonSlider = app->tex->Load("Assets/Textures/ButtonSlider.png");
+	Background = app->tex->Load("Assets/Textures/tittle_screen_1.png");
 
 	SDL_Rect NewGamePos = { 120, -520, 128, 32 };
 	NewGame = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "New Game", NewGamePos, this, NewGameButton);
@@ -124,6 +125,8 @@ bool SceneMenu::Update(float dt)
 	{
 		positionCredits += 2;
 	}
+
+	app->render->DrawTexture(Background, 0, -600);
 
 	app->render->DrawTexture(Cartel, positionCartel, -550);
 	app->render->DrawTexture(CreditsCartel, positionCredits, -480);

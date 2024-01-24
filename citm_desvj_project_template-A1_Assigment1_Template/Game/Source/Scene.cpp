@@ -38,6 +38,12 @@ bool Scene::Awake(pugi::xml_node& config)
 		item->parameters = itemNode;
 	}
 
+	for (pugi::xml_node itemNode = config.child("michelin"); itemNode; itemNode = itemNode.next_sibling("michelin"))
+	{
+		Michelin* item = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
+		item->parameters = itemNode;
+	}
+
 	if (config.child("player")) {
 		player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 		player->parameters = config.child("player");

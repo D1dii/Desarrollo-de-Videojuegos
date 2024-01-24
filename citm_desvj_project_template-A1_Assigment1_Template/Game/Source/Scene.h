@@ -11,6 +11,7 @@
 #include "GuiControlButton.h"
 #include "GuiCheckBox.h"
 #include "GuiSlider.h"
+#include "Michelin.h"
 
 #include "Physics.h"
 
@@ -93,6 +94,7 @@ public:
 	FlyEnemy* flyenemy;
 	FlyEnemy* flyenemy2;
 	Pozo* pozo;
+	
 
 	int checkPoints = 0;
 

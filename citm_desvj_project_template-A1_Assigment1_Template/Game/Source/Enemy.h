@@ -35,6 +35,9 @@ public:
 	Animation Shooting;
 	Animation WalkingRight;
 	Animation ShootingRight;
+	Animation Death;
+	Animation DeathRight;
+
 public:
 
 	const char* texturePath;

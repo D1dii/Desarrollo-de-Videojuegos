@@ -1,4 +1,4 @@
-#include "Item.h"
+#include "Michelin.h"
 #include "App.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -8,15 +8,16 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "Window.h"
 
-Item::Item() : Entity(EntityType::ITEM)
+Michelin::Michelin() : Entity(EntityType::MICHELIN)
 {
-	name.Create("item");
+	name.Create("michelin");
 }
 
-Item::~Item() {}
+Michelin::~Michelin() {}
 
-void Item::InitAnims()
+void Michelin::InitAnims()
 {
 	// Idle
 	for (pugi::xml_node node = parameters.child("Idle").child("pushback"); node; node = node.next_sibling("pushback")) {
@@ -29,14 +30,14 @@ void Item::InitAnims()
 	Idle.loop = parameters.child("Idle").attribute("loop").as_bool();
 }
 
-bool Item::Awake() {
+bool Michelin::Awake() {
 
-	
+
 
 	return true;
 }
 
-bool Item::Start() {
+bool Michelin::Start() {
 
 
 	position.x = parameters.attribute("x").as_int();
@@ -49,7 +50,7 @@ bool Item::Start() {
 	texture = app->tex->Load(texturePath);
 	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC, true);
 	pbody->listener = this;
-	pbody->ctype = ColliderType::ITEM;
+	pbody->ctype = ColliderType::MICHELIN;
 	pbody->body->SetGravityScale(0);
 
 	currentAnim = &Idle;
@@ -57,13 +58,33 @@ bool Item::Start() {
 	return true;
 }
 
-bool Item::Update(float dt)
+bool Michelin::Update(float dt)
 {
+	int scale = app->win->GetScale();
+
+	if (pos1)
+	{
+		position.x = 250;
+		position.y = app->scene->player->position.y - 200;
+		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
+	}
+	else if (pos2)
+	{
+		position.x = 290;
+		position.y = app->scene->player->position.y - 200;
+		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
+	}
+	else if (pos3)
+	{
+		position.x = 330;
+		position.y = app->scene->player->position.y - 200;
+		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
+	}
+
 	// L07 DONE 4: Add a physics to an item - update the position of the object from the physics.  
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - 16;
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - 16;
 
-	
 	currentAnim->Update();
 
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
@@ -71,16 +92,28 @@ bool Item::Update(float dt)
 	return true;
 }
 
-bool Item::CleanUp()
+bool Michelin::CleanUp()
 {
 	return true;
 }
 
-void Item::OnCollision(PhysBody* physA, PhysBody* physB)
+void Michelin::OnCollision(PhysBody* physA, PhysBody* physB)
 {
 	if (physB->ctype == ColliderType::PLAYER)
 	{
-		pendingDelete = true;
+		if (app->scene->player->numMichelin == 1)
+		{
+			pos1 = true;
+		}
+		else if (app->scene->player->numMichelin == 2)
+		{
+			pos2 = true;
+		}
+		else if (app->scene->player->numMichelin >= 3)
+		{
+			pos3 = true;
+		}
 		
+
 	}
 }

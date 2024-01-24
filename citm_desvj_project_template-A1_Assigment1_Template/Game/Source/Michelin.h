@@ -1,5 +1,5 @@
-#ifndef __ITEM_H__
-#define __ITEM_H__
+#ifndef __MICHELIN_H__
+#define __MICHELIN_H__
 
 #include "Entity.h"
 #include "Point.h"
@@ -8,12 +8,12 @@
 
 struct SDL_Texture;
 
-class Item : public Entity
+class Michelin : public Entity
 {
 public:
 
-	Item();
-	virtual ~Item();
+	Michelin();
+	virtual ~Michelin();
 
 	bool Awake();
 
@@ -35,7 +35,11 @@ public:
 
 	Animation Idle;
 
-	
+	bool pos1 = false;
+	bool pos2 = false;
+	bool pos3 = false;
+
+
 
 private:
 

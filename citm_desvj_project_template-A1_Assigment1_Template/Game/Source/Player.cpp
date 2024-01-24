@@ -513,6 +513,16 @@ bool Player::Update(float dt)
 		dmgTimer = 0;
 	}
 
+	if (!canMichelin)
+	{
+		michelinTimer++;
+	}
+
+	if (michelinTimer >= 25) {
+		canMichelin = true;
+		michelinTimer = 0;
+	}
+
 	if (lifes == 0) {
 		app->LoadRequest();
 		lifeCurrentAnim->SetCurrentFrame(0);
@@ -571,6 +581,21 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			case ColliderType::ITEM:
 				LOG("Collision ITEM");
 				app->audio->PlayFx(pickCoinFxId);
+				if (lifes < 3 && lifes > 0)
+				{
+					lifes++;
+					lifeFrame--;
+					lifeCurrentAnim->SetCurrentFrame(lifeFrame);
+					
+				}
+				break;
+			case ColliderType::MICHELIN:
+				LOG("Collision MICHELIN");
+				if (canMichelin)
+				{
+					numMichelin++;
+					canMichelin = false;
+				}
 				break;
 			case ColliderType::PLATFORM:
 				LOG("Collision PLATFORM");

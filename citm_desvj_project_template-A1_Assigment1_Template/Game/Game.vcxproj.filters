@@ -32,6 +32,7 @@
     <ClCompile Include="Source\Pozo.cpp" />
     <ClCompile Include="Source\GuiSlider.cpp" />
     <ClCompile Include="Source\GuiCheckBox.cpp" />
+    <ClCompile Include="Source\Michelin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Source\Pozo.h" />
     <ClInclude Include="Source\GuiSlider.h" />
     <ClInclude Include="Source\GuiCheckBox.h" />
+    <ClInclude Include="Source\Michelin.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

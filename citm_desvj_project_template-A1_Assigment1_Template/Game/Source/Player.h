@@ -48,6 +48,10 @@ public:
 	Animation attackLeft;
 	Animation lifeAnim;
 	Animation ChargeBar;
+	Animation Stairs;
+	Animation Death;
+	Animation DeathRight;
+	Animation WinAnim;
 
 public:
 	float speedx = 0.2f;
@@ -88,6 +92,10 @@ public:
 	int lifeFrame = 0;
 	bool canDmg = true;
 	int dmgTimer = 0;
+
+	int numMichelin = 0;
+	bool canMichelin = true;
+	int michelinTimer = 0;
 
 	SDL_Texture* texture = NULL;
 	SDL_Texture* hearts = NULL;

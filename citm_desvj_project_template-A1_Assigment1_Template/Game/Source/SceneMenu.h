@@ -85,6 +85,7 @@ public:
 	SDL_Texture* CreditsCartel = nullptr;
 	SDL_Texture* SliderTex = nullptr;
 	SDL_Texture* ButtonSlider = nullptr;
+	SDL_Texture* Background = nullptr;
 
 	bool isSettingsActive = false;
 	bool isCreditsActive = false;

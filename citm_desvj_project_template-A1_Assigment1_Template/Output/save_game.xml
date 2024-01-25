@@ -12,6 +12,7 @@
 		<positionEnemy2 x="419" y="1569" isDead="false" />
 		<positionFlyEnemy x="245" y="2017" isDead="false" />
 		<positionFlyEnemy2 x="218" y="957" isDead="false" />
+		<positionBoss x="2144" y="208" isDead="false" />
 	</scene>
 	<sceneMenu />
 	<entitymanager />

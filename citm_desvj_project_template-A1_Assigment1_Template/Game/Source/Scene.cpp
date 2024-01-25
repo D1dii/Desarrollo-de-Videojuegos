@@ -121,6 +121,11 @@ bool Scene::Awake(pugi::xml_node& config)
 			player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 			player->parameters = config.child("player2");
 		}
+
+		if (config.child("boss")) {
+			boss = (Boss*)app->entityManager->CreateEntity(EntityType::BOSS);
+			boss->parameters = config.child("boss");
+		}
 	}
 
 	
@@ -406,7 +411,18 @@ bool Scene::LoadState(pugi::xml_node node)
 		flyenemy2->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionFlyEnemy2").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionFlyEnemy2").attribute("y").as_int()) }, 0);
 	}
 	
+	if (!node.child("positionBoss").attribute("isDead").as_bool()) {
 
+		boss->pendingDelete = true;
+		boss = (Boss*)app->entityManager->CreateEntity(EntityType::BOSS);
+		boss->parameters = sceneParameter.child("boss");
+		boss->Awake();
+		boss->Start();
+		boss->position.x = node.child("positionBoss").attribute("x").as_int();
+		boss->position.y = node.child("positionBoss").attribute("y").as_int();
+		boss->isDead = node.child("positionBoss").attribute("isDead").as_bool();
+		boss->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionBoss").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionBoss").attribute("y").as_int()) }, 0);
+	}
 	
 
 	return true;
@@ -457,6 +473,12 @@ bool Scene::SaveState(pugi::xml_node node)
 	flyEnemy2Node.append_attribute("x").set_value(flyenemy2->position.x);
 	flyEnemy2Node.append_attribute("y").set_value(flyenemy2->position.y);
 	flyEnemy2Node.append_attribute("isDead").set_value(flyenemy2->isDead);
+
+	pugi::xml_node bossNode = node.append_child("positionBoss");
+	bossNode.append_attribute("x").set_value(boss->position.x);
+	bossNode.append_attribute("y").set_value(boss->position.y);
+	bossNode.append_attribute("isDead").set_value(boss->isDead);
+
 
 	return true;
 }

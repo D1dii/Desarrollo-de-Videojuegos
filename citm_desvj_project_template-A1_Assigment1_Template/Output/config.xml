@@ -584,6 +584,9 @@
 				<pushback x = "192" y = "96" width = "32" height = "32" />
 			</AttackRight>
 		</FlyEnemy2>
+		<boss x="2144" y="208" texturepath="Assets/Textures/Final Boss-Sheet.png" id="1">
+			<deathAudio path="Assets/Audio/Fx/muerteAudio.wav"/>
+		</boss>
 		<Pozo x="224" y="960">
 			
 		</Pozo>

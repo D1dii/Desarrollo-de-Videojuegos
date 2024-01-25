@@ -160,6 +160,13 @@ bool GuiControlButton::Update(float dt)
 			else {	
 				app->scene->flyenemy2->isDead = true;
 			}
+			if (saveFile.child("game_state").child("scene").child("positionBoss").attribute("isDead").as_bool() == false && !app->map->isMap1)
+			{
+				app->scene->boss->Start();
+			}
+			else {
+				app->scene->boss->isDead = true;
+			}
 			app->scene->pozo->Start();
 			app->LoadRequest();
 			app->scene->player->lifes = 0;

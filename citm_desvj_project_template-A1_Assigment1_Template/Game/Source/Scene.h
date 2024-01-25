@@ -12,6 +12,7 @@
 #include "GuiCheckBox.h"
 #include "GuiSlider.h"
 #include "Michelin.h"
+#include "Boss.h"
 
 #include "Physics.h"
 
@@ -101,6 +102,7 @@ public:
 	Michelin* star;
 	Michelin* star2;
 	Michelin* star3;
+	Boss* boss;
 	
 	
 

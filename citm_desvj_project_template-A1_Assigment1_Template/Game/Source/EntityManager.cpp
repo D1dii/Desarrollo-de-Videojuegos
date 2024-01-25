@@ -7,6 +7,7 @@
 #include "FlyEnemy.h"
 #include "Pozo.h"
 #include "Michelin.h"
+#include "Boss.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -104,6 +105,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::MICHELIN:
 		entity = new Michelin();
+		break;
+	case EntityType::BOSS:
+		entity = new Boss();
 		break;
 	default:
 		break;

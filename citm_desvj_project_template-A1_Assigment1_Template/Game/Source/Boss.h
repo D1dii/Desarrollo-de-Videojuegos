@@ -48,6 +48,13 @@ public:
 
 	int life = 100;
 
+	bool isAttacking;
+	int attackTimer = 0;
+
+	bool isKetchup = false;
+	int startKetchup = 0;
+	int ketchupTimer = 0;
+
 	SDL_Rect lifeBoss;
 
 	SDL_Rect bound;
@@ -56,9 +63,7 @@ public:
 
 	bool isDead = false;
 
-	bool isShooting = false;
-
-	int shootTimer = 0;
+	float jumpForce = -5.8f;
 
 	bool isFacingLeft = true;
 

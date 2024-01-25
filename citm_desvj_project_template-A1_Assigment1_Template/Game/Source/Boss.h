@@ -29,13 +29,11 @@ public:
 	void InitAnims();
 
 	Animation* currentAnim;
-
-	Animation Idle;
 	Animation Walking;
-	Animation Shooting;
-	Animation WalkingRight;
-	Animation ShootingRight;
+	Animation Attacking;
 	Animation Death;
+	Animation WalkingRight;
+	Animation AttackingRight;
 	Animation DeathRight;
 
 public:

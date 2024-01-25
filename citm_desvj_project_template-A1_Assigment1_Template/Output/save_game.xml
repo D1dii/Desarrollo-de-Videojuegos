@@ -7,7 +7,7 @@
 	<:anonymous />
 	<:anonymous />
 	<scene>
-		<positionPlayer x="56" y="2183" lifeLost="0" />
+		<positionPlayer x="0" y="0" lifeLost="0" />
 		<positionEnemy x="196" y="1857" isDead="false" />
 		<positionEnemy2 x="419" y="1569" isDead="false" />
 		<positionFlyEnemy x="245" y="2017" isDead="false" />
@@ -18,6 +18,6 @@
 	<guiManager />
 	<:anonymous />
 	<renderer>
-		<camera x="0" y="-3906" />
+		<camera x="0" y="-1400" />
 	</renderer>
 </game_state>

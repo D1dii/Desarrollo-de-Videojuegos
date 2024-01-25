@@ -121,7 +121,7 @@ bool FlyEnemy::Update(float dt)
 	// Activate or deactivate debug mode
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
-	if (isDead == false) 
+	if (isDead == false && app->map->isMap1)
 	{
 		if (app->scene->GetPLayerPosition().x > bound.x
 			&& app->scene->GetPLayerPosition().x < bound.x + bound.w

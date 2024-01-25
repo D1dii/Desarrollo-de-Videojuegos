@@ -103,6 +103,7 @@ public:
 	SDL_Texture* texture = NULL;
 	SDL_Texture* hearts = NULL;
 	SDL_Texture* chargebar = NULL;
+	SDL_Texture* finalDoor = NULL;
 	
 	PhysBody* pbody;
 	PhysBody* sword;

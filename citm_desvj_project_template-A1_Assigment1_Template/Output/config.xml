@@ -38,7 +38,7 @@
 				<pushback x="224" y="0" width="32" height="32"/>
 			</Idle>
 		</michelin>
-		<michelin x="400" y="1408" texturepath="Assets/Textures/michelin star.png">
+		<michelin2 x="400" y="1408" texturepath="Assets/Textures/michelin star.png">
 			<Idle animspeed="0.1f" loop="true">
 				<pushback x="0" y="0" width="32" height="32"/>
 				<pushback x="32" y="0" width="32" height="32"/>
@@ -49,8 +49,8 @@
 				<pushback x="192" y="0" width="32" height="32"/>
 				<pushback x="224" y="0" width="32" height="32"/>
 			</Idle>
-		</michelin>
-		<michelin x="224" y="224" texturepath="Assets/Textures/michelin star.png">
+		</michelin2>
+		<michelin3 x="224" y="224" texturepath="Assets/Textures/michelin star.png">
 			<Idle animspeed="0.1f" loop="true">
 				<pushback x="0" y="0" width="32" height="32"/>
 				<pushback x="32" y="0" width="32" height="32"/>
@@ -61,7 +61,7 @@
 				<pushback x="192" y="0" width="32" height="32"/>
 				<pushback x="224" y="0" width="32" height="32"/>
 			</Idle>
-		</michelin>
+		</michelin3>
 		<item x="432" y="2116" texturepath="Assets/Textures/almax.png">
 			<Idle animspeed="0.1f" loop="true">
 				<pushback x="0" y="0" width="32" height="32"/>
@@ -72,7 +72,7 @@
 				<pushback x="160" y="0" width="32" height="32"/>
 			</Idle>
 		</item>
-		<item x="336" y="1796" texturepath="Assets/Textures/almax.png">
+		<item2 x="336" y="1796" texturepath="Assets/Textures/almax.png">
 			<Idle animspeed="0.1f" loop="true">
 				<pushback x="0" y="0" width="32" height="32"/>
 				<pushback x="32" y="0" width="32" height="32"/>
@@ -81,8 +81,8 @@
 				<pushback x="128" y="0" width="32" height="32"/>
 				<pushback x="160" y="0" width="32" height="32"/>
 			</Idle>
-		</item>
-		<item x="32" y="1408" texturepath="Assets/Textures/almax.png">
+		</item2>
+		<item3 x="32" y="1408" texturepath="Assets/Textures/almax.png">
 			<Idle animspeed="0.1f" loop="true">
 				<pushback x="0" y="0" width="32" height="32"/>
 				<pushback x="32" y="0" width="32" height="32"/>
@@ -91,8 +91,8 @@
 				<pushback x="128" y="0" width="32" height="32"/>
 				<pushback x="160" y="0" width="32" height="32"/>
 			</Idle>
-		</item>
-		<item x="272" y="544" texturepath="Assets/Textures/almax.png">
+		</item3>
+		<item4 x="272" y="544" texturepath="Assets/Textures/almax.png">
 			<Idle animspeed="0.1f" loop="true">
 				<pushback x="0" y="0" width="32" height="32"/>
 				<pushback x="32" y="0" width="32" height="32"/>
@@ -101,7 +101,7 @@
 				<pushback x="128" y="0" width="32" height="32"/>
 				<pushback x="160" y="0" width="32" height="32"/>
 			</Idle>
-		</item>
+		</item4>
 		<player x="90" y="2172" texturepath="Assets/Textures/idle.png">
 			<jumpAudio path="Assets/Audio/Fx/jumpAudio.wav"/>
 			<Idle animspeed="0.2f" loop="true">

@@ -132,7 +132,7 @@ bool Enemy::Update(float dt)
 	iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
 	iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
 
-	if (isDead == false) {
+	if (isDead == false && app->map->isMap1) {
 		if (app->scene->GetPLayerPosition().x >= bound.x
 			&& app->scene->GetPLayerPosition().x <= bound.x + bound.w
 			&& app->scene->GetPLayerPosition().y >= bound.y
@@ -227,6 +227,7 @@ bool Enemy::Update(float dt)
 		currentAnim->Update();
 		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 	}
+	
 	
 	if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
 		isFacingLeft = false;

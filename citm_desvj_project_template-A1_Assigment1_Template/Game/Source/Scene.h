@@ -94,6 +94,13 @@ public:
 	FlyEnemy* flyenemy;
 	FlyEnemy* flyenemy2;
 	Pozo* pozo;
+	Item* item;
+	Item* item2;
+	Item* item3;
+	Item* item4;
+	Michelin* star;
+	Michelin* star2;
+	Michelin* star3;
 	
 	
 

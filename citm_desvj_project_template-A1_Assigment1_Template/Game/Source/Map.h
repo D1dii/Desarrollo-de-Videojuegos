@@ -127,6 +127,8 @@ public:
 	// Called before the first frame
 	bool Start();
 
+	bool PreUpdate();
+
 	// Called each loop iteration
 	bool Update(float dt);
 
@@ -165,6 +167,8 @@ public:
 	List<PhysBody*> platforms;
 	bool isMap1 = true;
 	bool Destroying = false;
+
+	bool LoadRequestLevel2 = false;
 
 private:
 	

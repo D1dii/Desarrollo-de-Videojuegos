@@ -38,6 +38,7 @@ bool Map::Start() {
     mapPath += name;
     ret = Load(mapPath);
     
+    
 
     //Initialize pathfinding 
     pathfinding = new PathFinding();
@@ -49,6 +50,12 @@ bool Map::Start() {
     RELEASE_ARRAY(navigationMap);
 
     return ret;
+}
+
+bool Map::PreUpdate()
+{
+    
+    return true;
 }
 
 bool Map::Update(float dt)
@@ -88,20 +95,19 @@ bool Map::Update(float dt)
 
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
-        CleanUp();
-        Destroying = true;
-        isMap1 = false;
-    }
+
 
     return true;
 }
 
 bool Map::PostUpdate()
 {
+
     if (Destroying) {
         CleanUp();
         isMap1 = false;
+        app->scene->isSaved = true;
+        app->scene->checkPoints = 0;
         app->physics->Disable();
         app->entityManager->Disable();
         Destroying = false;
@@ -109,9 +115,12 @@ bool Map::PostUpdate()
         app->physics->Enable();
         app->entityManager->Enable();
         Start();
+        app->SaveRequest();
         app->render->camera.y = -1400;
         app->render->camera.x = 0;
     }
+
+    
     
     return true;
 }

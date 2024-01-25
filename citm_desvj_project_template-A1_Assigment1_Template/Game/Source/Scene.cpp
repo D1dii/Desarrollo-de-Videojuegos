@@ -38,16 +38,40 @@ bool Scene::Awake(pugi::xml_node& config)
 		app->map->name = config.child("map").attribute("name").as_string();
 		app->map->path = config.child("map").attribute("path").as_string();
 
-		for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
-		{
-			Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-			item->parameters = itemNode;
+
+		if (config.child("michelin")) {
+			star = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
+			star->parameters = config.child("michelin");
 		}
 
-		for (pugi::xml_node itemNode = config.child("michelin"); itemNode; itemNode = itemNode.next_sibling("michelin"))
-		{
-			Michelin* item = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
-			item->parameters = itemNode;
+		if (config.child("michelin2")) {
+			star2 = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
+			star2->parameters = config.child("michelin2");
+		}
+
+		if (config.child("michelin3")) {
+			star3 = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
+			star3->parameters = config.child("michelin3");
+		}
+
+		if (config.child("item")) {
+			item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+			item->parameters = config.child("item");
+		}
+
+		if (config.child("item2")) {
+			item2 = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+			item2->parameters = config.child("item2");
+		}
+
+		if (config.child("item3")) {
+			item3 = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+			item3->parameters = config.child("item3");
+		}
+
+		if (config.child("item4")) {
+			item4 = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+			item4->parameters = config.child("item4");
 		}
 
 		if (config.child("player")) {

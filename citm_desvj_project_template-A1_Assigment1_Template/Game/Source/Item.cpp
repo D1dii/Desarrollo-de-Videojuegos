@@ -38,7 +38,6 @@ bool Item::Awake() {
 
 bool Item::Start() {
 
-
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();

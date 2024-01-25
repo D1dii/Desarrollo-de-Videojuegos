@@ -86,9 +86,12 @@ bool GuiControlButton::Update(float dt)
 
 		if (buttonID == 1)
 		{
+			app->map->isMap1 = true;
 			app->scene->Enable();
 			app->sceneMenu->Disable();
 			app->physics->Enable();
+			app->map->name = app->scene->sceneParameter.child("map").attribute("name").as_string();
+			app->map->path = app->scene->sceneParameter.child("map").attribute("path").as_string();
 			app->map->Enable();
 			app->entityManager->Enable();
 			if (app->scene->firstStart == false)
@@ -101,6 +104,13 @@ bool GuiControlButton::Update(float dt)
 				app->scene->enemy2->Start();
 				app->scene->flyenemy->Start();
 				app->scene->flyenemy2->Start();
+				app->scene->item->Start();
+				app->scene->item2->Start();
+				app->scene->item3->Start();
+				app->scene->item4->Start();
+				app->scene->star->Start();
+				app->scene->star2->Start();
+				app->scene->star3->Start();
 				app->scene->pozo->Start();
 			}
 			app->scene->isInScene = true;
@@ -121,7 +131,7 @@ bool GuiControlButton::Update(float dt)
 			pugi::xml_document saveFile;
 			pugi::xml_parse_result result = saveFile.load_file("save_game.xml");
 
-			if (saveFile.child("game_state").child("scene").child("positionEnemy").attribute("isDead").as_bool() == false)
+			if (saveFile.child("game_state").child("scene").child("positionEnemy").attribute("isDead").as_bool() == false && app->map->isMap1)
 			{
 				app->scene->enemy->Start();
 
@@ -129,21 +139,21 @@ bool GuiControlButton::Update(float dt)
 			else {
 				app->scene->enemy->isDead = true;
 			}
-			if (saveFile.child("game_state").child("scene").child("positionEnemy2").attribute("isDead").as_bool() == false)
+			if (saveFile.child("game_state").child("scene").child("positionEnemy2").attribute("isDead").as_bool() == false && app->map->isMap1)
 			{
 				app->scene->enemy2->Start();
 			}
 			else {
 				app->scene->enemy2->isDead = true;
 			}
-			if (saveFile.child("game_state").child("scene").child("positionFlyEnemy").attribute("isDead").as_bool() == false)
+			if (saveFile.child("game_state").child("scene").child("positionFlyEnemy").attribute("isDead").as_bool() == false && app->map->isMap1)
 			{
 				app->scene->flyenemy->Start();
 			}
 			else {
 				app->scene->flyenemy->isDead = true;
 			}
-			if (saveFile.child("game_state").child("scene").child("positionFlyEnemy2").attribute("isDead").as_bool() == false)
+			if (saveFile.child("game_state").child("scene").child("positionFlyEnemy2").attribute("isDead").as_bool() == false && app->map->isMap1)
 			{
 				app->scene->flyenemy2->Start();
 			}

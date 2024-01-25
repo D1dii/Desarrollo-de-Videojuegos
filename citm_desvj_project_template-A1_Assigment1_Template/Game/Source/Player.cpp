@@ -206,7 +206,7 @@ bool Player::Awake() {
 
 bool Player::Start() {
 
-	if (app->scene->isSaved) {
+	if (app->scene->isSaved && app->map->isMap1) {
 		position.x = -300;
 		position.y = 2500;
 	}
@@ -226,6 +226,7 @@ bool Player::Start() {
 	texture = app->tex->Load(texturePath);
 	hearts = app->tex->Load("Assets/Textures/hp.png");
 	chargebar = app->tex->Load("Assets/Textures/charge bar.png");
+	finalDoor = app->tex->Load("Assets/Textures/door.png");
 	powerJump.h = 0;
 	powerJump.w = 0;
 	powerJump.x = position.x;
@@ -248,7 +249,7 @@ bool Player::Start() {
 		escalera2->ctype = ColliderType::ESCALERA;
 		escalera2->body->SetGravityScale(0);
 
-		winLevel = app->physics->CreateRectangleSensor(240, 352, 32, 32, bodyType::DYNAMIC);
+		winLevel = app->physics->CreateRectangleSensor(240, 352, 16, 32, bodyType::DYNAMIC);
 		winLevel->ctype = ColliderType::COMPLETE_LEVEL;
 		winLevel->body->SetGravityScale(0);
 	}
@@ -621,8 +622,14 @@ bool Player::Update(float dt)
 		app->render->DrawTexture(hearts, (-app->render->camera.x) / scale + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());
 	}
 	
+	if (app->map->isMap1)
+	{
+		SDL_Rect door = { 0, 0, 32, 32 };
+		app->render->DrawTexture(finalDoor, 224, 336, &door);
+
+		app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
+	}
 	
-	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
 
 	if (app->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
 	{
@@ -736,6 +743,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				break;
 			case ColliderType::COMPLETE_LEVEL:
 				app->map->Destroying = true;
+				
 			case ColliderType::UNKNOWN:
 				LOG("Collision UNKNOWN");
 				break;

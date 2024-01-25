@@ -35,6 +35,8 @@ enum class ColliderType {
 	ENEMY_ATTACK_SAVED,
 	DETECT,
 	POZO,
+	ESCALERA,
+	COMPLETE_LEVEL,
 	UNKNOWN
 	// ..
 };

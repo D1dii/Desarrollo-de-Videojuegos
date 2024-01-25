@@ -130,6 +130,8 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	bool PostUpdate();
+
     // Called before quitting
     bool CleanUp();
 
@@ -160,8 +162,13 @@ public:
 	SString path;
 	PathFinding* pathfinding;
 
-private:
+	List<PhysBody*> platforms;
 	bool isMap1 = true;
+	bool Destroying = false;
+
+private:
+	
+	
 	bool mapLoaded;
 	MapLayer* navigationLayer;
 	int blockedGid = 546;

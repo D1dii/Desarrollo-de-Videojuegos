@@ -97,6 +97,9 @@ public:
 	bool canMichelin = true;
 	int michelinTimer = 0;
 
+	bool wonLevel = false;
+	int winAnimTimer = 0;
+
 	SDL_Texture* texture = NULL;
 	SDL_Texture* hearts = NULL;
 	SDL_Texture* chargebar = NULL;
@@ -104,6 +107,10 @@ public:
 	PhysBody* pbody;
 	PhysBody* sword;
 	int pickCoinFxId;
+
+	PhysBody* escalera1 = nullptr;
+	PhysBody* escalera2 = nullptr;
+	PhysBody* winLevel = nullptr;
 	
 	SDL_Rect powerJump;
 	SDL_Rect destinoRect;
@@ -116,7 +123,8 @@ public:
 	{
 		JUMPING,
 		POWER_JUMP,
-		FLOOR
+		FLOOR,
+		ESCALANDO
 	};
 
 	jumpState player = jumpState::FLOOR;

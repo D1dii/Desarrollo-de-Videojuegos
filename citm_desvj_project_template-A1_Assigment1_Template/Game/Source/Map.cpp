@@ -1,4 +1,3 @@
-
 #include "App.h"
 #include "Render.h"
 #include "Textures.h"
@@ -35,19 +34,10 @@ bool Map::Start() {
     //Calls the functon to load the map, make sure that the filename is assigned
     bool ret;
 
-    if (isMap1) 
-    {
-        SString mapPath = path;
-        mapPath += name;
-        ret = Load(mapPath);
-    }
-    else if (!isMap1) 
-    {
-        SString mapPath2 = path;
-        mapPath2 += name2;
-        ret = Load(mapPath2);
-        
-    }
+    SString mapPath = path;
+    mapPath += name;
+    ret = Load(mapPath);
+    
 
     //Initialize pathfinding 
     pathfinding = new PathFinding();
@@ -100,11 +90,29 @@ bool Map::Update(float dt)
 
     if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
         CleanUp();
-        app->physics->DestroyPlatforms();
+        Destroying = true;
         isMap1 = false;
-        Start();
     }
 
+    return true;
+}
+
+bool Map::PostUpdate()
+{
+    if (Destroying) {
+        CleanUp();
+        isMap1 = false;
+        app->physics->Disable();
+        app->entityManager->Disable();
+        Destroying = false;
+        app->AwakeScene();
+        app->physics->Enable();
+        app->entityManager->Enable();
+        Start();
+        app->render->camera.y = -1400;
+        app->render->camera.x = 0;
+    }
+    
     return true;
 }
 
@@ -422,6 +430,7 @@ bool Map::LoadObjectGroups(pugi::xml_node mapNode)
 
             PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
             c1->ctype = ColliderType::PLATFORM;
+            platforms.Add(c1);
         }
     }
 

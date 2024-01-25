@@ -32,55 +32,74 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	sceneParameter = config;
 
-	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	if (app->map->isMap1) 
 	{
-		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-		item->parameters = itemNode;
-	}
 
-	for (pugi::xml_node itemNode = config.child("michelin"); itemNode; itemNode = itemNode.next_sibling("michelin"))
-	{
-		Michelin* item = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
-		item->parameters = itemNode;
-	}
-
-	if (config.child("player")) {
-		player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-		player->parameters = config.child("player");
-	}
-
-	if (config.child("enemy")) {
-		enemy = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
-		enemy->parameters = config.child("enemy");
-	}
-
-	if (config.child("enemy2")) {
-		enemy2 = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
-		enemy2->parameters = config.child("enemy2");
-	}
-
-	if (config.child("FlyEnemy")) {
-		flyenemy = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
-		flyenemy->parameters = config.child("FlyEnemy");
-	}
-
-	if (config.child("FlyEnemy2")) {
-		flyenemy2 = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
-		flyenemy2->parameters = config.child("FlyEnemy2");
-	}
-
-	if (config.child("Pozo")) {
-		pozo = (Pozo*)app->entityManager->CreateEntity(EntityType::POZO);
-		pozo->parameters = config.child("Pozo");
-	}
-
-	if (config.child("map")) {
-		//Get the map name from the config file and assigns the value in the module
 		app->map->name = config.child("map").attribute("name").as_string();
 		app->map->path = config.child("map").attribute("path").as_string();
+
+		for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+		{
+			Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+			item->parameters = itemNode;
+		}
+
+		for (pugi::xml_node itemNode = config.child("michelin"); itemNode; itemNode = itemNode.next_sibling("michelin"))
+		{
+			Michelin* item = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
+			item->parameters = itemNode;
+		}
+
+		if (config.child("player")) {
+			player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
+			player->parameters = config.child("player");
+		}
+
+		if (config.child("enemy")) {
+			enemy = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
+			enemy->parameters = config.child("enemy");
+		}
+
+		if (config.child("enemy2")) {
+			enemy2 = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMY);
+			enemy2->parameters = config.child("enemy2");
+		}
+
+		if (config.child("FlyEnemy")) {
+			flyenemy = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
+			flyenemy->parameters = config.child("FlyEnemy");
+		}
+
+		if (config.child("FlyEnemy2")) {
+			flyenemy2 = (FlyEnemy*)app->entityManager->CreateEntity(EntityType::FLY_ENEMY);
+			flyenemy2->parameters = config.child("FlyEnemy2");
+		}
+
+		if (config.child("Pozo")) {
+			pozo = (Pozo*)app->entityManager->CreateEntity(EntityType::POZO);
+			pozo->parameters = config.child("Pozo");
+		}
+
+		if (config.child("map")) {
+			//Get the map name from the config file and assigns the value in the module
+			app->map->name = config.child("map").attribute("name").as_string();
+			app->map->path = config.child("map").attribute("path").as_string();
+		}
+
+		audioPath = config.child("musicFile").attribute("path").as_string();
+	}
+	else /*Level 2*/
+	{
+		app->map->name = config.child("map1").attribute("name").as_string();
+		app->map->path = config.child("map1").attribute("path").as_string();
+
+		if (config.child("player2")) {
+			player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
+			player->parameters = config.child("player2");
+		}
 	}
 
-	audioPath = config.child("musicFile").attribute("path").as_string();
+	
 	
 	return ret;
 }
@@ -111,6 +130,8 @@ bool Scene::Start()
 
 	SliderTex = app->tex->Load("Assets/Textures/SliderSprite.png");
 	ButtonSlider = app->tex->Load("Assets/Textures/ButtonSlider.png");
+
+	
 	
 	CreateOptionsButtons();
 
@@ -158,16 +179,16 @@ bool Scene::Update(float dt)
 
 	int scale = app->win->GetScale();
 
-	if ((app->sceneMenu->isSettingsActive && app->scene->player->options) && app->sceneMenu->positionCartel > 245)
+	if ((app->sceneMenu->isSettingsActive && app->scene->player->options) && app->sceneMenu->positionCartel > (-app->render->camera.x + app->render->camera.w - 472) / scale)
 	{
 		app->sceneMenu->positionCartel -= 2;
 	}
-	else if ((!app->sceneMenu->isSettingsActive && app->scene->player->options == false) && app->sceneMenu->positionCartel < 550)
+	else if ((!app->sceneMenu->isSettingsActive && app->scene->player->options == false) && app->sceneMenu->positionCartel < (-app->render->camera.x + app->render->camera.w) / scale)
 	{
 		app->sceneMenu->positionCartel += 2;
 	}
 
-	if ((app->sceneMenu->isSettingsActive && app->scene->player->options) && app->sceneMenu->positionCartel <= 245)
+	if ((app->sceneMenu->isSettingsActive && app->scene->player->options) && app->sceneMenu->positionCartel <= (-app->render->camera.x + app->render->camera.w - 472) / scale)
 	{
 		app->sceneMenu->showOptions = true;
 	}
@@ -248,8 +269,15 @@ bool Scene::Update(float dt)
 	}
 
 	
-
-	app->render->DrawTexture(checkPointUI, app->render->camera.x + 20, player->position.y - 185);
+	if (app->map->isMap1)
+	{
+		app->render->DrawTexture(checkPointUI, app->render->camera.x + 20, player->position.y - 185);
+	}
+	else if (!app->map->isMap1)
+	{
+		app->render->DrawTexture(checkPointUI, (-app->render->camera.x) / scale + 20, player->position.y - 185);
+	}
+	
 
 	return true;
 }

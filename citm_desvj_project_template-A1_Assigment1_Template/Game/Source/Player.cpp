@@ -11,6 +11,7 @@
 #include "Physics.h"
 #include "Window.h"
 #include "GuiManager.h"
+#include "Map.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -144,6 +145,7 @@ void Player::InitAnims() {
 	lifeAnim.speed = parameters.child("lifeAnim").attribute("animspeed").as_float();
 	lifeAnim.loop = parameters.child("lifeAnim").attribute("loop").as_bool();
 
+	// Charge Bar
 	for (pugi::xml_node node = parameters.child("ChargeBar").child("pushback"); node; node = node.next_sibling("pushback")) {
 		ChargeBar.PushBack({ node.attribute("x").as_int(),
 						node.attribute("y").as_int(),
@@ -152,6 +154,47 @@ void Player::InitAnims() {
 	}
 	ChargeBar.speed = parameters.child("ChargeBar").attribute("animspeed").as_float();
 	ChargeBar.loop = parameters.child("ChargeBar").attribute("loop").as_bool();
+
+	// Stairs
+	for (pugi::xml_node node = parameters.child("Stairs").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Stairs.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Stairs.speed = parameters.child("Stairs").attribute("animspeed").as_float();
+	Stairs.loop = parameters.child("Stairs").attribute("loop").as_bool();
+
+	// Death
+	for (pugi::xml_node node = parameters.child("Death").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Death.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Death.speed = parameters.child("Death").attribute("animspeed").as_float();
+	Death.loop = parameters.child("Death").attribute("loop").as_bool();
+
+	// DeathRight
+	for (pugi::xml_node node = parameters.child("DeathRight").child("pushback"); node; node = node.next_sibling("pushback")) {
+		DeathRight.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	DeathRight.speed = parameters.child("DeathRight").attribute("animspeed").as_float();
+	DeathRight.loop = parameters.child("DeathRight").attribute("loop").as_bool();
+
+	// WinAnim
+	for (pugi::xml_node node = parameters.child("WinAnim").child("pushback"); node; node = node.next_sibling("pushback")) {
+		WinAnim.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	WinAnim.speed = parameters.child("WinAnim").attribute("animspeed").as_float();
+	WinAnim.loop = parameters.child("WinAnim").attribute("loop").as_bool();
+
 }
 
 bool Player::Awake() {
@@ -171,6 +214,7 @@ bool Player::Start() {
 		position.x = parameters.attribute("x").as_int();
 		position.y = parameters.attribute("y").as_int();
 	}
+
 	
 
 	texturePath = parameters.attribute("texturepath").as_string();
@@ -193,6 +237,26 @@ bool Player::Start() {
 		12, 16,
 		0, 16,
 	};
+
+	if (app->map->isMap1)
+	{
+		escalera1 = app->physics->CreateRectangleSensor(36, 800, 2, 128, bodyType::DYNAMIC);
+		escalera1->ctype = ColliderType::ESCALERA;
+		escalera1->body->SetGravityScale(0);
+
+		escalera2 = app->physics->CreateRectangleSensor(436, 424, 2, 144, bodyType::DYNAMIC);
+		escalera2->ctype = ColliderType::ESCALERA;
+		escalera2->body->SetGravityScale(0);
+
+		winLevel = app->physics->CreateRectangleSensor(240, 352, 32, 32, bodyType::DYNAMIC);
+		winLevel->ctype = ColliderType::COMPLETE_LEVEL;
+		winLevel->body->SetGravityScale(0);
+	}
+	else {
+		escalera1 = nullptr;
+		escalera2 = nullptr;
+		winLevel = nullptr;
+	}
 
 	
 	pbody = app->physics->CreateChain(position.x, position.y, player, 8, bodyType::DYNAMIC);
@@ -407,7 +471,6 @@ bool Player::Update(float dt)
 		break;
 	case Player::FLOOR:
 		speedy = 1.0f;
-		b2Vec2 vel = b2Vec2(0, -GRAVITY_Y);
 		if (justFall == true) {
 			if (isFacingLeft == false) {
 				currentAnim = &Fall;
@@ -416,7 +479,16 @@ bool Player::Update(float dt)
 				currentAnim = &FallLeft;
 			}
 		}
+		break;
+	case Player::ESCALANDO:
+		currentAnim = &Stairs;
 		
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		{
+			vel = b2Vec2(0, -1);
+			
+		}
+
 		break;
 	}
 
@@ -536,8 +608,19 @@ bool Player::Update(float dt)
 		app->render->DrawTexture(chargebar, position.x, position.y - 5, &chargebarcurrentanim->GetCurrentFrame());
 	}
 
+	
+
 	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
-	app->render->DrawTexture(hearts, app->render->camera.x + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());
+
+	if (app->map->isMap1)
+	{
+		app->render->DrawTexture(hearts, app->render->camera.x + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());
+	}
+	else if (!app->map->isMap1)
+	{
+		app->render->DrawTexture(hearts, (-app->render->camera.x) / scale + 20, position.y - 220, &lifeCurrentAnim->GetCurrentFrame());
+	}
+	
 	
 	app->render->DrawRectangle(powerJump, 255, 0, 0, 255);
 
@@ -557,8 +640,14 @@ bool Player::Update(float dt)
 		
 	}
 
-	if (isScene) {
+	if (isScene && app->map->isMap1) 
+	{
 		app->render->camera.y = (-position.y + 230) * scale;
+	} 
+	else if (isScene && !app->map->isMap1) 
+	{
+		app->render->camera.y = (-position.y + 230) * scale;
+		app->render->camera.x = (-position.x + 50) * scale;
 	}
 	
 
@@ -586,7 +675,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 					lifes++;
 					lifeFrame--;
 					lifeCurrentAnim->SetCurrentFrame(lifeFrame);
-					
 				}
 				break;
 			case ColliderType::MICHELIN:
@@ -605,6 +693,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 					charge = 0;
 					justFall = true;
 					fallTimer = 0;
+				}
+				else if (player == jumpState::ESCALANDO)
+				{
+					player = jumpState::FLOOR;
 				}
 				break;
 			case ColliderType::ENEMY_ATTACK:
@@ -638,6 +730,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			case ColliderType::POZO:
 				charge = 0;
 				lifes = 0;
+				break;
+			case ColliderType::ESCALERA:
+				player = jumpState::ESCALANDO;
+				break;
+			case ColliderType::COMPLETE_LEVEL:
+				app->map->Destroying = true;
 			case ColliderType::UNKNOWN:
 				LOG("Collision UNKNOWN");
 				break;

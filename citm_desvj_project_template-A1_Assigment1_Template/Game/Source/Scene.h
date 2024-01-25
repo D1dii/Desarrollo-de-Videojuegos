@@ -95,6 +95,7 @@ public:
 	FlyEnemy* flyenemy2;
 	Pozo* pozo;
 	
+	
 
 	int checkPoints = 0;
 

@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Window.h"
 #include "Scene.h"
+#include "Map.h"
 #include "Box2D/Box2D/Box2D.h"
 
 // Tell the compiler to reference the compiled Box2D libraries
@@ -416,16 +417,14 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 void Physics::DestroyPlatforms()
 {
 	ListItem<PhysBody*>* item;
-	item = physBodies.start;
+	item = app->map->platforms.start;
 
 	while (item)
 	{
-		if (item->data->ctype == ColliderType::PLATFORM ||
-			item->data->ctype == ColliderType::POZO) {
-			DestroyObject(item->data);
-		}
+		DestroyObject(item->data);
 		item = item->next;
 	}
+
 }
 
 void Physics::DestroyEntities()

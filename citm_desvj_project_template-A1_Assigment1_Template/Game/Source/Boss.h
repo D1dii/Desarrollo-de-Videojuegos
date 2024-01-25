@@ -29,12 +29,14 @@ public:
 	void InitAnims();
 
 	Animation* currentAnim;
+	Animation* currentHp;
 	Animation Walking;
 	Animation Attacking;
 	Animation Death;
 	Animation WalkingRight;
 	Animation AttackingRight;
 	Animation DeathRight;
+	Animation HP;
 
 public:
 
@@ -42,11 +44,16 @@ public:
 
 	SDL_Texture* texture = NULL;
 	SDL_Texture* pathTest = NULL;
+	SDL_Texture* lifeBoss = NULL;
 
 	int counterPath = 0;
 	int timer = 0;
 
-	int life = 100;
+	int life = 8;
+	int lifeCurrentframe = 0;
+	bool canDmg = true;
+	int dmgTimer = 0;
+	int deathTimer = 0;
 
 	bool isAttacking;
 	int attackTimer = 0;
@@ -55,7 +62,7 @@ public:
 	int startKetchup = 0;
 	int ketchupTimer = 0;
 
-	SDL_Rect lifeBoss;
+	
 
 	SDL_Rect bound;
 

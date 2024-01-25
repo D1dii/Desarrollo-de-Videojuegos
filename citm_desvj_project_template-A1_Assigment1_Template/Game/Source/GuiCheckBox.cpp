@@ -4,11 +4,13 @@
 #include "../GuiManager.h"
 #include "../Audio.h"
 #include "../Window.h"
+#include "SceneMenu.h"
 
 GuiCheckBox::GuiCheckBox(uint32 id, SDL_Rect bounds, const char* tex) : GuiControl(GuiControlType::CHECKBOX, id)
 {
     this->bounds = bounds;
     this->text = tex;
+    this->id = id;
 }
 
 GuiCheckBox::~GuiCheckBox()
@@ -53,13 +55,39 @@ bool GuiCheckBox::Update(float dt)
 
     case GuiControlState::NORMAL:
 
-        if (checked)
-            app->render->DrawRectangle(bounds, 0, 255, 0, 128, true, true);
+        if (id == 7 || id == 10)
+        {
+            if (checked) {
+                app->render->DrawRectangle(bounds, 0, 255, 0, 128, true, true);
+                app->isVSync = true;
+                app->sceneMenu->isVSyncCheck = true;
+            }
 
-        if (!checked)
-            app->render->DrawRectangle(bounds, 0, 255, 0, 128, false, true);
-        /*  if (!checked) render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 0,0,20,20 }), 0, 0, 0, 0, false);
-          else          render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 60,0,20,20 }), 0, 0, 0, 0, false);*/
+
+            if (!checked) {
+                app->render->DrawRectangle(bounds, 0, 255, 0, 128, false, true);
+                app->isVSync = false;
+                app->sceneMenu->isVSyncCheck = false;
+            }
+        }
+
+        if (id == 8 || id == 11)
+        {
+            if (checked) {
+                app->render->DrawRectangle(bounds, 0, 255, 0, 128, true, true);
+
+            }
+
+
+            if (!checked) {
+                app->render->DrawRectangle(bounds, 0, 255, 0, 128, false, true);
+
+            }
+        }
+        
+        
+            
+      
         break;
 
     case GuiControlState::FOCUSED:
@@ -67,15 +95,13 @@ bool GuiCheckBox::Update(float dt)
         app->render->DrawRectangle(bounds, 255, 0, 0, 128, true, true);
 
 
-        /* if (!checked) render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 20,0,20,20 }), 0, 0, 0, 0, false);
-         else          render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 80,0,20,20 }), 0, 0, 0, 0, false);*/
+       
         break;
 
     case GuiControlState::PRESSED:
 
         app->render->DrawRectangle(bounds, 255, 0, 0, 128, true, true);
-        /*   if (!checked) render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 40,0,20,20 }), 0, 0, 0, 0, false);
-           else          render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 100,0,20,20 }), 0, 0, 0, 0, false);*/
+       
         break;
 
     case GuiControlState::SELECTED:
@@ -88,15 +114,7 @@ bool GuiCheckBox::Update(float dt)
         else if (!checked)
             checked = true;
 
-        //if (id == 1)
-        //{
-        //    checked = !checked;
-        //}
-        //else if (id == 2)
-        //{
-
-        //    checked = !checked;
-        //}
+      
         NotifyObserver();
         break;
 

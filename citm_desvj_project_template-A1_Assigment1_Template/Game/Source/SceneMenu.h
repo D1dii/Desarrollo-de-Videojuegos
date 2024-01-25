@@ -67,9 +67,14 @@ private:
 	GuiControlButton* Credits;
 	GuiControlButton* Exit;
 	GuiSlider* Slider;
+	
+public:
+
 	GuiCheckBox* VSync;
 	GuiCheckBox* FullScreen;
-public:
+
+	bool isVSyncCheck = true;
+	bool isFullScreenCheck = false;
 
 	pugi::xml_node sceneParameter;
 	bool ret = true;

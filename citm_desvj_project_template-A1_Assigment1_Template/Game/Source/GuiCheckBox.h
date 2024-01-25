@@ -17,11 +17,13 @@ public:
     bool Draw(Render* render);
     bool DrawDebug(Render* render);
 
-private:
-
     // GuiCheckBox specific properties
     // Maybe some animation properties for state change?
     bool checked = false;
+
+private:
+
+    
 
     bool playFxOnce = true;
 };

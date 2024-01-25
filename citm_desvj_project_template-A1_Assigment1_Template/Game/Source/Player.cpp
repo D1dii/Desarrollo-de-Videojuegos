@@ -709,7 +709,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			case ColliderType::ENEMY_ATTACK:
 				LOG("Collision ENEMY_ATTACK");
 
-				if (canDmg && app->scene->isSaved == false) {
+				if (canDmg && app->scene->isSaved == false && !godMode) {
 					lifes--;
 					canDmg = false;
 					if (lifeFrame < 4) {
@@ -722,7 +722,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				}
 				break;
 			case ColliderType::ENEMY_ATTACK_SAVED:
-				if (canDmg && app->scene->isSaved == true) {
+				if (canDmg && app->scene->isSaved == true && !godMode) {
 					lifes--;
 					canDmg = false;
 					if (lifeFrame < 4) {

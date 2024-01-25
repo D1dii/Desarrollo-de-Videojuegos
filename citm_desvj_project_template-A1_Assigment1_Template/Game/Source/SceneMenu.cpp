@@ -33,6 +33,11 @@ bool SceneMenu::Awake(pugi::xml_node& config)
 
 	sceneParameter = config;
 
+	//Get the size of the window
+	app->win->GetWindowSize(windowW, windowH);
+
+	
+
 
 	return ret;
 }
@@ -40,9 +45,6 @@ bool SceneMenu::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool SceneMenu::Start()
 {
-
-	//Get the size of the window
-	app->win->GetWindowSize(windowW, windowH);
 
 	NewGameButton = app->tex->Load("Assets/Textures/NewGameTitle-Sheet.png");
 	ContinueButton = app->tex->Load("Assets/Textures/ContinueTitle-Sheet.png");
@@ -75,9 +77,12 @@ bool SceneMenu::Start()
 
 	SDL_Rect VSyncPos = { 310, -450, 25, 25 };
 	VSync = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 7, "VSync", VSyncPos, this, ExitButton);
+	VSync->checked = true;
+	isVSyncCheck = true;
 
 	SDL_Rect FullScreenPos = { 375, -450, 25, 25 };
 	FullScreen = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 8, "FullScreen", FullScreenPos, this, ExitButton);
+	isFullScreenCheck = false;
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 1200;

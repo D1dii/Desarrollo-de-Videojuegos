@@ -182,9 +182,23 @@ void Scene::CreateOptionsButtons()
 
 	SDL_Rect VSyncPos = { 310, player->position.y - 105, 25, 25 };
 	VSyncScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 10, "VSync", VSyncPos, this, SliderTex);
+	if (app->sceneMenu->isVSyncCheck)
+	{
+		VSyncScene->checked = true;
+	}
+	else {
+		VSyncScene->checked = false;
+	}
 
 	SDL_Rect FullScreenPos = { 375, player->position.y - 105, 25, 25 };
 	FullScreenScene = (GuiCheckBox*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 11, "FullScreen", FullScreenPos, this, SliderTex);
+	if (app->sceneMenu->isFullScreenCheck)
+	{
+		FullScreenScene->checked = true;
+	}
+	else {
+		FullScreenScene->checked = false;
+	}
 }
 
 void Scene::DeleteButtons()

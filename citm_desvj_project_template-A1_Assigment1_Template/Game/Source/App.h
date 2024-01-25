@@ -100,6 +100,8 @@ public:
 	ModuleFadeToBlack* fade;
 	SceneMenu* sceneMenu;
 
+	bool isVSync = true;
+
 private:
 
 	int argc;

@@ -84,6 +84,16 @@ void Boss::InitAnims()
 	AttackingRight.speed = parameters.child("AttackingRight").attribute("animspeed").as_float();
 	AttackingRight.loop = parameters.child("AttackingRight").attribute("loop").as_bool();
 
+	//HP
+	for (pugi::xml_node node = parameters.child("HP").child("pushback"); node; node = node.next_sibling("pushback")) {
+		HP.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	HP.speed = parameters.child("HP").attribute("animspeed").as_float();
+	HP.loop = parameters.child("HP").attribute("loop").as_bool();
+
 }
 
 bool Boss::Awake()
@@ -108,16 +118,12 @@ bool Boss::Start()
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 	pathTest = app->tex->Load("Assets/Textures/testPathTile.png");
+	lifeBoss = app->tex->Load("Assets/Textures/boss hp.png");
 
 	bound.x = position.x - 300;
 	bound.y = position.y - 60;
 	bound.w = 500;
 	bound.h = 120;
-
-	lifeBoss.x = position.x - 20;
-	lifeBoss.y = position.y - 50;
-	lifeBoss.w = 100;
-	lifeBoss.h = 10;
 
 	int enemy[8] = {
 		-32, 0,
@@ -162,6 +168,8 @@ bool Boss::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		debug = !debug;
 
+	int scale = app->win->GetScale();
+
 	// Get Positions for Path
 	iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
 	iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
@@ -192,17 +200,24 @@ bool Boss::Update(float dt)
 
 				if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
 					pbody->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
-					isFacingLeft = false;
-					currentAnim = &WalkingRight;
-					isAttacking = false;
-					attackTimer = 0;
+					if (!isAttacking)
+					{
+						isFacingLeft = false;
+						currentAnim = &WalkingRight;
+					}
+					
+					
 				}
 				else if (abs(enemyPos.x - playerPos.x) > 3) {
 					pbody->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
-					isFacingLeft = true;
-					currentAnim = &Walking;
-					isAttacking = false;
-					attackTimer = 0;
+					if (!isAttacking)
+					{
+						isFacingLeft = true;
+						currentAnim = &Walking;
+					}
+					
+					
+					
 				}
 				else if (abs(enemyPos.x - playerPos.x) < 3) {
 					pbody->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
@@ -227,12 +242,15 @@ bool Boss::Update(float dt)
 			if (isFacingLeft) {
 				currentAnim = &Walking;
 				isAttacking = false;
-				attackTimer = 0;
+				Attacking.SetCurrentFrame(0);
+				AttackingRight.SetCurrentFrame(0);
+				
 			}
 			else if (!isFacingLeft) {
 				currentAnim = &WalkingRight;
 				isAttacking = false;
-				attackTimer = 0;
+				Attacking.SetCurrentFrame(0);
+				AttackingRight.SetCurrentFrame(0);
 			}
 		}
 
@@ -242,6 +260,12 @@ bool Boss::Update(float dt)
 			pbody->body->SetLinearVelocity(b2Vec2(0, jumpForce));
 			jumpForce += 0.1f;
 			startKetchup++;
+
+			if (startKetchup > 180)
+			{
+				isKetchup = true;
+				startKetchup = 0;
+			}
 
 			if (isKetchup)
 			{
@@ -260,6 +284,7 @@ bool Boss::Update(float dt)
 				jumpForce = -5.8f;
 				isKetchup = false;
 				startKetchup = 0;
+				ketchupTimer = 0;
 				
 			}
 		}
@@ -269,31 +294,62 @@ bool Boss::Update(float dt)
 		}
 
 		// Draw Debug Bounds area of effect
-		bound.x = position.x - 130;
+		bound.x = position.x - 75;
 		bound.y = position.y - 60;
-		bound.w = 400;
+		bound.w = 300;
 		bound.h = 350;
 
 		if (app->physics->debug) app->render->DrawRectangle(bound, 0, 255, 0, 80);
 
 
-		// Draw Life of the Boss
-		lifeBoss.x = position.x - 20;
-		lifeBoss.y = position.y - 50;
-		lifeBoss.w = life;
-		lifeBoss.h = 10;
+		// Life of the Boss
+		currentHp = &HP;
+		currentHp->SetCurrentFrame(lifeCurrentframe);
 
-		app->render->DrawRectangle(lifeBoss, 255, 0, 0, 255);
+		if (!canDmg)
+		{
+			dmgTimer++;
+		}
+		
+		if (dmgTimer >= 25) {
+			canDmg = true;
+			dmgTimer = 0;
+		}
+
+		// Boss Death
+		if (life <= 0)
+		{
+			if (isFacingLeft)
+			{
+				currentAnim = &Death;
+				
+			}
+			else
+			{
+				currentAnim = &DeathRight;
+			}
+
+			pbody->body->SetLinearVelocity(b2Vec2(0, -GRAVITY_Y));
+			deathTimer++;
+
+			if (deathTimer >= 110)
+			{
+				isDead = true;
+			}
+		}
+
+
+		app->render->DrawTexture(lifeBoss, app->scene->player->position.x + 100, app->scene->player->position.y + 50, &currentHp->GetCurrentFrame());
 
 		// Draw Boss
 		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 60);
 		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 35);
 
 		currentAnim->Update();
-		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
+		
 	}
 
-	
+	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 
 
 	return true;
@@ -315,7 +371,14 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB)
 		{
 			isKetchup = true;
 		}
-		
+		break;
+	case ColliderType::ATTACK:
+		if (canDmg)
+		{
+			life--;
+			lifeCurrentframe++;
+			canDmg = false;
+		}
 		break;
 	}
 }

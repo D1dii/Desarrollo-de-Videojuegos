@@ -636,9 +636,9 @@ bool Player::Update(float dt)
 		options = !options;
 		app->sceneMenu->isSettingsActive = !app->sceneMenu->isSettingsActive;
 		if (options) {
-			app->guiManager->MoveButtons(305, position.y - 65, 9);
-			app->guiManager->MoveButtons(310, position.y - 105, 10);
-			app->guiManager->MoveButtons(375, position.y - 105, 11);
+			app->guiManager->MoveButtons(position.x + 105, position.y - 65, 9);
+			app->guiManager->MoveButtons(position.x + 110, position.y - 105, 10);
+			app->guiManager->MoveButtons(position.x + 175, position.y - 105, 11);
 		}
 		else if (!options)
 		{
@@ -654,7 +654,7 @@ bool Player::Update(float dt)
 	else if (isScene && !app->map->isMap1) 
 	{
 		app->render->camera.y = (-position.y + 230) * scale;
-		app->render->camera.x = (-position.x + 50) * scale;
+		app->render->camera.x = (-position.x + 200) * scale;
 	}
 	
 

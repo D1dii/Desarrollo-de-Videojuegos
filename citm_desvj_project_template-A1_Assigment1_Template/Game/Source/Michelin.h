@@ -39,13 +39,13 @@ public:
 	bool pos2 = false;
 	bool pos3 = false;
 
-
+	PhysBody* pbody;
 
 private:
 
 	SDL_Texture* texture;
 	const char* texturePath;
-	PhysBody* pbody;
+	
 };
 
 #endif // __ITEM_H__

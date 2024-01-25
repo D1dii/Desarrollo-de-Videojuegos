@@ -46,10 +46,12 @@ bool Pozo::Start()
 
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
+	width = parameters.attribute("width").as_int();
+	height = parameters.attribute("height").as_int();
 
 	InitAnims();
 
-	pbody = app->physics->CreateRectangleSensor(275, 2250, 350, 30, bodyType::DYNAMIC);
+	pbody = app->physics->CreateRectangleSensor(position.x, position.y, width, height, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::POZO;
 	pbody->body->SetGravityScale(0);

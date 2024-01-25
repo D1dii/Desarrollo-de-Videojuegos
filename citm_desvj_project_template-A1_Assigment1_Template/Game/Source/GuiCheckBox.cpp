@@ -75,13 +75,13 @@ bool GuiCheckBox::Update(float dt)
         {
             if (checked) {
                 app->render->DrawRectangle(bounds, 0, 255, 0, 128, true, true);
-
+                
             }
 
 
             if (!checked) {
                 app->render->DrawRectangle(bounds, 0, 255, 0, 128, false, true);
-
+                
             }
         }
         
@@ -113,6 +113,20 @@ bool GuiCheckBox::Update(float dt)
             checked = false;
         else if (!checked)
             checked = true;
+
+        if (id == 8 || id == 11)
+        {
+            if (checked)
+            {
+                SDL_SetWindowFullscreen(app->win->window, SDL_WINDOW_FULLSCREEN);
+                app->sceneMenu->isFullScreenCheck = true;
+            }
+            else if (!checked)
+            {
+                SDL_SetWindowFullscreen(app->win->window, 0);
+                app->sceneMenu->isFullScreenCheck = false;
+            }
+        }
 
       
         NotifyObserver();

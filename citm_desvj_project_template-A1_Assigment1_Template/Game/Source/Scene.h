@@ -95,6 +95,7 @@ public:
 	FlyEnemy* flyenemy;
 	FlyEnemy* flyenemy2;
 	Pozo* pozo;
+	Pozo* pozo2;
 	Item* item;
 	Item* item2;
 	Item* item3;

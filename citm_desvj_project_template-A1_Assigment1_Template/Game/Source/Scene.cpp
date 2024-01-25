@@ -126,6 +126,11 @@ bool Scene::Awake(pugi::xml_node& config)
 			boss = (Boss*)app->entityManager->CreateEntity(EntityType::BOSS);
 			boss->parameters = config.child("boss");
 		}
+
+		if (config.child("Pozo2")) {
+			pozo2 = (Pozo*)app->entityManager->CreateEntity(EntityType::POZO);
+			pozo2->parameters = config.child("Pozo2");
+		}
 	}
 
 	
@@ -425,19 +430,87 @@ bool Scene::LoadState(pugi::xml_node node)
 		flyenemy2->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionFlyEnemy2").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionFlyEnemy2").attribute("y").as_int()) }, 0);
 	}
 	
-	if (!node.child("positionBoss").attribute("isDead").as_bool()) {
+	if (app->map->isMap1 == false)
+	{
+		if (!node.child("positionBoss").attribute("isDead").as_bool()) {
 
-		boss->pendingDelete = true;
-		boss = (Boss*)app->entityManager->CreateEntity(EntityType::BOSS);
-		boss->parameters = sceneParameter.child("boss");
-		boss->Awake();
-		boss->Start();
-		boss->position.x = node.child("positionBoss").attribute("x").as_int();
-		boss->position.y = node.child("positionBoss").attribute("y").as_int();
-		boss->isDead = node.child("positionBoss").attribute("isDead").as_bool();
-		boss->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionBoss").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionBoss").attribute("y").as_int()) }, 0);
+			boss->pendingDelete = true;
+			boss = (Boss*)app->entityManager->CreateEntity(EntityType::BOSS);
+			boss->parameters = sceneParameter.child("boss");
+			boss->Awake();
+			boss->Start();
+			boss->position.x = node.child("positionBoss").attribute("x").as_int();
+			boss->position.y = node.child("positionBoss").attribute("y").as_int();
+			boss->isDead = node.child("positionBoss").attribute("isDead").as_bool();
+			boss->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("positionBoss").attribute("x").as_int()), PIXEL_TO_METERS(node.child("positionBoss").attribute("y").as_int()) }, 0);
+		}
 	}
 	
+		star->pendingDelete = true;
+		star = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
+		star->parameters = sceneParameter.child("michelin");
+		star->Awake();
+		star->Start();
+		star->position.x = node.child("michelin1").attribute("x").as_int();
+		star->position.y = node.child("michelin1").attribute("y").as_int();
+		star->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("michelin1").attribute("x").as_int()), PIXEL_TO_METERS(node.child("michelin1").attribute("y").as_int()) }, 0);
+	
+		star2->pendingDelete = true;
+		star2 = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
+		star2->parameters = sceneParameter.child("michelin2");
+		star2->Awake();
+		star2->Start();
+		star2->position.x = node.child("michelin2").attribute("x").as_int();
+		star2->position.y = node.child("michelin2").attribute("y").as_int();
+		star2->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("michelin2").attribute("x").as_int()), PIXEL_TO_METERS(node.child("michelin2").attribute("y").as_int()) }, 0);
+
+		star3->pendingDelete = true;
+		star3 = (Michelin*)app->entityManager->CreateEntity(EntityType::MICHELIN);
+		star3->parameters = sceneParameter.child("michelin3");
+		star3->Awake();
+		star3->Start();
+		star3->position.x = node.child("michelin3").attribute("x").as_int();
+		star3->position.y = node.child("michelin3").attribute("y").as_int();
+		star3->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("michelin3").attribute("x").as_int()), PIXEL_TO_METERS(node.child("michelin3").attribute("y").as_int()) }, 0);
+
+		item->pendingDelete = true;
+		item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+		item->parameters = sceneParameter.child("item");
+		item->Awake();
+		item->Start();
+		item->position.x = node.child("item1").attribute("x").as_int();
+		item->position.y = node.child("item1").attribute("y").as_int();
+		item->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("item1").attribute("x").as_int()), PIXEL_TO_METERS(node.child("item1").attribute("y").as_int()) }, 0);
+
+		item2->pendingDelete = true;
+		item2 = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+		item2->parameters = sceneParameter.child("item2");
+		item2->Awake();
+		item2->Start();
+		item2->position.x = node.child("item2").attribute("x").as_int();
+		item2->position.y = node.child("item2").attribute("y").as_int();
+		item2->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("item2").attribute("x").as_int()), PIXEL_TO_METERS(node.child("item2").attribute("y").as_int()) }, 0);
+
+		item3->pendingDelete = true;
+		item3 = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+		item3->parameters = sceneParameter.child("item3");
+		item3->Awake();
+		item3->Start();
+		item3->position.x = node.child("item3").attribute("x").as_int();
+		item3->position.y = node.child("item3").attribute("y").as_int();
+		item3->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("item3").attribute("x").as_int()), PIXEL_TO_METERS(node.child("item3").attribute("y").as_int()) }, 0);
+
+		item4->pendingDelete = true;
+		item4 = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+		item4->parameters = sceneParameter.child("item4");
+		item4->Awake();
+		item4->Start();
+		item4->position.x = node.child("item4").attribute("x").as_int();
+		item4->position.y = node.child("item4").attribute("y").as_int();
+		item4->pbody->body->SetTransform({ PIXEL_TO_METERS(node.child("item4").attribute("x").as_int()), PIXEL_TO_METERS(node.child("item4").attribute("y").as_int()) }, 0);
+
+
+
 
 	return true;
 }
@@ -488,10 +561,43 @@ bool Scene::SaveState(pugi::xml_node node)
 	flyEnemy2Node.append_attribute("y").set_value(flyenemy2->position.y);
 	flyEnemy2Node.append_attribute("isDead").set_value(flyenemy2->isDead);
 
-	pugi::xml_node bossNode = node.append_child("positionBoss");
-	bossNode.append_attribute("x").set_value(boss->position.x);
-	bossNode.append_attribute("y").set_value(boss->position.y);
-	bossNode.append_attribute("isDead").set_value(boss->isDead);
+	if (app->map->isMap1 == false)
+	{
+		pugi::xml_node bossNode = node.append_child("positionBoss");
+		bossNode.append_attribute("x").set_value(boss->position.x);
+		bossNode.append_attribute("y").set_value(boss->position.y);
+		bossNode.append_attribute("isDead").set_value(boss->isDead);
+	}
+
+	pugi::xml_node michelin1Node = node.append_child("michelin1");
+	michelin1Node.append_attribute("x").set_value(star->position.x);
+	michelin1Node.append_attribute("y").set_value(star->position.y);
+
+	pugi::xml_node michelin2Node = node.append_child("michelin2");
+	michelin2Node.append_attribute("x").set_value(star2->position.x);
+	michelin2Node.append_attribute("y").set_value(star2->position.y);
+
+	pugi::xml_node michelin3Node = node.append_child("michelin3");
+	michelin3Node.append_attribute("x").set_value(star3->position.x);
+	michelin3Node.append_attribute("y").set_value(star3->position.y);
+
+	pugi::xml_node item1Node = node.append_child("item1");
+	item1Node.append_attribute("x").set_value(item->position.x);
+	item1Node.append_attribute("y").set_value(item->position.y);
+
+	pugi::xml_node item2Node = node.append_child("item2");
+	item2Node.append_attribute("x").set_value(item2->position.x);
+	item2Node.append_attribute("y").set_value(item2->position.y);
+
+	pugi::xml_node item3Node = node.append_child("item3");
+	item3Node.append_attribute("x").set_value(item3->position.x);
+	item3Node.append_attribute("y").set_value(item3->position.y);
+
+	pugi::xml_node item4Node = node.append_child("item4");
+	item4Node.append_attribute("x").set_value(item4->position.x);
+	item4Node.append_attribute("y").set_value(item4->position.y);
+
+	
 
 
 	return true;

@@ -10,6 +10,8 @@
 #include "GuiManager.h"
 #include "ModuleFadeToBlack.h"
 #include "SceneMenu.h"
+#include "ScreenInitial.h"
+#include "ScreenEnd.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -34,11 +36,14 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new Audio(true);
 	physics = new Physics(false);
 	scene = new Scene(false);
-	sceneMenu = new SceneMenu(true);
+	sceneMenu = new SceneMenu(false);
+	initial = new ScreenInitial(true);
+	end = new ScreenEnd(false);
 	map = new Map(false);
 	entityManager = new EntityManager(false);
 	guiManager = new GuiManager(true);
 	fade = new ModuleFadeToBlack(true);
+	
 
 
 	// Ordered for awake / Start / Update
@@ -51,6 +56,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(scene);
 	AddModule(sceneMenu);
+	AddModule(initial);
+	AddModule(end);
 	AddModule(entityManager);
 	AddModule(guiManager);
 	AddModule(fade);

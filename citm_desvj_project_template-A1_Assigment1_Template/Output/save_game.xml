@@ -13,8 +13,17 @@
 		<positionFlyEnemy x="245" y="2017" isDead="false" />
 		<positionFlyEnemy2 x="218" y="957" isDead="false" />
 		<positionBoss x="2150" y="170" isDead="false" />
+		<michelin1 x="256" y="2048" />
+		<michelin2 x="400" y="1408" />
+		<michelin3 x="223" y="223" />
+		<item1 x="432" y="2116" />
+		<item2 x="336" y="1795" />
+		<item3 x="32" y="1408" />
+		<item4 x="272" y="544" />
 	</scene>
 	<sceneMenu />
+	<sceneInitial />
+	<sceneEnd />
 	<entitymanager />
 	<guiManager />
 	<:anonymous />

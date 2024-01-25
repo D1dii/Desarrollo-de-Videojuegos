@@ -39,6 +39,8 @@ public:
 	int counterPath = 0;
 	int timer = 0;
 
+	int width;
+	int height;
 
 	SDL_Rect bound;
 

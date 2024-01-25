@@ -1,5 +1,5 @@
-#ifndef __SCENEMENU_H__
-#define __SCENEMENU_H__
+#ifndef __SCREENEND_H__
+#define __SCREENEND_H__
 
 #include "Module.h"
 #include "Player.h"
@@ -21,14 +21,14 @@
 
 struct SDL_Texture;
 
-class SceneMenu : public Module
+class ScreenEnd : public Module
 {
 public:
 
-	SceneMenu(bool startEnabled);
+	ScreenEnd(bool startEnabled);
 
 	// Destructor
-	virtual ~SceneMenu();
+	virtual ~ScreenEnd();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& conf);
@@ -51,60 +51,26 @@ public:
 	// Handles multiple Gui Event methods
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
-	
+
 
 private:
 	SDL_Texture* img;
-	
-
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
-	Player* player;
-	GuiControlButton* NewGame;
-	GuiControlButton* Continue;
-	GuiControlButton* Settings;
-	GuiControlButton* Credits;
-	GuiControlButton* Exit;
-	GuiSlider* Slider;
-	
+
 public:
 
-	GuiCheckBox* VSync;
-	GuiCheckBox* FullScreen;
-
-	bool isVSyncCheck = true;
-	bool isFullScreenCheck = false;
+	
 
 	pugi::xml_node sceneParameter;
 	bool ret = true;
 
 	SString audioPath;
 
-	SDL_Texture* NewGameButton = nullptr;
-	SDL_Texture* ContinueButton = nullptr;
-	SDL_Texture* SettingsButton = nullptr;
-	SDL_Texture* CreditsButton = nullptr;
-	SDL_Texture* ExitButton = nullptr;
-	SDL_Texture* Cartel = nullptr;
-	SDL_Texture* CreditsCartel = nullptr;
-	SDL_Texture* SliderTex = nullptr;
-	SDL_Texture* ButtonSlider = nullptr;
-	SDL_Texture* Background = nullptr;
-
-	bool isSettingsActive = false;
-	bool isCreditsActive = false;
-	int positionCartel = 550;
-	int positionCredits = 475;
-	bool showOptions = false;
-
-	int SettingsTimer = 0;
-	int SettingsTimer2 = 0;
-	int CreditsTimer = 0;
-	int CreditsTimer2 = 0;
-
-
+	
 
 };
 
-#endif // __SCENEMENU_H__
+#endif // __SCREENEND_H__
+

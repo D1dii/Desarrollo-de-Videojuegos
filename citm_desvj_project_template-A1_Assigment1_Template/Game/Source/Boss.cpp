@@ -11,6 +11,7 @@
 #include "Window.h"
 #include "Pathfinding.h"
 #include "Map.h"
+#include "ScreenEnd.h"
 
 Boss::Boss() : Entity(EntityType::BOSS)
 {
@@ -138,14 +139,7 @@ bool Boss::Start()
 	pbody->listener = this;
 	pbody->ctype = ColliderType::ENEMY;
 
-	int ketchup[8] = {
-		-32, 0,
-		128, 0,
-		128, 16,
-		-32, 16,
-	};
-
-	shoot = app->physics->CreateRectangleSensor(position.x + 8, position.y + 32, 160, 16,  bodyType::DYNAMIC);
+	shoot = app->physics->CreateRectangleSensor(position.x + 8, position.y + 32, 120, 16,  bodyType::DYNAMIC);
 	shoot->listener = this;
 	if (app->scene->isSaved) {
 		shoot->ctype = ColliderType::ENEMY_ATTACK_SAVED;
@@ -316,6 +310,8 @@ bool Boss::Update(float dt)
 			dmgTimer = 0;
 		}
 
+		app->render->DrawTexture(lifeBoss, app->scene->player->position.x - 80, app->scene->player->position.y + 50, &currentHp->GetCurrentFrame());
+
 		// Boss Death
 		if (life <= 0)
 		{
@@ -332,14 +328,19 @@ bool Boss::Update(float dt)
 			pbody->body->SetLinearVelocity(b2Vec2(0, -GRAVITY_Y));
 			deathTimer++;
 
-			if (deathTimer >= 110)
+			if (deathTimer >= 130)
 			{
 				isDead = true;
+				app->scene->Disable();
+				app->map->Disable();
+				app->physics->Disable();
+				app->entityManager->Disable();
+				app->end->Enable();
 			}
 		}
 
 
-		app->render->DrawTexture(lifeBoss, app->scene->player->position.x + 100, app->scene->player->position.y + 50, &currentHp->GetCurrentFrame());
+		
 
 		// Draw Boss
 		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 60);

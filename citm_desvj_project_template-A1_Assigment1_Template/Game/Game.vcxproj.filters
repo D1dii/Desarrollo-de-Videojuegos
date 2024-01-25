@@ -34,6 +34,8 @@
     <ClCompile Include="Source\GuiCheckBox.cpp" />
     <ClCompile Include="Source\Michelin.cpp" />
     <ClCompile Include="Source\Boss.cpp" />
+    <ClCompile Include="Source\ScreenEnd.cpp" />
+    <ClCompile Include="Source\ScreenInitial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -98,6 +100,8 @@
     <ClInclude Include="Source\GuiCheckBox.h" />
     <ClInclude Include="Source\Michelin.h" />
     <ClInclude Include="Source\Boss.h" />
+    <ClInclude Include="Source\ScreenEnd.h" />
+    <ClInclude Include="Source\ScreenInitial.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

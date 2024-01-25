@@ -35,13 +35,13 @@ public:
 
 	Animation Idle;
 
-	
+	PhysBody* pbody;
 
 private:
 
 	SDL_Texture* texture;
 	const char* texturePath;
-	PhysBody* pbody;
+	
 };
 
 #endif // __ITEM_H__

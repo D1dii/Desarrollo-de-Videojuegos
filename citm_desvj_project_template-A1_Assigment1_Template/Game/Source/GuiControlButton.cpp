@@ -164,9 +164,39 @@ bool GuiControlButton::Update(float dt)
 			{
 				app->scene->boss->Start();
 			}
-			else {
+			else if (!app->map->isMap1) {
 				app->scene->boss->isDead = true;
 			}
+			if (app->map->isMap1)
+			{
+				app->scene->star->Start();
+			}
+			if (app->map->isMap1)
+			{
+				app->scene->star2->Start();
+			}
+			if (app->map->isMap1)
+			{
+				app->scene->star3->Start();
+			}
+			if (app->map->isMap1)
+			{
+				app->scene->item->Start();
+			}
+			if (app->map->isMap1)
+			{
+				app->scene->item2->Start();
+			}
+			if (app->map->isMap1)
+			{
+				app->scene->item3->Start();
+			}
+			if (app->map->isMap1)
+			{
+				app->scene->item4->Start();
+			}
+			
+
 			app->scene->pozo->Start();
 			app->LoadRequest();
 			app->scene->player->lifes = 0;
@@ -176,12 +206,35 @@ bool GuiControlButton::Update(float dt)
 		}
 		else if (buttonID == 3)
 		{
-			app->sceneMenu->isSettingsActive = !app->sceneMenu->isSettingsActive;
-			app->scene->player->options = !app->scene->player->options;
+			if (app->sceneMenu->isSettingsActive == false && app->sceneMenu->SettingsTimer2 > 10)
+			{
+				app->sceneMenu->isSettingsActive = true;
+				app->scene->player->options = true;
+
+				app->sceneMenu->SettingsTimer2 = 0;
+			}
+			if (app->sceneMenu->isSettingsActive == true && app->sceneMenu->SettingsTimer > 10) {
+				app->sceneMenu->isSettingsActive = false;
+				app->scene->player->options = false;
+				
+				app->sceneMenu->SettingsTimer = 0;
+			}
+			
+			
 		}
 		else if (buttonID == 4)
 		{
-			app->sceneMenu->isCreditsActive = !app->sceneMenu->isCreditsActive;
+		if (app->sceneMenu->isCreditsActive == false && app->sceneMenu->CreditsTimer2 > 10)
+		{
+			app->sceneMenu->isCreditsActive = true;
+
+			app->sceneMenu->CreditsTimer2 = 0;
+		}
+		if (app->sceneMenu->isCreditsActive == true && app->sceneMenu->CreditsTimer > 10) {
+			app->sceneMenu->isCreditsActive = false;
+
+			app->sceneMenu->CreditsTimer = 0;
+		}
 		}
 		else if (buttonID == 5)
 		{

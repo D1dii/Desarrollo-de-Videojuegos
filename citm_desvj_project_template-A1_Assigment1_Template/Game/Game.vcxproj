@@ -119,6 +119,8 @@
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\SceneMenu.cpp" />
+    <ClCompile Include="Source\ScreenEnd.cpp" />
+    <ClCompile Include="Source\ScreenInitial.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
     <ClCompile Include="Source\Window.cpp" />
@@ -151,6 +153,8 @@
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Render.h" />
     <ClInclude Include="Source\SceneMenu.h" />
+    <ClInclude Include="Source\ScreenEnd.h" />
+    <ClInclude Include="Source\ScreenInitial.h" />
     <ClInclude Include="Source\Textures.h" />
     <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\Window.h" />

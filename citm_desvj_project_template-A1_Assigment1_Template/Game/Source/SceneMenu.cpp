@@ -131,6 +131,25 @@ bool SceneMenu::Update(float dt)
 		positionCredits += 2;
 	}
 
+	if (isSettingsActive)
+	{
+		SettingsTimer++;
+	}
+	else
+	{
+		SettingsTimer2++;
+	}
+	
+	if (isCreditsActive)
+	{
+		CreditsTimer++;
+	}
+	else
+	{
+		CreditsTimer2++;
+	}
+	
+
 	app->render->DrawTexture(Background, 0, -600);
 
 	app->render->DrawTexture(Cartel, positionCartel, -550);

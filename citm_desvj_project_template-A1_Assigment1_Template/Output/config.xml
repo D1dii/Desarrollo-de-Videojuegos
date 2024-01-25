@@ -102,7 +102,7 @@
 				<pushback x="160" y="0" width="32" height="32"/>
 			</Idle>
 		</item4>
-		<player x="90" y="200" texturepath="Assets/Textures/idle.png">
+		<player x="90" y="2100" texturepath="Assets/Textures/idle.png">
 			<jumpAudio path="Assets/Audio/Fx/jumpAudio.wav"/>
 			<Idle animspeed="0.2f" loop="true">
 				<pushback x="0" y="0" width="30" height="30"/>
@@ -687,9 +687,10 @@
 				</HP>
 			
 		</boss>
-		<Pozo x="224" y="960">
-			
+		<Pozo x="275" y="2250" width="350" height="30">
 		</Pozo>
+		<Pozo2 x="10" y="1016" width="2500" height="30">
+		</Pozo2>
 		
 
 	</scene>

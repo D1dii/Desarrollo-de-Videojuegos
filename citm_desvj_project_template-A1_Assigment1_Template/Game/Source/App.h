@@ -22,6 +22,8 @@ class Physics;
 class GuiManager;
 class ModuleFadeToBlack;
 class SceneMenu;
+class ScreenInitial;
+class ScreenEnd;
 
 class App
 {
@@ -99,6 +101,9 @@ public:
 	GuiManager* guiManager;
 	ModuleFadeToBlack* fade;
 	SceneMenu* sceneMenu;
+	ScreenInitial* initial;
+	ScreenEnd* end;
+	
 
 	bool isVSync = true;
 

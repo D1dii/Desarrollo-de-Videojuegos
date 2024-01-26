@@ -614,6 +614,7 @@ bool Player::Update(float dt)
 			lifes = 3;
 			canDmg = true;
 			timerDeadAnim = 0;
+			isDying = false;
 		}
 	}
 

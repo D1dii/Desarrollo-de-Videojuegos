@@ -1,26 +1,36 @@
-# Desarrollo de Videojuegos
+# Videogame Development
 
 By Dídac García and Sergi Gantzer
  
 Let Him Cook!
 
 Description: You're in a tilter platformer. Control your power and jump through the obstacles to reach the top. Face your enemies and most importantly,
-don't fall!
-
-(Some final parts of the level cannot be passed without godmode because of a mechanic still pending to be implemented (go up ladders) we are sorry but we think
-the final product will be better with this!)
+don't fall! Start Cooking!
 
 # Controls:
 
 A: Move left
 D: Move right
 
+S: Attack
+
 Hold Spacebar: Charge Jump
 
 Release Spacebar: Jump
 
-(Note: Similar mechanic to other games like Jump King, where, the more you press the jump button, the further you'll jump. Use this mechanic to
-cover various distances and heights with your jump. Precision is key to avoid falling down.)
+T: Settings (Volume slider, first checkbox is V-Sync, second checkbox is Fullscreen)
+
+B: Back to main menu (cooking pun intended)
+
+W: Go up stairs (OnCollision isn't working as intended, you may need to try a few times)
+
+F5: Save checkpoint
+
+F6: Load last checkpoint
+
+(Note: Similar mechanic to other games like Jump King, where, the more you press the jump button, the further you'll jump. Note that the power
+is displayed in a power bar on top of the player's head. Use this mechanic to cover various distances and heights with your jump. 
+Precision is key to avoid falling down.)
 
 Debug options:
 
@@ -30,15 +40,9 @@ F2: Spawn at the debug checkpoint 1.
 
 F3: Spawn at the debug checkpoint 2.
 
-F4: Show the powerJump bar for reference.
-
-F5: Save game
-
-F6: Load game
-
 F9: Show colliders and pathfinding.
 
-F10: Godmode (move with WASD freely through the map).
+F10: Godmode (move with WASD freely through the map and become invincible).
 
 F11: Change between 30/60 FPS.
 

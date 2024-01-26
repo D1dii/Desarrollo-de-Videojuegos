@@ -104,7 +104,7 @@
 		</item4>
 		<player x="90" y="2180" texturepath="Assets/Textures/idle.png">
 			<jumpAudio path="Assets/Audio/Fx/jumpAudio.wav"/>
-			<itemFx path="Assets/Audio/Fx/HealthFX.wav"/>
+			<itemFx path="Assets/Audio/Fx/HealFX.wav"/>
 			<michelinFx path="Assets/Audio/Fx/starFX.wav"/>
 			<victoryFx path="Assets/Audio/Fx/victoryFX.wav"/>
 			<Idle animspeed="0.2f" loop="true">

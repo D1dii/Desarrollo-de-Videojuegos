@@ -11,7 +11,7 @@
 		<positionEnemy x="196" y="1857" isDead="false" />
 		<positionEnemy2 x="419" y="1569" isDead="false" />
 		<positionFlyEnemy x="245" y="2017" isDead="false" />
-		<positionFlyEnemy2 x="131" y="566" isDead="false" />
+		<positionFlyEnemy2 x="218" y="957" isDead="false" />
 		<positionBoss x="2150" y="170" isDead="false" />
 		<michelin1 x="256" y="2048" />
 		<michelin2 x="400" y="1408" />

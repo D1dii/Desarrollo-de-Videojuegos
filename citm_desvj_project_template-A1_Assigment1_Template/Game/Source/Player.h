@@ -103,6 +103,8 @@ public:
 	bool wonLevel = false;
 	int winAnimTimer = 0;
 
+	uint windowW, windowH;
+
 	SDL_Texture* texture = NULL;
 	SDL_Texture* hearts = NULL;
 	SDL_Texture* chargebar = NULL;
@@ -120,6 +122,9 @@ public:
 	SDL_Rect destinoRect;
 
 	uint jumpFx;
+	uint itemFx;
+	uint michelinFx;
+	uint victoryFx;
 
 	pugi::xml_node configNode;
 

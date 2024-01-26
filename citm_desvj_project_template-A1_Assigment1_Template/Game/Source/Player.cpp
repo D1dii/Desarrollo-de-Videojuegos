@@ -205,7 +205,8 @@ bool Player::Awake() {
 }
 
 bool Player::Start() {
-
+	timerDeadAnim = 0;
+	isDying = false;
 	if (app->scene->isSaved && app->map->isMap1) {
 		position.x = -300;
 		position.y = 2500;
@@ -278,201 +279,11 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
-	if (justFall == true)
-	{
-		fallTimer++;
-		if (isFacingLeft == false) {
-			currentAnim = &Fall;
-		}
-		else {
-			currentAnim = &FallLeft;
-		}
-	}
-	else if (justFall == false)
-	{
-		if (isFacingLeft != true) {
-			currentAnim = &Idle;
-		}
-		else {
-			currentAnim = &IdleLeft;
-		}
-	}
-	
-	if (fallTimer >= 50) {
-		justFall = false;
-	}
-	
-	b2Vec2 vel = b2Vec2(0, 0);
-	if (godMode == false) {
-		vel = b2Vec2(0, -GRAVITY_Y);
-	}
-	else {
-		vel = b2Vec2(0, 0);
-	}
-	
 	uint scale = app->win->GetScale();
-
-	
-	
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::POWER_JUMP && options == false) {
-		isCharging = true;
-		if (isFacingLeft != true) {
-			currentAnim = &ChargeJump;
-			chargebarcurrentanim = &ChargeBar;
-		}
-		else {
-			currentAnim = &ChargeJumpLeft;
-			chargebarcurrentanim = &ChargeBar;
-		}
-		if (power <= 0.6f) {
-			power += 0.0125f;
-			if (power < 0.2f) {
-				ChargeBar.SetCurrentFrame(0);
-			}
-			else if (power >= 0.2f && power < 0.4f) {
-				ChargeBar.SetCurrentFrame(1);
-			}
-			else  if (power >= 0.4f && power < 0.6f) {
-				ChargeBar.SetCurrentFrame(2);
-			}
-			else  if (power >= 0.6f) {
-				ChargeBar.SetCurrentFrame(3);
-			}
-			powerJump.w += 1;
-			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) isFacingLeft = false;
-			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) isFacingLeft = true;
-		}
-		
-	} else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && player != jumpState::POWER_JUMP && options == false) {
-		isCharging = false;
-		if (power < 0.2f) {
-			power = 0.1;
-		} else if (power >= 0.2f && power < 0.4f) {
-			power = 0.2f;
-		} else  if (power >= 0.4f && power < 0.6f) {
-			power = 0.4f;
-		} else  if (power >= 0.6f) {
-			power = 0.6f;
-		}
-		SDL_GetMouseState(&mouseX, &mouseY);
-		mouseX = mouseX;
-		mouseY = mouseY - app->render->camera.y;
-		savePos = position.x * scale;
-		savePosY = position.y * scale;
-
-		if (isFacingLeft == true) {
-			triX = 250;
-			triY = 400;
-		}
-		else {
-			triX = -250;
-			triY = 400;
-		}
-
-		powerJump.w = 0;
-		
-		app->audio->PlayFx(jumpFx);
-
-		player = jumpState::POWER_JUMP;
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
-		currentAnim = &RunLeft;
-		isFacingLeft = true;
-		if (godMode == false) {
-			vel = b2Vec2(-speedx * dt, -GRAVITY_Y);
-		}
-		else {
-			vel = b2Vec2(-speedx * dt, 0);
-		}
-			
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
-		isFacingLeft = false;
-		currentAnim = &Run;
-		if (godMode == false) {
-			vel = b2Vec2(speedx * dt, -GRAVITY_Y);
-		}
-		else {
-			vel = b2Vec2(speedx * dt, 0);
-		}
-		
-		
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true && options == false) {
-		currentAnim = &Run;
-		vel = b2Vec2(0, -speedx * dt);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true && options == false) {
-		currentAnim = &Run;
-		vel = b2Vec2(0, speedx * dt);
-
-	}
-
-	
-	switch (player)
-	{
-	case Player::JUMPING:
-		
-		vel = b2Vec2(0, -speedy * dt * 2);
-		speedy -= jumpa;
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
-			isFacingLeft = true;
-			vel = b2Vec2(-speedx * dt, -speedy * dt * 2);
-		}
-
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
-			isFacingLeft = false;
-			vel = b2Vec2(speedx * dt, -speedy * dt * 2);
-		}
-
-		if (options == true) {
-			app->physics->world->SetGravity({ 0,0 });
-			
-		}
-		else if (options == false)
+	if (isDying == false) {
+		if (justFall == true)
 		{
-			app->physics->world->SetGravity({ 0,10 });
-
-		}
-		
-		break;
-	case Player::POWER_JUMP:
-
-		angle = atan2(triY, triX) * DEGTORAD;
-		jumpX = speedPower * cos(angle);
-		jumpY = -speedPower * sin(angle);
-		vel = b2Vec2(-triX, -triY);
-		triY += GRAVITY_Y;
-		vel.Normalize();
-		//deja esto por si tenemos que cambiar algo del salto
-		//vel.x *= dt*0.55;
-		//vel.y *= power;
-
-		if (power == 0.1f) {
-			vel.x *= power * 8;
-			vel.y *= dt * 0.1;
-		}
-		else if (power == 0.2f) {
-			vel.x *= power * 7;
-			vel.y *= dt * 0.15;
-		}
-		else  if (power == 0.4f) {
-			vel.x *= power * 6;
-			vel.y *= dt * 0.2;
-		}
-		else  if (power == 0.6f) {
-			vel.x *= power * 5;
-			vel.y *= dt * 0.2;
-		}
-		
-		break;
-	case Player::FLOOR:
-		speedy = 1.0f;
-		if (justFall == true) {
+			fallTimer++;
 			if (isFacingLeft == false) {
 				currentAnim = &Fall;
 			}
@@ -480,98 +291,292 @@ bool Player::Update(float dt)
 				currentAnim = &FallLeft;
 			}
 		}
-		break;
-	case Player::ESCALANDO:
-		currentAnim = &Stairs;
-		
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		else if (justFall == false)
 		{
-			vel = b2Vec2(0, -1);
-			
+			if (isFacingLeft != true) {
+				currentAnim = &Idle;
+			}
+			else {
+				currentAnim = &IdleLeft;
+			}
 		}
 
-		break;
-	}
-
-	// Attacking
-
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && options == false) {
-		isAttacking = true;
-	}
-
-	if (isAttacking && options == false) {
-		attTimer++;
-		if (isFacingLeft == false) {
-			sword->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 24)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
-			currentAnim = &attack;
+		if (fallTimer >= 50) {
+			justFall = false;
 		}
-		else if (isFacingLeft == true) {
-			sword->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
-			currentAnim = &attackLeft;
+
+		b2Vec2 vel = b2Vec2(0, 0);
+		if (godMode == false) {
+			vel = b2Vec2(0, -GRAVITY_Y);
 		}
-		
-		if (attTimer >= 70) {
-			attTimer = 0;
-			isAttacking = false;
+		else {
+			vel = b2Vec2(0, 0);
 		}
+
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT && player != jumpState::POWER_JUMP && options == false) {
+			isCharging = true;
+			if (isFacingLeft != true) {
+				currentAnim = &ChargeJump;
+				chargebarcurrentanim = &ChargeBar;
+			}
+			else {
+				currentAnim = &ChargeJumpLeft;
+				chargebarcurrentanim = &ChargeBar;
+			}
+			if (power <= 0.6f) {
+				power += 0.0125f;
+				if (power < 0.2f) {
+					ChargeBar.SetCurrentFrame(0);
+				}
+				else if (power >= 0.2f && power < 0.4f) {
+					ChargeBar.SetCurrentFrame(1);
+				}
+				else  if (power >= 0.4f && power < 0.6f) {
+					ChargeBar.SetCurrentFrame(2);
+				}
+				else  if (power >= 0.6f) {
+					ChargeBar.SetCurrentFrame(3);
+				}
+				powerJump.w += 1;
+				if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) isFacingLeft = false;
+				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) isFacingLeft = true;
+			}
+
+		}
+		else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP && player != jumpState::POWER_JUMP && options == false) {
+			isCharging = false;
+			if (power < 0.2f) {
+				power = 0.1;
+			}
+			else if (power >= 0.2f && power < 0.4f) {
+				power = 0.2f;
+			}
+			else  if (power >= 0.4f && power < 0.6f) {
+				power = 0.4f;
+			}
+			else  if (power >= 0.6f) {
+				power = 0.6f;
+			}
+			SDL_GetMouseState(&mouseX, &mouseY);
+			mouseX = mouseX;
+			mouseY = mouseY - app->render->camera.y;
+			savePos = position.x * scale;
+			savePosY = position.y * scale;
+
+			if (isFacingLeft == true) {
+				triX = 250;
+				triY = 400;
+			}
+			else {
+				triX = -250;
+				triY = 400;
+			}
+
+			powerJump.w = 0;
+
+			app->audio->PlayFx(jumpFx);
+
+			player = jumpState::POWER_JUMP;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
+			currentAnim = &RunLeft;
+			isFacingLeft = true;
+			if (godMode == false) {
+				vel = b2Vec2(-speedx * dt, -GRAVITY_Y);
+			}
+			else {
+				vel = b2Vec2(-speedx * dt, 0);
+			}
+
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
+			isFacingLeft = false;
+			currentAnim = &Run;
+			if (godMode == false) {
+				vel = b2Vec2(speedx * dt, -GRAVITY_Y);
+			}
+			else {
+				vel = b2Vec2(speedx * dt, 0);
+			}
+
+
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true && options == false) {
+			currentAnim = &Run;
+			vel = b2Vec2(0, -speedx * dt);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && godMode == true && options == false) {
+			currentAnim = &Run;
+			vel = b2Vec2(0, speedx * dt);
+
+		}
+
+
+		switch (player)
+		{
+		case Player::JUMPING:
+
+			vel = b2Vec2(0, -speedy * dt * 2);
+			speedy -= jumpa;
+			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
+				isFacingLeft = true;
+				vel = b2Vec2(-speedx * dt, -speedy * dt * 2);
+			}
+
+			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_IDLE && options == false) {
+				isFacingLeft = false;
+				vel = b2Vec2(speedx * dt, -speedy * dt * 2);
+			}
+
+			if (options == true) {
+				app->physics->world->SetGravity({ 0,0 });
+
+			}
+			else if (options == false)
+			{
+				app->physics->world->SetGravity({ 0,10 });
+
+			}
+
+			break;
+		case Player::POWER_JUMP:
+
+			angle = atan2(triY, triX) * DEGTORAD;
+			jumpX = speedPower * cos(angle);
+			jumpY = -speedPower * sin(angle);
+			vel = b2Vec2(-triX, -triY);
+			triY += GRAVITY_Y;
+			vel.Normalize();
+			//deja esto por si tenemos que cambiar algo del salto
+			//vel.x *= dt*0.55;
+			//vel.y *= power;
+
+			if (power == 0.1f) {
+				vel.x *= power * 8;
+				vel.y *= dt * 0.1;
+			}
+			else if (power == 0.2f) {
+				vel.x *= power * 7;
+				vel.y *= dt * 0.15;
+			}
+			else  if (power == 0.4f) {
+				vel.x *= power * 6;
+				vel.y *= dt * 0.2;
+			}
+			else  if (power == 0.6f) {
+				vel.x *= power * 5;
+				vel.y *= dt * 0.2;
+			}
+
+			break;
+		case Player::FLOOR:
+			speedy = 1.0f;
+			if (justFall == true) {
+				if (isFacingLeft == false) {
+					currentAnim = &Fall;
+				}
+				else {
+					currentAnim = &FallLeft;
+				}
+			}
+			break;
+		case Player::ESCALANDO:
+			currentAnim = &Stairs;
+
+			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			{
+				vel = b2Vec2(0, -1);
+
+			}
+
+			break;
+		}
+
+		// Attacking
+
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && options == false) {
+			isAttacking = true;
+		}
+
+		if (isAttacking && options == false) {
+			attTimer++;
+			if (isFacingLeft == false) {
+				sword->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 24)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
+				currentAnim = &attack;
+			}
+			else if (isFacingLeft == true) {
+				sword->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x)), PIXEL_TO_METERS((float32)(position.y + 15)) }, 0);
+				currentAnim = &attackLeft;
+			}
+
+			if (attTimer >= 70) {
+				attTimer = 0;
+				isAttacking = false;
+			}
+		}
+		else {
+			sword->body->SetTransform({ PIXEL_TO_METERS((float32)(0)), PIXEL_TO_METERS((float32)(0)) }, 0);
+		}
+
+		//Set the velocity of the pbody of the player
+		pbody->body->SetLinearVelocity(vel);
+
+		//Update player position in pixels
+
+		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 5);
+		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 7);
+
+
+
+		// Debug options
+
+		// GodMode
+		if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN && options == false) {
+			godMode = !godMode;
+		}
+
+		// Respawn on the start
+		if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && options == false) {
+			position.x = 90;
+			position.y = 2172;
+			pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
+		}
+
+		// Spawn on debug checkpoints
+		if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && options == false) {
+			position.x = 416;
+			position.y = 1440;
+			pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && options == false) {
+			position.x = 32;
+			position.y = 1072;
+			pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
+		}
+
+		// Show Power Jump bar
+		if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && options == false) {
+			showBar = !showBar;
+
+
+		}
+
+
+		if (showBar == false) {
+			powerJump.h = 0;
+		}
+		else {
+			powerJump.h = 20;
+		}
+		powerJump.x = position.x;
+		powerJump.y = position.y - 30;
 	}
-	else {
-		sword->body->SetTransform({ PIXEL_TO_METERS((float32)(0)), PIXEL_TO_METERS((float32)(0)) }, 0);
-	}
 
-	//Set the velocity of the pbody of the player
-	pbody->body->SetLinearVelocity(vel);
-
-	//Update player position in pixels
-
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 5);
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 7);
-
-	
-
-	// Debug options
-
-	// GodMode
-	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN && options == false) {
-		godMode = !godMode;
-	}
-
-	// Respawn on the start
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && options == false) {
-		position.x = 90;
-		position.y = 2172;
-		pbody->body->SetTransform({PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y)}, 0);
-	}
-
-	// Spawn on debug checkpoints
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && options == false) {
-		position.x = 416;
-		position.y = 1440;
-		pbody->body->SetTransform({PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && options == false) {
-		position.x = 32;
-		position.y = 1072;
-		pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
-	}
-
-	// Show Power Jump bar
-	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && options == false) {
-		showBar = !showBar;
-		
-		
-	}
-
-
-	if (showBar == false) {
-		powerJump.h = 0;
-	}
-	else {
-		powerJump.h = 20;
-	}
-	powerJump.x = position.x;
-	powerJump.y = position.y - 30;
 
 	lifeCurrentAnim = &lifeAnim;
 	currentAnim->Update();
@@ -597,10 +602,19 @@ bool Player::Update(float dt)
 	}
 
 	if (lifes == 0) {
-		app->LoadRequest();
-		lifeCurrentAnim->SetCurrentFrame(0);
-		lifeFrame = 0;
-		lifes = 3;
+		timerDeadAnim++;
+		isDying = true;
+		canDmg = false;
+		if (isFacingLeft == false) { currentAnim = &Death; }
+		if (isFacingLeft == true) { currentAnim = &DeathRight; }
+		if (timerDeadAnim >= 85) {
+			app->LoadRequest();
+			lifeCurrentAnim->SetCurrentFrame(0);
+			lifeFrame = 0;
+			lifes = 3;
+			canDmg = true;
+			timerDeadAnim = 0;
+		}
 	}
 
 	SDL_RendererFlip flip = (isFacingLeft) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
@@ -722,6 +736,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				}
 				break;
 			case ColliderType::ENEMY_ATTACK_SAVED:
+
 				if (canDmg && app->scene->isSaved == true && !godMode) {
 					lifes--;
 					canDmg = false;

@@ -47,6 +47,9 @@ public:
 
 	int counterPath = 0;
 	int timer = 0;
+
+	bool isDeadAnim;
+	int timerDeath;
 	
 
 	SDL_Rect bound;

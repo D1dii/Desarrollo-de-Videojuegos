@@ -63,6 +63,28 @@ void Enemy::InitAnims()
 	}
 	ShootingRight.speed = parameters.child("ShootingRight").attribute("animspeed").as_float();
 	ShootingRight.loop = parameters.child("ShootingRight").attribute("loop").as_bool();
+
+	//Death
+
+	for (pugi::xml_node node = parameters.child("Death").child("pushback"); node; node = node.next_sibling("pushback")) {
+		Death.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	Death.speed = parameters.child("Death").attribute("animspeed").as_float();
+	Death.loop = parameters.child("Death").attribute("loop").as_bool();
+
+	//DeathRight
+
+	for (pugi::xml_node node = parameters.child("DeathRight").child("pushback"); node; node = node.next_sibling("pushback")) {
+		DeathRight.PushBack({ node.attribute("x").as_int(),
+						node.attribute("y").as_int(),
+						node.attribute("width").as_int(),
+						node.attribute("height").as_int() });
+	}
+	DeathRight.speed = parameters.child("DeathRight").attribute("animspeed").as_float();
+	DeathRight.loop = parameters.child("DeathRight").attribute("loop").as_bool();
 }
 
 bool Enemy::Awake()
@@ -75,6 +97,8 @@ bool Enemy::Awake()
 
 bool Enemy::Start()
 {
+	isDeadAnim = false;
+	timerDeath = 0;
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 
@@ -132,111 +156,126 @@ bool Enemy::Update(float dt)
 	iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
 	iPoint playerPos = app->map->WorldToMap(app->scene->GetPLayerPosition().x, app->scene->GetPLayerPosition().y);
 
-	if (isDead == false && app->map->isMap1) {
-		if (app->scene->GetPLayerPosition().x >= bound.x
-			&& app->scene->GetPLayerPosition().x <= bound.x + bound.w
-			&& app->scene->GetPLayerPosition().y >= bound.y
-			&& app->scene->GetPLayerPosition().y <= bound.y + bound.h)
-		{
-			
-
-			app->map->pathfinding->CreatePath(enemyPos, playerPos);
-
-			const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
-
-			if (debug) {
-				for (uint i = 0; i < path->Count(); ++i)
-				{
-					iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-					app->render->DrawTexture(pathTest, pos.x, pos.y);
-				}
-			}
+	if (!isDeadAnim)
+	{
+		if (isDead == false && app->map->isMap1) {
+			if (app->scene->GetPLayerPosition().x >= bound.x
+				&& app->scene->GetPLayerPosition().x <= bound.x + bound.w
+				&& app->scene->GetPLayerPosition().y >= bound.y
+				&& app->scene->GetPLayerPosition().y <= bound.y + bound.h)
+			{
 
 
-			if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
+				app->map->pathfinding->CreatePath(enemyPos, playerPos);
 
-				if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
-					pbody->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
-					isFacingLeft = false;
-					currentAnim = &WalkingRight;
-					isShooting = false;
-				}
-				else if (abs(enemyPos.x - playerPos.x) > 3) {
-					pbody->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
-					isFacingLeft = true;
-					currentAnim = &Walking;
-					isShooting = false;
-				}
-				else if (abs(enemyPos.x - playerPos.x) < 3) {
-					pbody->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
-					pbody->body->SetLinearDamping(0);
+				const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
 
-					if (isFacingLeft) {
-						currentAnim = &Shooting;
+				if (debug) {
+					for (uint i = 0; i < path->Count(); ++i)
+					{
+						iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+						app->render->DrawTexture(pathTest, pos.x, pos.y);
 					}
-					else {
-						currentAnim = &ShootingRight;
-					}
-					
-					if(shootTimer >= 30) isShooting = true;
-					
-					if (shootTimer >= 60) {
-						shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
+				}
+
+
+				if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
+
+					if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
+						pbody->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+						isFacingLeft = false;
+						currentAnim = &WalkingRight;
 						isShooting = false;
-						shootTimer = 0;
 					}
-					shootTimer++;
+					else if (abs(enemyPos.x - playerPos.x) > 3) {
+						pbody->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
+						isFacingLeft = true;
+						currentAnim = &Walking;
+						isShooting = false;
+					}
+					else if (abs(enemyPos.x - playerPos.x) < 3) {
+						pbody->body->SetLinearVelocity(b2Vec2(0, 0.2 * dt));
+						pbody->body->SetLinearDamping(0);
+
+						if (isFacingLeft) {
+							currentAnim = &Shooting;
+						}
+						else {
+							currentAnim = &ShootingRight;
+						}
+
+						if (shootTimer >= 30) isShooting = true;
+
+						if (shootTimer >= 60) {
+							shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
+							isShooting = false;
+							shootTimer = 0;
+						}
+						shootTimer++;
+					}
 				}
 			}
-		}
-		else {
-			if (isFacingLeft) {
-				currentAnim = &Walking;
+			else {
+				if (isFacingLeft) {
+					currentAnim = &Walking;
+				}
+				else if (!isFacingLeft) {
+					currentAnim = &WalkingRight;
+				}
 			}
-			else if (!isFacingLeft) {
-				currentAnim = &WalkingRight;
+
+			position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 12);
+			position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 6);
+
+			if (isShooting == false) {
+				shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
 			}
-		}
+			else if (isShooting) {
 
-		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x - 12);
-		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y - 6);
+				if (isFacingLeft) {
+					shoot->body->SetLinearVelocity(b2Vec2(-1.5f, 0));
+				}
+				else if (isFacingLeft == false) {
+					shoot->body->SetLinearVelocity(b2Vec2(1.5f, 0));
+				}
 
-		if (isShooting == false) {
-			shoot->body->SetTransform({ PIXEL_TO_METERS((float32)(position.x + 15)), PIXEL_TO_METERS((float32)(position.y + 18)) }, 0);
-		}
-		else if (isShooting) {
+			}
+
+			bound.x = position.x - 120;
+			bound.y = position.y - 60;
+			bound.w = 240;
+			bound.h = 120;
+
+			if (app->physics->debug) {
+				app->render->DrawRectangle(bound, 0, 255, 0, 80);
+			}
+
 			
-			if (isFacingLeft) {
-				shoot->body->SetLinearVelocity(b2Vec2(-1.5f, 0));
-			}
-			else if (isFacingLeft == false) {
-				shoot->body->SetLinearVelocity(b2Vec2(1.5f, 0));
-			}
 			
 		}
 
-		bound.x = position.x - 120;
-		bound.y = position.y - 60;
-		bound.w = 240;
-		bound.h = 120;
 
-		if (app->physics->debug) {
-			app->render->DrawRectangle(bound, 0, 255, 0, 80);
+		if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
+			isFacingLeft = false;
+			currentAnim = &WalkingRight;
 		}
+		else if (abs(enemyPos.x - playerPos.x) > 3) {
+			isFacingLeft = true;
+			currentAnim = &Walking;
+		}
+	}
 
-		currentAnim->Update();
-		app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
+	if (isDeadAnim == true) {
+		timerDeath++;
+		if (isFacingLeft == true) { currentAnim = &Death; }
+		if (isFacingLeft != true) { currentAnim = &DeathRight; }
 	}
-	
-	
-	if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 3) {
-		isFacingLeft = false;
-		currentAnim = &WalkingRight;
+	if (timerDeath >= 55) {
+		pendingDelete = true;
 	}
-	else if (abs(enemyPos.x - playerPos.x) > 3) {
-		isFacingLeft = true;
-		currentAnim = &Walking;
-	}
+
+	currentAnim->Update();
+	app->render->DrawTexture(texture, position.x, position.y, &currentAnim->GetCurrentFrame());
 
 	return true;
 }
@@ -253,8 +292,8 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::ATTACK:
-		isDead = true;
-		pendingDelete = true;
+		//isDead = true;
+		isDeadAnim = true;
 		app->audio->PlayFx(deathFx);
 		break;
 	}

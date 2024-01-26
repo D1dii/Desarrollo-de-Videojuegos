@@ -78,6 +78,9 @@ public:
 	bool showBar = false;
 	bool isScene = false;
 	bool options = false;
+
+	bool isDying;
+	int timerDeadAnim;
 	
 	bool isFacingLeft;
 	bool justFall = false;

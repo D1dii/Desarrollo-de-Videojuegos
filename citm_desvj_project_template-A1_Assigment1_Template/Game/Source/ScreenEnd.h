@@ -61,7 +61,7 @@ private:
 
 public:
 
-	
+	uint victoryFx;
 
 	pugi::xml_node sceneParameter;
 	bool ret = true;

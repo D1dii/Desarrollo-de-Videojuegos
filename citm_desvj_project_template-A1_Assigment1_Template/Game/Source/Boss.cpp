@@ -315,6 +315,7 @@ bool Boss::Update(float dt)
 		// Boss Death
 		if (life <= 0)
 		{
+			
 			if (isFacingLeft)
 			{
 				currentAnim = &Death;

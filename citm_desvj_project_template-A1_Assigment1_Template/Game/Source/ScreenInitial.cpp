@@ -53,7 +53,7 @@ bool ScreenInitial::Start()
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 
-	audioPath = "Assets/Audio/Music/music_spy.ogg";
+	audioPath = "Assets/Audio/Music/Let_Him_Cook.mp3";
 
 	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
 

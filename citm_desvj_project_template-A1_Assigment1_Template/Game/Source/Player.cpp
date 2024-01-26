@@ -205,6 +205,7 @@ bool Player::Awake() {
 }
 
 bool Player::Start() {
+
 	timerDeadAnim = 0;
 	isDying = false;
 	if (app->scene->isSaved && app->map->isMap1) {
@@ -216,7 +217,8 @@ bool Player::Start() {
 		position.y = parameters.attribute("y").as_int();
 	}
 
-	
+	//Get the size of the window
+	app->win->GetWindowSize(windowW, windowH);
 
 	texturePath = parameters.attribute("texturepath").as_string();
 
@@ -272,6 +274,11 @@ bool Player::Start() {
 	
 	
 	jumpFx = app->audio->LoadFx(parameters.child("jumpAudio").attribute("path").as_string());
+	itemFx = app->audio->LoadFx(parameters.child("itemFx").attribute("path").as_string());
+	michelinFx = app->audio->LoadFx(parameters.child("michelinFx").attribute("path").as_string());
+	victoryFx = app->audio->LoadFx(parameters.child("victoryFx").attribute("path").as_string());
+
+
 	
 	
 	return true;
@@ -540,31 +547,25 @@ bool Player::Update(float dt)
 		}
 
 		// Respawn on the start
-		if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && options == false) {
+		if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && options == false && app->map->isMap1) {
 			position.x = 90;
 			position.y = 2172;
 			pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 		}
 
 		// Spawn on debug checkpoints
-		if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && options == false) {
+		if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && options == false && app->map->isMap1) {
 			position.x = 416;
 			position.y = 1440;
 			pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 		}
 
-		if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && options == false) {
+		if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN && options == false && app->map->isMap1) {
 			position.x = 32;
 			position.y = 1072;
 			pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 		}
 
-		// Show Power Jump bar
-		if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN && options == false) {
-			showBar = !showBar;
-
-
-		}
 
 
 		if (showBar == false) {
@@ -650,15 +651,31 @@ bool Player::Update(float dt)
 	{
 		options = !options;
 		app->sceneMenu->isSettingsActive = !app->sceneMenu->isSettingsActive;
-		if (options) {
-			app->guiManager->MoveButtons(position.x + 105, position.y - 65, 9);
-			app->guiManager->MoveButtons(position.x + 110, position.y - 105, 10);
-			app->guiManager->MoveButtons(position.x + 175, position.y - 105, 11);
-		}
-		else if (!options)
+		if (app->map->isMap1)
 		{
-			app->scene->DeleteButtons();
+			if (options) {
+				app->guiManager->MoveButtons(305, position.y - 65, 9);
+				app->guiManager->MoveButtons(310, position.y - 105, 10);
+				app->guiManager->MoveButtons(375, position.y - 105, 11);
+			}
+			else if (!options)
+			{
+				app->scene->DeleteButtons();
+			}
 		}
+		else
+		{
+			if (options) {
+				app->guiManager->MoveButtons(windowW / 2 - 175, position.y - 65, 9);
+				app->guiManager->MoveButtons(windowW / 2 - 170, position.y - 105, 10);
+				app->guiManager->MoveButtons(windowW / 2 - 105, position.y - 105, 11);
+			}
+			else if (!options)
+			{
+				app->scene->DeleteButtons();
+			}
+		}
+		
 		
 	}
 
@@ -691,7 +708,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 			{
 			case ColliderType::ITEM:
 				LOG("Collision ITEM");
-				app->audio->PlayFx(pickCoinFxId);
+				app->audio->PlayFx(itemFx);
 				if (lifes < 3 && lifes > 0)
 				{
 					lifes++;
@@ -701,6 +718,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				break;
 			case ColliderType::MICHELIN:
 				LOG("Collision MICHELIN");
+				app->audio->PlayFx(michelinFx);
 				if (canMichelin)
 				{
 					numMichelin++;
@@ -758,6 +776,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				player = jumpState::ESCALANDO;
 				break;
 			case ColliderType::COMPLETE_LEVEL:
+				app->audio->PlayFx(victoryFx);
 				app->map->Destroying = true;
 				
 			case ColliderType::UNKNOWN:

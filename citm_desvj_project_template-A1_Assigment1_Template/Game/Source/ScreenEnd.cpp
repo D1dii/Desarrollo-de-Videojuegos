@@ -52,9 +52,12 @@ bool ScreenEnd::Start()
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 
-	audioPath = "Assets/Audio/Music/music_spy.ogg";
+	
 
-	app->audio->PlayMusic(audioPath.GetString(), 0.0f);
+	
+
+	victoryFx = app->audio->LoadFx("Assets/Audio/Fx/victoryFX.wav");
+	if(app->map->isMap1 == false) app->audio->PlayFx(victoryFx);
 
 	return true;
 }
@@ -71,7 +74,7 @@ bool ScreenEnd::Update(float dt)
 	int scale = app->win->GetScale();
 
 	
-
+	
 
 	app->render->DrawTexture(img, 0, 0);
 

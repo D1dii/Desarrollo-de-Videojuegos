@@ -566,7 +566,7 @@ bool Player::Update(float dt)
 			pbody->body->SetTransform({ PIXEL_TO_METERS((float32)position.x), PIXEL_TO_METERS((float32)position.y) }, 0);
 		}
 
-
+		// Show bar
 
 		if (showBar == false) {
 			powerJump.h = 0;
